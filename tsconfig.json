@@ -4,7 +4,7 @@
     "target": "esnext",
     "module": "esnext",
     "allowJs": false,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -31,7 +31,8 @@
     ],
     "baseUrl": ".",
     "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "noFallthroughCasesInSwitch": true
   },
   "exclude": [
     "node_modules",
