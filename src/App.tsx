@@ -1,28 +1,33 @@
 import React, { useState } from 'react';
 import './App.css';
 import logo from './icons/cards.png';
+import SpillTabell from './SpillTabell';
 
 enum Slag {
-    Klover = 'klover',
-    Spar = 'spar',
-    Hjerter = 'hjerter',
-    Ruter = 'ruter',
+    Klover = 'Kløver',
+    Spar = 'Spar',
+    Hjerter = 'Hjerter',
+    Ruter = 'Ruter',
 }
 
 type Spiller = Record<string, string>;
-type Melding = [Slag, number];
+interface Melding {
+    slag: Slag | null;
+    antallStikk: number | null;
+}
+
 type Poeng = Record<string, number>;
 
 type Runder = Record<string, Poeng>;
 
-const spillereData: Spiller = {
+export const spillereData: Spiller = {
     '1': 'Trond',
     '2': 'Torunn',
     '3': 'Kristian',
     '4': 'Mathilde',
 };
 
-interface Spill {
+export interface Spill {
     lag: string[];
     melder: string;
     melding: Melding | null;
@@ -31,15 +36,20 @@ interface Spill {
 }
 
 const App: React.FC = () => {
+    const [gamleSpill] = useState<Spill[]>([]);
+    const [visNyttSpillInput, setVisNyttSpillInput] = useState<boolean>(false);
+    const [nyMelding, setNyMelding] = useState<Melding>({ antallStikk: null, slag: null });
+
     const [spill, setSpill] = useState<Spill>({
         spillerIder: ['1', '2', '3', '4'],
         lag: ['1', '2'],
         melder: '1',
-        melding: [Slag.Klover, 8],
+        melding: { slag: Slag.Klover, antallStikk: 8 },
         runder: {
             '0': { '1': 3, '2': 3, '3': 3, '4': 3 },
         },
     });
+    console.log(nyMelding);
     const [nyRundedata, setNyRundedata] = useState<Poeng | null>(null);
 
     const oppdaterRundedata = (spillerId: string, poeng: number) => {
@@ -58,14 +68,6 @@ const App: React.FC = () => {
 
         setNyRundedata(null);
     };
-    const runder = spill.runder;
-
-    const finnTotalsumForSpiller = (spillerId: string) => {
-        if (runder) {
-            return Object.values(runder).reduce((akk, poengliste) => akk + poengliste[spillerId], 0);
-        }
-        return 0;
-    };
 
     return (
         <div className="App">
@@ -74,36 +76,35 @@ const App: React.FC = () => {
             </header>
 
             <p>Amerikanerne</p>
-            <div className="poengtabell">
-                {spill.spillerIder.map((id) => (
-                    <span key={'navn' + id}>{spillereData[id]}</span>
-                ))}
-            </div>
-            {runder && (
-                <>
+
+            <button onClick={() => setVisNyttSpillInput(true)}>+ Nytt spill</button>
+            {visNyttSpillInput && (
+                <div>
                     <div>
-                        {Object.keys(runder).map((runde) => (
-                            <div key={runde} className="poengtabell">
-                                {Object.keys(runder[runde]).map((spillerId) => (
-                                    <li key={spillerId} className="poeng">
-                                        {runder[runde][spillerId]}
-                                    </li>
-                                ))}
-                            </div>
+                        Spillere:{' '}
+                        {spill.spillerIder.map((id) => (
+                            <span key={'spillere' + id}>{spillereData[id]}</span>
                         ))}
                     </div>
-                    {Object.keys(runder).length > 1 && (
-                        <div className="totalsum">
-                            Totalt:{' '}
-                            <div className="poengtabell">
-                                {spill.spillerIder.map((id) => (
-                                    <span key={'sum' + id}>{finnTotalsumForSpiller(id)}</span>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </>
+                    <>
+                        <p>Hva meldes?</p>
+                        <>
+                            {Object.values(Slag).map((typeSlag) => (
+                                <>
+                                    <input
+                                        type="radio"
+                                        id={typeSlag}
+                                        onChange={() => setNyMelding({ ...nyMelding, slag: typeSlag })}
+                                        checked={nyMelding.slag === typeSlag}
+                                    />
+                                    <label htmlFor={typeSlag}>{typeSlag}</label>
+                                </>
+                            ))}
+                        </>
+                    </>
+                </div>
             )}
+            <SpillTabell spill={spill} />
 
             <div className="nyePoeng">
                 <p className="nyePoengTittel">Legg til poeng:</p>
@@ -124,6 +125,14 @@ const App: React.FC = () => {
                 ))}
                 <button onClick={leggTilRunde}>Legg til</button>
             </div>
+
+            {gamleSpill.length > 0 && (
+                <div>
+                    {gamleSpill.map((gammeltSpill) => (
+                        <SpillTabell spill={gammeltSpill} />
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
