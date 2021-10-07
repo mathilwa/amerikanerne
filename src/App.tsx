@@ -2,23 +2,56 @@ import React, { useState } from 'react';
 import './App.css';
 import logo from './icons/cards.png';
 import SpillTabell from './SpillTabell';
+import NyttSpillModal from './NyttSpillModal';
+import NyRundeModal from './NyRundeModal';
+import hjerterIkon from './icons/hjerter.png';
+import hjerterValgtIkon from './icons/hjerter-valgt.png';
+import ruterIkon from './icons/ruter.png';
+import ruterValgtIkon from './icons/ruter-valgt.png';
+import kloverIkon from './icons/klover.png';
+import kloverValgtIkon from './icons/klover-valgt.png';
+import sparIkon from './icons/spar.png';
+import sparValgtIkon from './icons/spar-valgt.png';
 
-enum Slag {
+export enum Slag {
     Klover = 'Kløver',
     Spar = 'Spar',
     Hjerter = 'Hjerter',
     Ruter = 'Ruter',
 }
 
+export const slagIkoner: {
+    [key in Slag]: {
+        valgt: string;
+        vanlig: string;
+    };
+} = {
+    [Slag.Klover]: {
+        vanlig: kloverIkon,
+        valgt: kloverValgtIkon,
+    },
+    [Slag.Spar]: {
+        vanlig: sparIkon,
+        valgt: sparValgtIkon,
+    },
+    [Slag.Hjerter]: {
+        vanlig: hjerterIkon,
+        valgt: hjerterValgtIkon,
+    },
+    [Slag.Ruter]: {
+        vanlig: ruterIkon,
+        valgt: ruterValgtIkon,
+    },
+};
+
 type Spiller = Record<string, string>;
-interface Melding {
+export interface Melding {
     slag: Slag | null;
     antallStikk: number | null;
 }
 
-type Poeng = Record<string, number>;
-
-type Runder = Record<string, Poeng>;
+export type Poeng = Record<string, number>;
+export type Runder = Record<string, Poeng>;
 
 export const spillereData: Spiller = {
     '1': 'Trond',
@@ -36,9 +69,9 @@ export interface Spill {
 }
 
 const App: React.FC = () => {
-    const [gamleSpill] = useState<Spill[]>([]);
-    const [visNyttSpillInput, setVisNyttSpillInput] = useState<boolean>(false);
-    const [nyMelding, setNyMelding] = useState<Melding>({ antallStikk: null, slag: null });
+    const [gamleSpill, setGamleSpill] = useState<Spill[]>([]);
+    const [visNyttSpillModal, setVisNyttSpillModal] = useState<boolean>(false);
+    const [visSettNyRundeModal, setVisSettNyRundeModal] = useState<boolean>(false);
 
     const [spill, setSpill] = useState<Spill>({
         spillerIder: ['1', '2', '3', '4'],
@@ -49,24 +82,11 @@ const App: React.FC = () => {
             '0': { '1': 3, '2': 3, '3': 3, '4': 3 },
         },
     });
-    console.log(nyMelding);
-    const [nyRundedata, setNyRundedata] = useState<Poeng | null>(null);
 
-    const oppdaterRundedata = (spillerId: string, poeng: number) => {
-        if (nyRundedata) {
-            setNyRundedata({ ...nyRundedata, [spillerId]: poeng });
-        } else {
-            setNyRundedata({ [spillerId]: poeng });
-        }
-    };
-    const leggTilRunde = () => {
-        const antallRunderTilNa = spill.runder ? Object.keys(spill.runder).length : 0;
-
-        if (nyRundedata) {
-            setSpill({ ...spill, runder: { ...spill.runder, [antallRunderTilNa + 1]: nyRundedata } });
-        }
-
-        setNyRundedata(null);
+    const startNyttSpill = (spill: Spill) => {
+        setGamleSpill(gamleSpill.concat(spill));
+        setSpill(spill);
+        setVisNyttSpillModal(false);
     };
 
     return (
@@ -77,54 +97,21 @@ const App: React.FC = () => {
 
             <p>Amerikanerne</p>
 
-            <button onClick={() => setVisNyttSpillInput(true)}>+ Nytt spill</button>
-            {visNyttSpillInput && (
-                <div>
-                    <div>
-                        Spillere:{' '}
-                        {spill.spillerIder.map((id) => (
-                            <span key={'spillere' + id}>{spillereData[id]}</span>
-                        ))}
-                    </div>
-                    <>
-                        <p>Hva meldes?</p>
-                        <>
-                            {Object.values(Slag).map((typeSlag) => (
-                                <>
-                                    <input
-                                        type="radio"
-                                        id={typeSlag}
-                                        onChange={() => setNyMelding({ ...nyMelding, slag: typeSlag })}
-                                        checked={nyMelding.slag === typeSlag}
-                                    />
-                                    <label htmlFor={typeSlag}>{typeSlag}</label>
-                                </>
-                            ))}
-                        </>
-                    </>
-                </div>
-            )}
+            <button onClick={() => setVisNyttSpillModal(true)}>+ Nytt spill</button>
+            <NyttSpillModal visNyttSpillInput={visNyttSpillModal} setNyttSpill={startNyttSpill} />
+
             <SpillTabell spill={spill} />
 
-            <div className="nyePoeng">
-                <p className="nyePoengTittel">Legg til poeng:</p>
-                {spill.spillerIder.map((id) => (
-                    <div key={id} className="leggTilNyePoeng">
-                        <label className="labelNyePoeng" htmlFor={id}>
-                            {spillereData[id]}
-                        </label>
-                        <input
-                            className="inputNyePoeng"
-                            key={id}
-                            id={id}
-                            type="text"
-                            value={nyRundedata && nyRundedata[id] ? nyRundedata[id] : ''}
-                            onChange={(event) => oppdaterRundedata(id, parseInt(event.target.value))}
-                        />
-                    </div>
-                ))}
-                <button onClick={leggTilRunde}>Legg til</button>
-            </div>
+            <button onClick={() => setVisSettNyRundeModal(true)}>Legg til runde</button>
+            <NyRundeModal
+                setNyRunde={(nyRunde) => {
+                    setSpill({ ...spill, runder: { ...spill.runder, ...nyRunde } });
+                    setVisSettNyRundeModal(false);
+                }}
+                visSettNyRunde={visSettNyRundeModal}
+                eksisterendeRunder={spill.runder}
+                spillerIder={spill.spillerIder}
+            />
 
             {gamleSpill.length > 0 && (
                 <div>

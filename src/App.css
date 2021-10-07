@@ -34,13 +34,88 @@
 .nyePoeng {
     width: 300px;
 }
-
-.leggTilNyePoeng {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
 .nyePoengTittel {
     margin-bottom: 20px;
+}
+
+.modal {
+    width: 60%;
+    margin: 0 auto;
+    background-color: #282c34;
+    padding: 3rem;
+    color: white;
+}
+
+.modal .spillere {
+    width: 60%;
+    display: flex;
+}
+
+.modal .spillere > *,
+.melder,
+.velgLag {
+    border: 2px solid aqua;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-right: 2rem;
+}
+
+.modal .melder.valgt,
+.modal .velgLag.paLag {
+    border-color: white;
+    background-color: #ba1515;
+    color: white;
+}
+
+input[type='radio'] {
+    display: none;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.modal .slagIkon {
+    width: 50px;
+}
+
+.melding {
+    display: flex;
+}
+
+.melding .slag label {
+    margin-right: 2rem;
+}
+
+.inputNyePoeng {
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    width: 2rem;
+    text-align: right;
+}
+
+.hvemMelder {
+    display: flex;
+}
+
+.hvemKommerPaLag {
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+h2 {
+    margin-bottom: 1rem;
+}
+
+.knapp {
+    -webkit-appearance: none;
+    padding: 1rem;
+    font-size: 1.2rem;
+    box-sizing: border-box;
+    background-color: #ba1515;
+    color: white;
+    border: 1px solid white;
+    border-radius: 4px;
 }
