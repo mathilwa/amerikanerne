@@ -98,7 +98,11 @@ const App: React.FC = () => {
             <p>Amerikanerne</p>
 
             <button onClick={() => setVisNyttSpillModal(true)}>+ Nytt spill</button>
-            <NyttSpillModal visNyttSpillInput={visNyttSpillModal} setNyttSpill={startNyttSpill} />
+            <NyttSpillModal
+                visNyttSpillInput={visNyttSpillModal}
+                setNyttSpill={startNyttSpill}
+                onAvbryt={() => setVisNyttSpillModal(false)}
+            />
 
             <SpillTabell spill={spill} />
 

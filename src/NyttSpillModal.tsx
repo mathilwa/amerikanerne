@@ -5,9 +5,10 @@ import { Melding, Slag, slagIkoner, Spill, spillereData } from './App';
 interface Props {
     visNyttSpillInput: boolean;
     setNyttSpill: (nyttSpill: Spill) => void;
+    onAvbryt: () => void;
 }
 
-const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill }) => {
+const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAvbryt }) => {
     const [nyMelding, setNyMelding] = useState<Melding>({ antallStikk: null, slag: null });
     const [nyttLag, setNyttLag] = useState<string[]>([]);
     const [nyMelder, setNyMelder] = useState<string>('');
@@ -129,6 +130,9 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill }) =>
                 </div>
                 <button type="submit" className="knapp" onClick={startNyRunde}>
                     Start runde
+                </button>
+                <button type="submit" className="knapp avbryt" onClick={onAvbryt}>
+                    Avbryt
                 </button>
             </form>
         </Modal>
