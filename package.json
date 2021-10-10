@@ -1,7 +1,8 @@
 {
   "name": "amerikaner",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "homepage": "https://mathilwa.github.io/amerikanerne/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
