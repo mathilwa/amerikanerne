@@ -116,7 +116,11 @@ const App: React.FC = () => {
 
             <p>Amerikanerne</p>
 
-            <button onClick={() => setVisNyttSpillModal(true)}>+ Nytt spill</button>
+            <div className="knappContainer">
+                <button className="knapp" onClick={() => setVisNyttSpillModal(true)}>
+                    + Nytt spill
+                </button>
+            </div>
             <NyttSpillModal
                 visNyttSpillInput={visNyttSpillModal}
                 setNyttSpill={startNyttSpill}
@@ -125,7 +129,12 @@ const App: React.FC = () => {
 
             <SpillTabell spill={spill} />
 
-            <button onClick={() => setVisSettNyRundeModal(true)}>Legg til runde</button>
+            <div className="knappContainer">
+                <button className="knapp" onClick={() => setVisSettNyRundeModal(true)}>
+                    Legg til runde
+                </button>
+            </div>
+
             <NyRundeModal
                 visNyttSpillInput={visSettNyRundeModal}
                 startNyRunde={startNyRunde}
@@ -134,7 +143,11 @@ const App: React.FC = () => {
             />
             {spill.runder && (
                 <>
-                    <button onClick={() => setVisGiPoengModal(true)}>Legg til poeng</button>
+                    <div className="knappContainer">
+                        <button className="knapp" onClick={() => setVisGiPoengModal(true)}>
+                            Legg til poeng
+                        </button>
+                    </div>
                     <GiPoengForRundeModal
                         oppdatertRundeMedPoeng={(nyRunde) => {
                             const sisteRundeIndex = spill.runder ? Object.keys(spill.runder).length : 0;

@@ -135,3 +135,7 @@ h2 {
     border: 2px solid #282c34;
     color: #282c34;
 }
+
+.knappContainer {
+    margin-bottom: 1rem;
+}
