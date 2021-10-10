@@ -3,7 +3,7 @@ import './App.css';
 import logo from './icons/cards.png';
 import SpillTabell from './SpillTabell';
 import NyttSpillModal from './NyttSpillModal';
-import NyRundeModal from './NyRundeModal';
+import GiPoengForRundeModal from './GiPoengForRundeModal';
 import hjerterIkon from './icons/hjerter.png';
 import hjerterValgtIkon from './icons/hjerter-valgt.png';
 import ruterIkon from './icons/ruter.png';
@@ -12,6 +12,7 @@ import kloverIkon from './icons/klover.png';
 import kloverValgtIkon from './icons/klover-valgt.png';
 import sparIkon from './icons/spar.png';
 import sparValgtIkon from './icons/spar-valgt.png';
+import NyRundeModal from './NyRundeModal';
 
 export enum Slag {
     Klover = 'Kløver',
@@ -51,7 +52,7 @@ export interface Melding {
 }
 
 export type Poeng = Record<string, number>;
-export type Runder = Record<string, Poeng>;
+export type Runder = Record<string, Runde>;
 
 export const spillereData: Spiller = {
     '1': 'Trond',
@@ -60,10 +61,14 @@ export const spillereData: Spiller = {
     '4': 'Mathilde',
 };
 
-export interface Spill {
+export interface Runde {
+    poeng: Poeng | null;
     lag: string[];
     melder: string;
-    melding: Melding | null;
+    melding: Melding;
+}
+
+export interface Spill {
     runder: Runder | null;
     spillerIder: string[];
 }
@@ -72,14 +77,17 @@ const App: React.FC = () => {
     const [gamleSpill, setGamleSpill] = useState<Spill[]>([]);
     const [visNyttSpillModal, setVisNyttSpillModal] = useState<boolean>(false);
     const [visSettNyRundeModal, setVisSettNyRundeModal] = useState<boolean>(false);
+    const [visGiPoengModal, setVisGiPoengModal] = useState<boolean>(false);
 
     const [spill, setSpill] = useState<Spill>({
         spillerIder: ['1', '2', '3', '4'],
-        lag: ['1', '2'],
-        melder: '1',
-        melding: { slag: Slag.Klover, antallStikk: 8 },
         runder: {
-            '0': { '1': 3, '2': 3, '3': 3, '4': 3 },
+            '0': {
+                poeng: { '1': 3, '2': 3, '3': 3, '4': 3 },
+                lag: ['1', '2'],
+                melder: '1',
+                melding: { slag: Slag.Klover, antallStikk: 8 },
+            },
         },
     });
 
@@ -89,6 +97,17 @@ const App: React.FC = () => {
         setVisNyttSpillModal(false);
     };
 
+    const startNyRunde = (runde: Runde) => {
+        const antallRunderTilNa = spill.runder ? Object.keys(spill.runder).length : 0;
+
+        setSpill({ ...spill, runder: { [antallRunderTilNa + 1]: runde } });
+        setVisSettNyRundeModal(false);
+    };
+
+    const gjeldendeRunde = (runder: Runder) => {
+        const antallRunder = Object.keys(runder).length;
+        return runder[antallRunder - 1];
+    };
     return (
         <div className="App">
             <header className="appHeader">
@@ -108,14 +127,27 @@ const App: React.FC = () => {
 
             <button onClick={() => setVisSettNyRundeModal(true)}>Legg til runde</button>
             <NyRundeModal
-                setNyRunde={(nyRunde) => {
-                    setSpill({ ...spill, runder: { ...spill.runder, ...nyRunde } });
-                    setVisSettNyRundeModal(false);
-                }}
-                visSettNyRunde={visSettNyRundeModal}
-                eksisterendeRunder={spill.runder}
+                visNyttSpillInput={visSettNyRundeModal}
+                startNyRunde={startNyRunde}
                 spillerIder={spill.spillerIder}
+                onAvbryt={() => setVisSettNyRundeModal(false)}
             />
+            {spill.runder && (
+                <>
+                    <button onClick={() => setVisGiPoengModal(true)}>Legg til poeng</button>
+                    <GiPoengForRundeModal
+                        oppdatertRundeMedPoeng={(nyRunde) => {
+                            const sisteRundeIndex = spill.runder ? Object.keys(spill.runder).length : 0;
+                            setSpill({ ...spill, runder: { ...spill.runder, [sisteRundeIndex]: nyRunde } });
+                            setVisGiPoengModal(false);
+                        }}
+                        visGiPoengForRunde={visGiPoengModal}
+                        gjeldendeRunde={gjeldendeRunde(spill.runder)}
+                        spillerIder={spill.spillerIder}
+                        onAvbryt={() => setVisGiPoengModal(false)}
+                    />
+                </>
+            )}
 
             {gamleSpill.length > 0 && (
                 <div>

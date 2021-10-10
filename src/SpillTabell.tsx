@@ -11,35 +11,42 @@ const SpillTabell: React.FC<Props> = ({ spill }) => {
 
     const finnTotalsumForSpiller = (spillerId: string) => {
         if (runder) {
-            return Object.values(runder).reduce((akk, poengliste) => akk + poengliste[spillerId], 0);
+            return Object.values(runder).reduce((akk, runde) => {
+                if (runde.poeng) {
+                    return akk + runde.poeng[spillerId];
+                } else {
+                    return akk;
+                }
+            }, 0);
         }
         return 0;
     };
 
+    if (spill.runder && spill.runder[0] && spill.runder[0].poeng) {
+        console.log('runder', spill.runder[0].poeng!['1']);
+    }
+
     return (
         <>
-            <div>
-                Spillere:{' '}
-                {spill.spillerIder.map((id) => (
-                    <span key={'spillere' + id}>{spillereData[id]}</span>
-                ))}
-            </div>
-
             <div className="poengtabell">
                 {spill.spillerIder.map((id) => (
                     <span key={'navn' + id}>{spillereData[id]}</span>
                 ))}
             </div>
-            {runder && (
+            {runder && runder[0].poeng && (
                 <>
                     <div>
                         {Object.keys(runder).map((runde) => (
                             <div key={runde} className="poengtabell">
-                                {Object.keys(runder[runde]).map((spillerId) => (
-                                    <li key={spillerId} className="poeng">
-                                        {runder[runde][spillerId]}
-                                    </li>
-                                ))}
+                                {runder[runde] &&
+                                    runder[runde].poeng &&
+                                    Object.keys(runder[runde].poeng!).map((spillerId) => (
+                                        <li key={spillerId} className="poeng">
+                                            {runder[runde] && runder[runde].poeng
+                                                ? runder[runde].poeng![spillerId]
+                                                : 0}
+                                        </li>
+                                    ))}
                             </div>
                         ))}
                     </div>

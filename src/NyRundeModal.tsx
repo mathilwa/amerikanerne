@@ -1,54 +1,128 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import Modal from './Modal';
-import { Poeng, Runder, spillereData } from './App';
+import { Melding, Runde, Slag, slagIkoner, spillereData } from './App';
 
 interface Props {
-    setNyRunde: (nyRunde: Runder) => void;
-    visSettNyRunde: boolean;
-    eksisterendeRunder: Runder | null;
+    visNyttSpillInput: boolean;
+    startNyRunde: (nyRunde: Runde) => void;
     spillerIder: string[];
+    onAvbryt: () => void;
 }
 
-const NyRundeModal: React.FC<Props> = ({ setNyRunde, visSettNyRunde, eksisterendeRunder, spillerIder }) => {
-    const [nyRundedata, setNyRundedata] = useState<Poeng | null>(null);
+const NyRundeModal: React.FC<Props> = ({ visNyttSpillInput, startNyRunde, spillerIder, onAvbryt }) => {
+    const [nyMelding, setNyMelding] = useState<Melding>({ antallStikk: null, slag: null });
+    const [nyttLag, setNyttLag] = useState<string[]>([]);
+    const [nyMelder, setNyMelder] = useState<string>('');
 
-    const oppdaterRundedata = (spillerId: string, poeng: number) => {
-        if (nyRundedata) {
-            setNyRundedata({ ...nyRundedata, [spillerId]: poeng });
-        } else {
-            setNyRundedata({ [spillerId]: poeng });
+    const oppdaterNyttLag = (spillerId: string) => {
+        if (nyttLag.includes(spillerId) && spillerId !== nyMelder) {
+            setNyttLag([nyMelder]);
+        } else if (nyttLag.length < 2 && spillerId !== nyMelder) {
+            setNyttLag(nyttLag.concat(spillerId));
+        } else if (nyttLag.length === 2 && spillerId !== nyMelder) {
+            setNyttLag([nyMelder, spillerId]);
         }
     };
-    const leggTilRunde = () => {
-        const antallRunderTilNa = eksisterendeRunder ? Object.keys(eksisterendeRunder).length : 0;
 
-        if (nyRundedata) {
-            setNyRunde({ [antallRunderTilNa + 1]: nyRundedata });
+    const onStartNyRunde = (event: FormEvent) => {
+        event.preventDefault();
 
-            setNyRundedata(null);
+        if (nyMelding.antallStikk && nyMelding.slag && nyttLag.length === 2 && !!nyMelder) {
+            startNyRunde({
+                melding: nyMelding,
+                lag: nyttLag,
+                melder: nyMelder,
+                poeng: null,
+            });
+            setNyMelding({ antallStikk: null, slag: null });
+            setNyMelder('');
+            setNyttLag([]);
         }
     };
 
     return (
-        <Modal isOpen={visSettNyRunde} onClose={() => console.log('lukk')}>
-            <div className="nyePoeng">
-                <p className="nyePoengTittel">Legg til poeng:</p>
-                {spillerIder.map((id) => (
-                    <div key={id} className="leggTilNyePoeng">
-                        <label className="labelNyePoeng">
-                            {spillereData[id]}
-                            <input
-                                className="inputNyePoeng"
-                                type="text"
-                                value={nyRundedata && nyRundedata[id] ? nyRundedata[id] : ''}
-                                onChange={(event) => oppdaterRundedata(id, parseInt(event.target.value))}
-                            />
-                        </label>
-                    </div>
-                ))}
+        <Modal onClose={onAvbryt} isOpen={visNyttSpillInput}>
+            <form>
+                <h1>Ny runde</h1>
 
-                <button onClick={leggTilRunde}>Legg til</button>
-            </div>
+                <h2>Hva meldes?</h2>
+                <div className="hvaMeldes">
+                    <div className="melding">
+                        <div className="slag">
+                            {Object.values(Slag).map((typeSlag) => (
+                                <label key={typeSlag}>
+                                    <input
+                                        type="radio"
+                                        id={typeSlag}
+                                        onChange={() => setNyMelding({ ...nyMelding, slag: typeSlag })}
+                                        checked={nyMelding.slag === typeSlag}
+                                    />
+                                    <img
+                                        src={
+                                            nyMelding.slag === typeSlag
+                                                ? slagIkoner[typeSlag].valgt
+                                                : slagIkoner[typeSlag].vanlig
+                                        }
+                                        className="slagIkon"
+                                    />
+                                </label>
+                            ))}
+                        </div>
+
+                        <div className="leggTilNyePoeng">
+                            <label className="labelNyePoeng">
+                                <input
+                                    className="inputNyePoeng"
+                                    type="number"
+                                    value={nyMelding.antallStikk ? nyMelding.antallStikk : ''}
+                                    onChange={(event) =>
+                                        setNyMelding({
+                                            ...nyMelding,
+                                            antallStikk: parseInt(event.target.value),
+                                        })
+                                    }
+                                />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <h2>Hvem melder?</h2>
+                <div className="hvemMelder">
+                    {spillerIder.map((melder) => (
+                        <label key={melder} className={`melder ${melder === nyMelder ? 'valgt' : ''}`}>
+                            <input
+                                type="radio"
+                                id={melder}
+                                onChange={() => {
+                                    setNyMelder(melder);
+                                    setNyttLag([melder]);
+                                }}
+                                checked={nyMelder === melder}
+                            />
+                            {spillereData[melder]}
+                        </label>
+                    ))}
+                </div>
+
+                <h2>Hvem kommer på lag?</h2>
+                <div className="hvemKommerPaLag">
+                    {spillerIder.map((id) => (
+                        <div
+                            key={id}
+                            className={`velgLag ${nyttLag.includes(id) ? 'paLag' : ''} `}
+                            onClick={() => oppdaterNyttLag(id)}
+                        >
+                            {spillereData[id]}
+                        </div>
+                    ))}
+                </div>
+                <button type="submit" className="knapp" onClick={onStartNyRunde}>
+                    Start runde
+                </button>
+                <button type="submit" className="knapp avbryt" onClick={onAvbryt}>
+                    Avbryt
+                </button>
+            </form>
         </Modal>
     );
 };
