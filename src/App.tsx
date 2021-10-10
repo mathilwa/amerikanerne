@@ -100,7 +100,7 @@ const App: React.FC = () => {
     const startNyRunde = (runde: Runde) => {
         const antallRunderTilNa = spill.runder ? Object.keys(spill.runder).length : 0;
 
-        setSpill({ ...spill, runder: { [antallRunderTilNa + 1]: runde } });
+        setSpill({ ...spill, runder: { ...spill.runder, [antallRunderTilNa + 1]: runde } });
         setVisSettNyRundeModal(false);
     };
 
@@ -114,7 +114,7 @@ const App: React.FC = () => {
                 <img src={logo} className="App-logo" alt="logo" />
             </header>
 
-            <p>Amerikanerne</p>
+            <h1>Amerikanerne</h1>
 
             <div className="knappContainer">
                 <button className="knapp" onClick={() => setVisNyttSpillModal(true)}>

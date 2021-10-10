@@ -17,14 +17,17 @@
 
 .poengtabell {
     display: grid;
-    grid-template-columns: 2fr 2fr 2fr 2fr;
+    grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
     min-height: 15px;
     list-style-type: none;
+    grid-gap: 0.5rem;
 }
 
 .poengtabell > * {
     border: 1px solid white;
     width: 200px;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .totalsum {
@@ -78,7 +81,7 @@ input[type='number']::-webkit-inner-spin-button {
     margin: 0;
 }
 
-.modal .slagIkon {
+.slagIkon {
     width: 50px;
 }
 
@@ -138,4 +141,36 @@ h2 {
 
 .knappContainer {
     margin-bottom: 1rem;
+}
+
+.poengContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.poengContainer > * {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.poengContainer .melding {
+    width: 100%;
+}
+
+.poengContainer .slagIkon {
+    margin-right: 0.5rem;
+}
+
+.poengContainer .poeng.lag {
+    border: 1px solid red;
+    border-radius: 45px;
+}
+
+.poengContainer .poeng.lag.rundeMelder {
+    border-width: 2px;
+    box-sizing: border-box;
 }
