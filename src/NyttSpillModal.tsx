@@ -30,7 +30,7 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
                 <h2>Spillere:</h2>
                 <div className="spillere">
                     {spillerIder.map((id) => (
-                        <div key={'spillere' + id}>{spillereData[id]}</div>
+                        <div key={'spillere' + id}>{spillereData[id].navn}</div>
                     ))}
                 </div>
 

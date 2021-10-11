@@ -15,9 +15,16 @@
     pointer-events: none;
 }
 
+.sideContainer {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
 .poengtabell {
     display: grid;
-    grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
+    grid-template-columns: 2fr 2fr 2fr 2fr 4fr;
     min-height: 15px;
     list-style-type: none;
     grid-gap: 0.5rem;
@@ -25,8 +32,7 @@
 
 .poengtabell > * {
     border: 1px solid white;
-    width: 200px;
-    padding: 1rem;
+    padding: 0.5rem;
     margin-bottom: 0.5rem;
 }
 
@@ -82,7 +88,7 @@ input[type='number']::-webkit-inner-spin-button {
 }
 
 .slagIkon {
-    width: 50px;
+    width: 2rem;
 }
 
 .melding {
@@ -116,8 +122,8 @@ h3 {
 
 .knapp {
     -webkit-appearance: none;
-    padding: 1rem;
-    font-size: 1.2rem;
+    padding: 0.5rem;
+    font-size: 1rem;
     box-sizing: border-box;
     background-color: #ba1515;
     color: white;
@@ -142,6 +148,13 @@ h3 {
 
 .knappContainer {
     margin-bottom: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.knappContainer > *:not(:last-child) {
+    margin-right: 1rem;
 }
 
 .poengContainer {
@@ -150,8 +163,8 @@ h3 {
 }
 
 .poengContainer > * {
-    width: 3rem;
-    height: 3rem;
+    width: 2rem;
+    height: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -181,4 +194,46 @@ h3 {
     border-radius: 4px;
     padding: 1rem 1.5rem;
     margin-right: 1rem;
+}
+
+.tabellHeaderDesktop {
+    display: none;
+}
+
+@media screen and (min-width: 900px) {
+    .tabellHeaderMobil {
+        display: none;
+    }
+
+    .tabellHeaderDesktop {
+        display: block;
+    }
+
+    .poengContainer > * {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .poengtabell > * {
+        padding: 1rem;
+    }
+
+    .slagIkon {
+        width: 3rem;
+    }
+
+    .poengtabell {
+        grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
+    }
+
+    .knapp {
+        padding: 1rem;
+        font-size: 1.2rem;
+    }
+}
+
+@media screen and (min-width: 1400px) {
+    .sideContainer {
+        width: 70%;
+    }
 }

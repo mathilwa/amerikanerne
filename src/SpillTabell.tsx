@@ -28,7 +28,10 @@ const SpillTabell: React.FC<Props> = ({ spill }) => {
         <>
             <div className="poengtabell">
                 {spill.spillerIder.map((id) => (
-                    <span key={'navn' + id}>{spillereData[id]}</span>
+                    <>
+                    <span key={'navn' + id} className="tabellHeaderMobil">{spillereData[id].forkortelse}</span>
+                    <span key={'navn' + id} className="tabellHeaderDesktop">{spillereData[id].navn}</span>
+                    </>
                 ))}
                 <span>Melding</span>
             </div>
@@ -56,6 +59,7 @@ const SpillTabell: React.FC<Props> = ({ spill }) => {
                                                     <img
                                                         className="slagIkon"
                                                         src={slagIkoner[runder[runde].melding!.slag!].vanlig}
+                                                        alt=""
                                                     />
                                                     <div>{`${runder[runde].melding.antallStikk}`}</div>
                                                 </div>

@@ -45,7 +45,7 @@ export const slagIkoner: {
     },
 };
 
-type Spiller = Record<string, string>;
+type Spiller = Record<string, { navn: string; forkortelse: string }>;
 export interface Melding {
     slag: Slag | null;
     antallStikk: number | null;
@@ -55,10 +55,16 @@ export type Poeng = Record<string, number>;
 export type Runder = Record<string, Runde>;
 
 export const spillereData: Spiller = {
-    '1': 'Trond',
-    '2': 'Torunn',
-    '3': 'Kristian',
-    '4': 'Mathilde',
+    '1': {
+        navn: 'Trond',
+        forkortelse: 'Tr',
+    },
+    '2': { navn: 'Torunn', forkortelse: 'To' },
+    '3': { navn: 'Kristian', forkortelse: 'Kr' },
+    '4': {
+        navn: 'Mathilde',
+        forkortelse: 'Ma',
+    },
 };
 
 export interface Runde {
@@ -114,40 +120,35 @@ const App: React.FC = () => {
                 <img src={logo} className="App-logo" alt="logo" />
             </header>
 
-            <h1>Amerikanerne</h1>
+            <div className="sideContainer">
+                <h1>Amerikanerne</h1>
 
-            <div className="knappContainer">
-                <button className="knapp" onClick={() => setVisNyttSpillModal(true)}>
-                    + Nytt spill
-                </button>
-            </div>
-            <NyttSpillModal
-                visNyttSpillInput={visNyttSpillModal}
-                setNyttSpill={startNyttSpill}
-                onAvbryt={() => setVisNyttSpillModal(false)}
-            />
+                <div className="knappContainer">
+                    <button className="knapp" onClick={() => setVisNyttSpillModal(true)}>
+                        + Nytt spill
+                    </button>
+                    <button className="knapp" onClick={() => setVisSettNyRundeModal(true)}>
+                        Legg til runde
+                    </button>
+                    <button className="knapp" onClick={() => setVisGiPoengModal(true)}>
+                        Legg til poeng
+                    </button>
+                </div>
+                <NyttSpillModal
+                    visNyttSpillInput={visNyttSpillModal}
+                    setNyttSpill={startNyttSpill}
+                    onAvbryt={() => setVisNyttSpillModal(false)}
+                />
 
-            <SpillTabell spill={spill} />
+                <SpillTabell spill={spill} />
 
-            <div className="knappContainer">
-                <button className="knapp" onClick={() => setVisSettNyRundeModal(true)}>
-                    Legg til runde
-                </button>
-            </div>
-
-            <NyRundeModal
-                visNyttSpillInput={visSettNyRundeModal}
-                startNyRunde={startNyRunde}
-                spillerIder={spill.spillerIder}
-                onAvbryt={() => setVisSettNyRundeModal(false)}
-            />
-            {spill.runder && (
-                <>
-                    <div className="knappContainer">
-                        <button className="knapp" onClick={() => setVisGiPoengModal(true)}>
-                            Legg til poeng
-                        </button>
-                    </div>
+                <NyRundeModal
+                    visNyttSpillInput={visSettNyRundeModal}
+                    startNyRunde={startNyRunde}
+                    spillerIder={spill.spillerIder}
+                    onAvbryt={() => setVisSettNyRundeModal(false)}
+                />
+                {spill.runder && (
                     <GiPoengForRundeModal
                         oppdatertRundeMedPoeng={(nyRunde) => {
                             const sisteRundeIndex = spill.runder ? Object.keys(spill.runder).length : 0;
@@ -159,16 +160,16 @@ const App: React.FC = () => {
                         spillerIder={spill.spillerIder}
                         onAvbryt={() => setVisGiPoengModal(false)}
                     />
-                </>
-            )}
+                )}
 
-            {gamleSpill.length > 0 && (
-                <div>
-                    {gamleSpill.map((gammeltSpill) => (
-                        <SpillTabell spill={gammeltSpill} />
-                    ))}
-                </div>
-            )}
+                {gamleSpill.length > 0 && (
+                    <div>
+                        {gamleSpill.map((gammeltSpill) => (
+                            <SpillTabell spill={gammeltSpill} />
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

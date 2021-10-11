@@ -56,8 +56,8 @@ const GiPoengForRundeModal: React.FC<Props> = ({
                 {gjeldendeRunde.lag && (
                     <>
                         <h3>
-                            {`Klarte ${spillereData[gjeldendeRunde.lag[0]]} og ${
-                                spillereData[gjeldendeRunde.lag[1]]
+                            {`Klarte ${spillereData[gjeldendeRunde.lag[0]].navn} og ${
+                                spillereData[gjeldendeRunde.lag[1]].navn
                             } det?`}{' '}
                         </h3>
                         <div>
@@ -85,7 +85,7 @@ const GiPoengForRundeModal: React.FC<Props> = ({
                 {spillerIder.map((id) => (
                     <div key={id} className="leggTilNyePoeng">
                         <label className="labelNyePoeng">
-                            {spillereData[id]}
+                            {spillereData[id].navn}
                             <input
                                 className="inputNyePoeng"
                                 type="text"

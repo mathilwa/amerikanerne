@@ -64,6 +64,7 @@ const NyRundeModal: React.FC<Props> = ({ visNyttSpillInput, startNyRunde, spille
                                                 : slagIkoner[typeSlag].vanlig
                                         }
                                         className="slagIkon"
+                                        alt=""
                                     />
                                 </label>
                             ))}
@@ -99,7 +100,7 @@ const NyRundeModal: React.FC<Props> = ({ visNyttSpillInput, startNyRunde, spille
                                 }}
                                 checked={nyMelder === melder}
                             />
-                            {spillereData[melder]}
+                            {spillereData[melder].navn}
                         </label>
                     ))}
                 </div>
@@ -112,7 +113,7 @@ const NyRundeModal: React.FC<Props> = ({ visNyttSpillInput, startNyRunde, spille
                             className={`velgLag ${nyttLag.includes(id) ? 'paLag' : ''} `}
                             onClick={() => oppdaterNyttLag(id)}
                         >
-                            {spillereData[id]}
+                            {spillereData[id].navn}
                         </div>
                     ))}
                 </div>
