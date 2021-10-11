@@ -29,8 +29,12 @@ const SpillTabell: React.FC<Props> = ({ spill }) => {
             <div className="poengtabell">
                 {spill.spillerIder.map((id) => (
                     <>
-                    <span key={'navn' + id} className="tabellHeaderMobil">{spillereData[id].forkortelse}</span>
-                    <span key={'navn' + id} className="tabellHeaderDesktop">{spillereData[id].navn}</span>
+                        <span key={'navn-mobil-' + id} className="tabellHeaderMobil">
+                            {spillereData[id].forkortelse}
+                        </span>
+                        <span key={'navn-desktop-' + id} className="tabellHeaderDesktop">
+                            {spillereData[id].navn}
+                        </span>
                     </>
                 ))}
                 <span>Melding</span>
