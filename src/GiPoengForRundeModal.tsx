@@ -18,14 +18,12 @@ const GiPoengForRundeModal: React.FC<Props> = ({
     onAvbryt,
 }) => {
     const [nyRundedata, setNyRundedata] = useState<Poeng | null>(null);
+    const [klarteLagetDet, setKlarteLagetDet] = useState<boolean | null>(null);
 
     const oppdaterRundedata = (spillerId: string, poeng: number) => {
-        if (nyRundedata) {
-            setNyRundedata({ ...nyRundedata, [spillerId]: poeng });
-        } else {
-            setNyRundedata({ [spillerId]: poeng });
-        }
+        setNyRundedata(nyRundedata ? { ...nyRundedata, [spillerId]: poeng } : { [spillerId]: poeng });
     };
+
     const leggTilRunde = () => {
         if (nyRundedata && Object.keys(nyRundedata).length === 4) {
             oppdatertRundeMedPoeng({ ...gjeldendeRunde, poeng: nyRundedata });
@@ -34,10 +32,56 @@ const GiPoengForRundeModal: React.FC<Props> = ({
         }
     };
 
+    const onChangeKlarteLagetDet = (klarteDeDet: boolean) => {
+        const melding = gjeldendeRunde.melding;
+        const lag = gjeldendeRunde.lag;
+
+        if (melding && lag) {
+            const antallPoeng = klarteDeDet ? melding.antallStikk! : -melding.antallStikk!;
+            const poengForLaget = {
+                [lag[0]]: antallPoeng,
+                [lag[1]]: antallPoeng,
+            };
+
+            setNyRundedata(nyRundedata ? { ...nyRundedata, ...poengForLaget } : poengForLaget);
+        }
+
+        setKlarteLagetDet(klarteDeDet);
+    };
+
     return (
         <Modal isOpen={visGiPoengForRunde} onClose={onAvbryt}>
             <div className="nyePoeng">
-                <p className="nyePoengTittel">Legg til poeng:</p>
+                <h2 className="nyePoengTittel">Legg til poeng:</h2>
+                {gjeldendeRunde.lag && (
+                    <>
+                        <h3>
+                            {`Klarte ${spillereData[gjeldendeRunde.lag[0]]} og ${
+                                spillereData[gjeldendeRunde.lag[1]]
+                            } det?`}{' '}
+                        </h3>
+                        <div>
+                            <label className="klarteLagetDetRadio">
+                                <input
+                                    type="radio"
+                                    onChange={() => onChangeKlarteLagetDet(true)}
+                                    checked={klarteLagetDet === true}
+                                />
+                                Ja
+                            </label>
+
+                            <label className="klarteLagetDetRadio">
+                                <input
+                                    type="radio"
+                                    onChange={() => onChangeKlarteLagetDet(false)}
+                                    checked={klarteLagetDet === false}
+                                />
+                                Nei
+                            </label>
+                        </div>
+                    </>
+                )}
+
                 {spillerIder.map((id) => (
                     <div key={id} className="leggTilNyePoeng">
                         <label className="labelNyePoeng">

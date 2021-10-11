@@ -98,9 +98,9 @@ const App: React.FC = () => {
     };
 
     const startNyRunde = (runde: Runde) => {
-        const antallRunderTilNa = spill.runder ? Object.keys(spill.runder).length : 0;
+        const indexForNyRunde = spill.runder ? Object.keys(spill.runder).length : 0;
 
-        setSpill({ ...spill, runder: { ...spill.runder, [antallRunderTilNa + 1]: runde } });
+        setSpill({ ...spill, runder: { ...spill.runder, [indexForNyRunde]: runde } });
         setVisSettNyRundeModal(false);
     };
 

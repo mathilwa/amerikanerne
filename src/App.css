@@ -109,7 +109,8 @@ input[type='number']::-webkit-inner-spin-button {
     margin-bottom: 4rem;
 }
 
-h2 {
+h2,
+h3 {
     margin-bottom: 1rem;
 }
 
@@ -173,4 +174,11 @@ h2 {
 .poengContainer .poeng.lag.rundeMelder {
     border-width: 2px;
     box-sizing: border-box;
+}
+
+.klarteLagetDetRadio {
+    border: 1px solid aqua;
+    border-radius: 4px;
+    padding: 1rem 1.5rem;
+    margin-right: 1rem;
 }
