@@ -157,6 +157,7 @@ const App: React.FC = () => {
             <div className="sideContainer">
                 <h1>Amerikanerne</h1>
 
+                {spill && <SpillTabell spill={spill} spillere={spillere} />}
                 <div className="knappContainer">
                     <button className="knapp" onClick={() => setVisNyttSpillModal(true)}>
                         + Nytt spill
@@ -168,14 +169,13 @@ const App: React.FC = () => {
                         Legg til poeng
                     </button>
                 </div>
+
                 <NyttSpillModal
                     visNyttSpillInput={visNyttSpillModal}
                     setNyttSpill={startNyttSpill}
                     onAvbryt={() => setVisNyttSpillModal(false)}
                     spillere={spillere}
                 />
-
-                {spill && <SpillTabell spill={spill} spillere={spillere} />}
 
                 <NyRundeModal
                     visNyttSpillInput={visSettNyRundeModal}

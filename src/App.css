@@ -32,7 +32,7 @@
 
 .poengtabell > * {
     border: 1px solid white;
-    padding: 0.5rem;
+    padding: 0.1rem;
     margin-bottom: 0.5rem;
 }
 
@@ -200,6 +200,11 @@ h3 {
     display: none;
 }
 
+@media screen and (min-width: 500px) {
+    .poengtabell > * {
+        padding: 0.5rem;
+    }
+}
 @media screen and (min-width: 900px) {
     .tabellHeaderMobil {
         display: none;
