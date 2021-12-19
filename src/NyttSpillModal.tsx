@@ -1,24 +1,23 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent } from 'react';
 import Modal from './Modal';
-import { Spill, spillereData } from './App';
+import { Spill, Spillere } from './App';
 
 interface Props {
     visNyttSpillInput: boolean;
     setNyttSpill: (nyttSpill: Spill) => void;
     onAvbryt: () => void;
+    spillere: Spillere;
 }
 
-const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAvbryt }) => {
-    const [spillerIder] = useState<string[]>(['1', '2', '3', '4']);
-
+const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAvbryt, spillere }) => {
+    const spillerIder = Object.keys(spillere).map((key) => key);
     const startNyttSpill = (event: FormEvent) => {
         event.preventDefault();
 
         if (spillerIder.length === 4) {
             setNyttSpill({
-                spillerIder: spillerIder,
-
                 runder: null,
+                vinnerId: null,
             });
         }
     };
@@ -30,7 +29,7 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
                 <h2>Spillere:</h2>
                 <div className="spillere">
                     {spillerIder.map((id) => (
-                        <div key={'spillere' + id}>{spillereData[id].navn}</div>
+                        <div key={'spillere' + id}>{spillere[id].navn}</div>
                     ))}
                 </div>
 

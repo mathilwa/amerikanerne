@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Modal from './Modal';
-import { Poeng, Runde, spillereData } from './App';
+import { Poeng, Runde, Spillere } from './App';
 
 interface Props {
     oppdatertRundeMedPoeng: (nyRunde: Runde) => void;
     visGiPoengForRunde: boolean;
     gjeldendeRunde: Runde;
-    spillerIder: string[];
+    spillere: Spillere;
     onAvbryt: () => void;
 }
 
@@ -14,11 +14,13 @@ const GiPoengForRundeModal: React.FC<Props> = ({
     oppdatertRundeMedPoeng,
     visGiPoengForRunde,
     gjeldendeRunde,
-    spillerIder,
+
     onAvbryt,
+    spillere,
 }) => {
     const [nyRundedata, setNyRundedata] = useState<Poeng | null>(null);
     const [klarteLagetDet, setKlarteLagetDet] = useState<boolean | null>(null);
+    const spillerIder = Object.keys(spillere).map((key) => key);
 
     const oppdaterRundedata = (spillerId: string, poeng: number) => {
         setNyRundedata(nyRundedata ? { ...nyRundedata, [spillerId]: poeng } : { [spillerId]: poeng });
@@ -56,8 +58,8 @@ const GiPoengForRundeModal: React.FC<Props> = ({
                 {gjeldendeRunde.lag && (
                     <>
                         <h3>
-                            {`Klarte ${spillereData[gjeldendeRunde.lag[0]].navn} og ${
-                                spillereData[gjeldendeRunde.lag[1]].navn
+                            {`Klarte ${spillere[gjeldendeRunde.lag[0]].navn} og ${
+                                spillere[gjeldendeRunde.lag[1]].navn
                             } det?`}{' '}
                         </h3>
                         <div>
@@ -85,7 +87,7 @@ const GiPoengForRundeModal: React.FC<Props> = ({
                 {spillerIder.map((id) => (
                     <div key={id} className="leggTilNyePoeng">
                         <label className="labelNyePoeng">
-                            {spillereData[id].navn}
+                            {spillere[id].navn}
                             <input
                                 className="inputNyePoeng"
                                 type="text"

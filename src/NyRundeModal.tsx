@@ -1,18 +1,19 @@
 import React, { FormEvent, useState } from 'react';
 import Modal from './Modal';
-import { Melding, Runde, Slag, slagIkoner, spillereData } from './App';
+import { Melding, Runde, Slag, slagIkoner, Spillere } from './App';
 
 interface Props {
     visNyttSpillInput: boolean;
     startNyRunde: (nyRunde: Runde) => void;
-    spillerIder: string[];
     onAvbryt: () => void;
+    spillere: Spillere;
 }
 
-const NyRundeModal: React.FC<Props> = ({ visNyttSpillInput, startNyRunde, spillerIder, onAvbryt }) => {
+const NyRundeModal: React.FC<Props> = ({ visNyttSpillInput, startNyRunde, onAvbryt, spillere }) => {
     const [nyMelding, setNyMelding] = useState<Melding>({ antallStikk: null, slag: null });
     const [nyttLag, setNyttLag] = useState<string[]>([]);
     const [nyMelder, setNyMelder] = useState<string>('');
+    const spillerIder = Object.keys(spillere).map((key) => key);
 
     const oppdaterNyttLag = (spillerId: string) => {
         if (nyttLag.includes(spillerId) && spillerId !== nyMelder) {
@@ -100,7 +101,7 @@ const NyRundeModal: React.FC<Props> = ({ visNyttSpillInput, startNyRunde, spille
                                 }}
                                 checked={nyMelder === melder}
                             />
-                            {spillereData[melder].navn}
+                            {spillere[melder].navn}
                         </label>
                     ))}
                 </div>
@@ -113,7 +114,7 @@ const NyRundeModal: React.FC<Props> = ({ visNyttSpillInput, startNyRunde, spille
                             className={`velgLag ${nyttLag.includes(id) ? 'paLag' : ''} `}
                             onClick={() => oppdaterNyttLag(id)}
                         >
-                            {spillereData[id].navn}
+                            {spillere[id].navn}
                         </div>
                     ))}
                 </div>
