@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, addDoc, doc, setDoc } from 'firebase/firestore';
 import './App.css';
 import logo from './icons/cards.png';
 import SpillTabell from './SpillTabell';
@@ -37,24 +37,10 @@ const App: React.FC = () => {
                 snapshot.docs.map((doc) => {
                     const spillData = doc.data();
 
-                    const rundeData: Runder = spillData.runder.map((runde: any) => {
-                        const melding = { slag: runde.slagMeldt, antallStikk: runde.antallMeldt };
-                        const poeng = runde.poeng.reduce(
-                            (akk: Poeng, p: Poeng) => ({ ...akk, [p.spillerId]: p.poeng }),
-                            {},
-                        );
-
-                        return {
-                            melding,
-                            lag: runde.lag,
-                            melder: runde.melderId,
-                            poeng,
-                        };
-                    });
-
                     setSpill({
+                        id: doc.id,
                         vinnerId: !!spillData.vinnerId ? (spillData.vinnerId as string) : null,
-                        runder: rundeData as Runder,
+                        runder: (spillData.runder as Runder) ?? [],
                     });
                 }, {});
             });
@@ -63,16 +49,29 @@ const App: React.FC = () => {
         getSpill();
     }, []);
 
-    const startNyttSpill = (spill: Spill) => {
+    const startNyttSpill = async (spill: Spill) => {
+        const database = getFirestore();
+        await addDoc(collection(database, 'spill'), {
+            vinnerId: spill.vinnerId ?? '',
+            runder: spill.runder,
+            startingAt: new Date(),
+            endingAt: null,
+        });
+
         setGamleSpill(gamleSpill.concat(spill));
         setSpill(spill);
         setVisNyttSpillModal(false);
     };
 
-    const startNyRunde = (runde: Runde) => {
-        if (spill) {
+    const startNyRunde = async (runde: Runde) => {
+        if (spill && spill.id) {
             const indexForNyRunde = spill.runder ? Object.keys(spill.runder).length : 0;
 
+            const database = getFirestore();
+            await setDoc(doc(database, 'spill', spill.id), {
+                ...spill,
+                runder: { ...spill.runder, [indexForNyRunde]: runde },
+            });
             setSpill({ ...spill, runder: { ...spill.runder, [indexForNyRunde]: runde } });
             setVisSettNyRundeModal(false);
         }
@@ -83,7 +82,23 @@ const App: React.FC = () => {
         return runder[antallRunder - 1];
     };
 
-    console.log(spillere);
+    const onLagrePoeng = async (oppdatertePoeng: Poeng) => {
+        if (spill && spill.id && spill.runder) {
+            const database = getFirestore();
+
+            const gjeldendeRundeIndex = Object.keys(spill.runder).length - 1;
+            const gjeldendeRunde = spill.runder[gjeldendeRundeIndex];
+            const oppdatertSpillData = {
+                ...spill,
+                runder: { ...spill.runder, [gjeldendeRundeIndex]: { ...gjeldendeRunde, poeng: oppdatertePoeng } },
+            };
+
+            await setDoc(doc(database, 'spill', spill.id), oppdatertSpillData);
+
+            setSpill(oppdatertSpillData);
+            setVisGiPoengModal(false);
+        }
+    };
 
     if (!spillere) {
         return null;
@@ -129,11 +144,7 @@ const App: React.FC = () => {
                 />
                 {spill && spill.runder && (
                     <GiPoengForRundeModal
-                        oppdatertRundeMedPoeng={(nyRunde) => {
-                            const sisteRundeIndex = spill.runder ? Object.keys(spill.runder).length : 0;
-                            setSpill({ ...spill, runder: { ...spill.runder, [sisteRundeIndex]: nyRunde } });
-                            setVisGiPoengModal(false);
-                        }}
+                        onOppdaterPoeng={(oppdatertePoeng) => onLagrePoeng(oppdatertePoeng)}
                         visGiPoengForRunde={visGiPoengModal}
                         gjeldendeRunde={gjeldendeRunde(spill.runder)}
                         onAvbryt={() => setVisGiPoengModal(false)}

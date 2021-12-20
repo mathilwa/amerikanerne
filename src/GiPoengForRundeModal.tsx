@@ -3,7 +3,7 @@ import Modal from './Modal';
 import { Poeng, Runde, Spillere } from './types/Types';
 
 interface Props {
-    oppdatertRundeMedPoeng: (nyRunde: Runde) => void;
+    onOppdaterPoeng: (poeng: Poeng) => void;
     visGiPoengForRunde: boolean;
     gjeldendeRunde: Runde;
     spillere: Spillere;
@@ -11,26 +11,28 @@ interface Props {
 }
 
 const GiPoengForRundeModal: React.FC<Props> = ({
-    oppdatertRundeMedPoeng,
+    onOppdaterPoeng,
     visGiPoengForRunde,
     gjeldendeRunde,
-
     onAvbryt,
     spillere,
 }) => {
-    const [nyRundedata, setNyRundedata] = useState<Poeng | null>(null);
+    const [poengTilSpillere, setPoengTilSpillere] = useState<Poeng | null>(null);
     const [klarteLagetDet, setKlarteLagetDet] = useState<boolean | null>(null);
+
     const spillerIder = Object.keys(spillere).map((key) => key);
 
-    const oppdaterRundedata = (spillerId: string, poeng: number) => {
-        setNyRundedata(nyRundedata ? { ...nyRundedata, [spillerId]: poeng } : { [spillerId]: poeng });
+    const oppdaterPoeng = (spillerId: string, antallPoeng: number) => {
+        setPoengTilSpillere(
+            poengTilSpillere ? { ...poengTilSpillere, [spillerId]: antallPoeng } : { [spillerId]: antallPoeng },
+        );
     };
 
-    const leggTilRunde = () => {
-        if (nyRundedata && Object.keys(nyRundedata).length === 4) {
-            oppdatertRundeMedPoeng({ ...gjeldendeRunde, poeng: nyRundedata });
+    const leggTilPoeng = () => {
+        if (poengTilSpillere && Object.keys(poengTilSpillere).length === 4) {
+            onOppdaterPoeng(poengTilSpillere);
 
-            setNyRundedata(null);
+            setPoengTilSpillere(null);
         }
     };
 
@@ -45,7 +47,7 @@ const GiPoengForRundeModal: React.FC<Props> = ({
                 [lag[1]]: antallPoeng,
             };
 
-            setNyRundedata(nyRundedata ? { ...nyRundedata, ...poengForLaget } : poengForLaget);
+            setPoengTilSpillere(poengTilSpillere ? { ...poengTilSpillere, ...poengForLaget } : poengForLaget);
         }
 
         setKlarteLagetDet(klarteDeDet);
@@ -55,7 +57,7 @@ const GiPoengForRundeModal: React.FC<Props> = ({
         <Modal isOpen={visGiPoengForRunde} onClose={onAvbryt}>
             <div className="nyePoeng">
                 <h2 className="nyePoengTittel">Legg til poeng:</h2>
-                {gjeldendeRunde.lag && (
+                {gjeldendeRunde && gjeldendeRunde.lag && (
                     <>
                         <h3 className="klarteLagetDet">
                             {`Klarte ${spillere[gjeldendeRunde.lag[0]].navn} og ${
@@ -91,8 +93,8 @@ const GiPoengForRundeModal: React.FC<Props> = ({
                             <input
                                 className="inputNyePoeng"
                                 type="number"
-                                value={nyRundedata && nyRundedata[id] ? nyRundedata[id] : ''}
-                                onChange={(event) => oppdaterRundedata(id, parseInt(event.target.value))}
+                                value={poengTilSpillere && poengTilSpillere[id] ? poengTilSpillere[id] : ''}
+                                onChange={(event) => oppdaterPoeng(id, parseInt(event.target.value))}
                             />
                         </label>
                     ))}
@@ -101,7 +103,7 @@ const GiPoengForRundeModal: React.FC<Props> = ({
                 <button className="knapp avbryt" onClick={onAvbryt}>
                     Avbryt
                 </button>
-                <button className="knapp" onClick={leggTilRunde}>
+                <button className="knapp" onClick={leggTilPoeng}>
                     Legg til
                 </button>
             </div>

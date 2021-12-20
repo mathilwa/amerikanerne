@@ -16,6 +16,7 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
 
         if (spillerIder.length === 4) {
             setNyttSpill({
+                id: null,
                 runder: null,
                 vinnerId: null,
             });

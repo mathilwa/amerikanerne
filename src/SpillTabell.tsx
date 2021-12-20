@@ -40,7 +40,7 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
                 ))}
                 <span>Melding</span>
             </div>
-            {runder && runder[0].poeng && (
+            {runder && runder[0] && runder[0].poeng && (
                 <>
                     <div>
                         {Object.keys(runder).map((runde) => (
