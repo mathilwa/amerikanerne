@@ -102,7 +102,7 @@ const GiPoengForRundeModal: React.FC<Props> = ({
 
                 <div className="nyePoengInput">
                     {spillerIder.map((id) => (
-                        <label className="labelNyePoeng">
+                        <label key={`poeng-input-${id}`} className="labelNyePoeng">
                             <span className="navn">{spillere[id].navn}</span>
                             <input
                                 className="inputNyePoeng"

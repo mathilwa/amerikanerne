@@ -7,6 +7,8 @@ import NyttSpillModal from './NyttSpillModal';
 import GiPoengForRundeModal from './GiPoengForRundeModal';
 import NyRundeModal from './NyRundeModal';
 import { Poeng, Runde, Runder, Spill, Spillere } from './types/Types';
+import { formaterSpillForLagring } from './utils';
+import sortBy from 'lodash.sortby';
 
 const App: React.FC = () => {
     const [spillere, setSpillere] = useState<Spillere | null>(null);
@@ -14,7 +16,7 @@ const App: React.FC = () => {
     const [visNyttSpillModal, setVisNyttSpillModal] = useState<boolean>(false);
     const [visSettNyRundeModal, setVisSettNyRundeModal] = useState<boolean>(false);
     const [visGiPoengModal, setVisGiPoengModal] = useState<boolean>(false);
-    const [spill, setSpill] = useState<Spill | null>(null);
+    const [paGaendeSpill, setPaGaendeSpill] = useState<Spill | null>(null);
 
     useEffect(() => {
         const database = getFirestore();
@@ -33,46 +35,57 @@ const App: React.FC = () => {
         const getSpill = async () => {
             const spillCollection = collection(database, 'spill');
 
+            const alleSpill: Spill[] = [];
             await getDocs(spillCollection).then((snapshot) => {
                 snapshot.docs.map((doc) => {
                     const spillData = doc.data();
 
-                    setSpill({
+                    console.log(spillData);
+                    alleSpill.push({
                         id: doc.id,
                         vinnerId: !!spillData.vinnerId ? (spillData.vinnerId as string) : null,
                         runder: (spillData.runder as Runder) ?? [],
+                        startet: spillData.startingAt,
+                        avsluttet: !!spillData.endingAt ? spillData.endingAt : null,
                     });
+                    // setPaGaendeSpill({
+                    //     id: doc.id,
+                    //     vinnerId: !!spillData.vinnerId ? (spillData.vinnerId as string) : null,
+                    //     runder: (spillData.runder as Runder) ?? [],
+                    //     startet: spillData.startedAt,
+                    //     avsluttet: !!spillData.endingAt ? spillData.endingAt : null,
+                    // });
                 }, {});
             });
+            const alleSpillSortert = sortBy(alleSpill, 'startet');
+
+            const gamleSpill = alleSpillSortert.slice(0, alleSpillSortert.length - 1);
+            setGamleSpill(gamleSpill);
+            setPaGaendeSpill(alleSpillSortert[alleSpillSortert.length - 1]);
         };
         getSpillere();
         getSpill();
     }, []);
 
-    const startNyttSpill = async (spill: Spill) => {
+    const startNyttSpill = async (nyttSpill: Spill) => {
         const database = getFirestore();
-        await addDoc(collection(database, 'spill'), {
-            vinnerId: spill.vinnerId ?? '',
-            runder: spill.runder,
-            startingAt: new Date(),
-            endingAt: null,
-        });
+        const lagretSpill = await addDoc(collection(database, 'spill'), formaterSpillForLagring(nyttSpill));
 
-        setGamleSpill(gamleSpill.concat(spill));
-        setSpill(spill);
+        paGaendeSpill && setGamleSpill(gamleSpill.concat(paGaendeSpill));
+        setPaGaendeSpill({ ...nyttSpill, id: lagretSpill.id });
         setVisNyttSpillModal(false);
     };
 
     const startNyRunde = async (runde: Runde) => {
-        if (spill && spill.id) {
-            const indexForNyRunde = spill.runder ? Object.keys(spill.runder).length : 0;
+        if (paGaendeSpill && paGaendeSpill.id) {
+            const indexForNyRunde = paGaendeSpill.runder ? Object.keys(paGaendeSpill.runder).length : 0;
 
             const database = getFirestore();
-            await setDoc(doc(database, 'spill', spill.id), {
-                ...spill,
-                runder: { ...spill.runder, [indexForNyRunde]: runde },
+            await setDoc(doc(database, 'spill', paGaendeSpill.id), {
+                ...formaterSpillForLagring(paGaendeSpill),
+                runder: { ...paGaendeSpill.runder, [indexForNyRunde]: runde },
             });
-            setSpill({ ...spill, runder: { ...spill.runder, [indexForNyRunde]: runde } });
+            setPaGaendeSpill({ ...paGaendeSpill, runder: { ...paGaendeSpill.runder, [indexForNyRunde]: runde } });
             setVisSettNyRundeModal(false);
         }
     };
@@ -83,19 +96,22 @@ const App: React.FC = () => {
     };
 
     const onLagrePoeng = async (oppdatertePoeng: Poeng) => {
-        if (spill && spill.id && spill.runder) {
+        if (paGaendeSpill && paGaendeSpill.id && paGaendeSpill.runder) {
             const database = getFirestore();
 
-            const gjeldendeRundeIndex = Object.keys(spill.runder).length - 1;
-            const gjeldendeRunde = spill.runder[gjeldendeRundeIndex];
-            const oppdatertSpillData = {
-                ...spill,
-                runder: { ...spill.runder, [gjeldendeRundeIndex]: { ...gjeldendeRunde, poeng: oppdatertePoeng } },
+            const gjeldendeRundeIndex = Object.keys(paGaendeSpill.runder).length - 1;
+            const gjeldendeRunde = paGaendeSpill.runder[gjeldendeRundeIndex];
+            const oppdatertRundeData = {
+                ...paGaendeSpill.runder,
+                [gjeldendeRundeIndex]: { ...gjeldendeRunde, poeng: oppdatertePoeng },
             };
 
-            await setDoc(doc(database, 'spill', spill.id), oppdatertSpillData);
+            await setDoc(doc(database, 'spill', paGaendeSpill.id), {
+                ...formaterSpillForLagring(paGaendeSpill),
+                runder: oppdatertRundeData,
+            });
 
-            setSpill(oppdatertSpillData);
+            setPaGaendeSpill({ ...paGaendeSpill, runder: oppdatertRundeData });
             setVisGiPoengModal(false);
         }
     };
@@ -104,6 +120,8 @@ const App: React.FC = () => {
         return null;
     }
 
+    console.log(gamleSpill);
+    console.log(paGaendeSpill);
     return (
         <div className="App">
             <header className="appHeader">
@@ -113,7 +131,7 @@ const App: React.FC = () => {
             <div className="sideContainer">
                 <h1>Amerikanerne</h1>
 
-                {spill && <SpillTabell spill={spill} spillere={spillere} />}
+                {paGaendeSpill && <SpillTabell spill={paGaendeSpill} spillere={spillere} />}
 
                 <div className="knappContainer">
                     <button className="knapp" onClick={() => setVisNyttSpillModal(true)}>
@@ -142,11 +160,11 @@ const App: React.FC = () => {
                     onAvbryt={() => setVisSettNyRundeModal(false)}
                     spillere={spillere}
                 />
-                {spill && spill.runder && (
+                {paGaendeSpill && paGaendeSpill.runder && (
                     <GiPoengForRundeModal
                         onOppdaterPoeng={(oppdatertePoeng) => onLagrePoeng(oppdatertePoeng)}
                         visGiPoengForRunde={visGiPoengModal}
-                        gjeldendeRunde={gjeldendeRunde(spill.runder)}
+                        gjeldendeRunde={gjeldendeRunde(paGaendeSpill.runder)}
                         onAvbryt={() => setVisGiPoengModal(false)}
                         spillere={spillere}
                     />
@@ -154,6 +172,7 @@ const App: React.FC = () => {
 
                 {gamleSpill.length > 0 && (
                     <div>
+                        <h2>Tidligere spill:</h2>
                         {gamleSpill.map((gammeltSpill) => (
                             <SpillTabell spill={gammeltSpill} spillere={spillere} />
                         ))}

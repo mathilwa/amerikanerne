@@ -9,6 +9,7 @@ interface Props {
 
 const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
     const runder = spill.runder;
+    console.log('rinder', runder);
 
     const finnTotalsumForSpiller = (spillerId: string) => {
         if (runder) {
@@ -40,7 +41,7 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
                 ))}
                 <span>Melding</span>
             </div>
-            {runder && runder[0] && runder[0].poeng && (
+            {runder && runder[0] && (
                 <>
                     <div>
                         {Object.keys(runder).map((runde) => (
