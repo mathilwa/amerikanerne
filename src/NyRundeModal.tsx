@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import Modal from './Modal';
-import { Melding, Runde, Slag, slagIkoner, Spillere } from './App';
+import { Melding, Runde, Slag, slagIkoner, Spillere } from './types/Types';
 
 interface Props {
     visNyttSpillInput: boolean;
@@ -118,11 +118,20 @@ const NyRundeModal: React.FC<Props> = ({ visNyttSpillInput, startNyRunde, onAvbr
                         </div>
                     ))}
                 </div>
-                <button type="submit" className="knapp" onClick={onStartNyRunde}>
-                    Start runde
-                </button>
-                <button type="submit" className="knapp avbryt" onClick={onAvbryt}>
+                <button
+                    type="submit"
+                    className="knapp avbryt"
+                    onClick={() => {
+                        setNyMelding({ antallStikk: null, slag: null });
+                        setNyMelder('');
+                        setNyttLag([]);
+                        onAvbryt();
+                    }}
+                >
                     Avbryt
+                </button>
+                <button type="submit" className="knapp" onClick={onStartNyRunde}>
+                    Legg til
                 </button>
             </form>
         </Modal>

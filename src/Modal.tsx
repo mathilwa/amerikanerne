@@ -14,6 +14,7 @@ const Modal: React.FC<Props> = ({ isOpen, onClose, children }) => (
         onRequestClose={onClose}
         shouldCloseOnEsc={true}
         className="modal"
+        overlayClassName="modalOverlay"
         shouldCloseOnOverlayClick={true}
     >
         <div>{children}</div>

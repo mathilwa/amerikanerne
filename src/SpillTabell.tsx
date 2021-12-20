@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { slagIkoner, Spill, Spillere } from './App';
+import { slagIkoner, Spill, Spillere } from './types/Types';
 
 interface Props {
     spill: Spill;

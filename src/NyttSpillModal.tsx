@@ -1,6 +1,6 @@
 import React, { FormEvent } from 'react';
 import Modal from './Modal';
-import { Spill, Spillere } from './App';
+import { Spill, Spillere } from './types/Types';
 
 interface Props {
     visNyttSpillInput: boolean;

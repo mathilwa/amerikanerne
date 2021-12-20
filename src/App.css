@@ -40,19 +40,29 @@
     border-top: 1px solid white;
 }
 
-.nyePoeng {
-    width: 300px;
-}
 .nyePoengTittel {
     margin-bottom: 20px;
 }
 
 .modal {
-    width: 60%;
     margin: 0 auto;
     background-color: #282c34;
     padding: 3rem;
     color: white;
+}
+
+.modalOverlay {
+    z-index: 20;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.75);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .spillere {
@@ -73,8 +83,8 @@
 .modal .melder.valgt,
 .modal .velgLag.paLag {
     border-color: white;
-    background-color: #ba1515;
-    color: white;
+    background-color: aqua;
+    color: #282c34;
 }
 
 input[type='radio'] {
@@ -150,11 +160,15 @@ h3 {
     margin-bottom: 1rem;
     width: 100%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
 .knappContainer > *:not(:last-child) {
     margin-right: 1rem;
+}
+
+.knappContainer .nyRunde {
+    margin-right: 10px;
 }
 
 .poengContainer {
@@ -189,11 +203,45 @@ h3 {
     box-sizing: border-box;
 }
 
-.klarteLagetDetRadio {
-    border: 1px solid aqua;
+.klarteLagetDet {
+    margin-bottom: 1rem;
+}
+
+.klarteLagetDetInput {
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+.klarteLagetDetInput .radio {
+    border: 2px solid aqua;
     border-radius: 4px;
     padding: 1rem 1.5rem;
     margin-right: 1rem;
+}
+
+.klarteLagetDetInput .radio.checked {
+    border-color: white;
+    color: #282c34;
+    background-color: aqua;
+}
+
+.nyePoengInput {
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+.labelNyePoeng {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+
+.leggTilNyePoeng {
+    margin-bottom: 1rem;
+}
+
+.labelNyePoeng .navn {
+    margin-bottom: 10px;
 }
 
 .tabellHeaderDesktop {

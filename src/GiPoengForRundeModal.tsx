@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Modal from './Modal';
-import { Poeng, Runde, Spillere } from './App';
+import { Poeng, Runde, Spillere } from './types/Types';
 
 interface Props {
     oppdatertRundeMedPoeng: (nyRunde: Runde) => void;
@@ -57,13 +57,13 @@ const GiPoengForRundeModal: React.FC<Props> = ({
                 <h2 className="nyePoengTittel">Legg til poeng:</h2>
                 {gjeldendeRunde.lag && (
                     <>
-                        <h3>
+                        <h3 className="klarteLagetDet">
                             {`Klarte ${spillere[gjeldendeRunde.lag[0]].navn} og ${
                                 spillere[gjeldendeRunde.lag[1]].navn
                             } det?`}{' '}
                         </h3>
-                        <div>
-                            <label className="klarteLagetDetRadio">
+                        <div className="klarteLagetDetInput">
+                            <label className={`radio ${klarteLagetDet === true ? 'checked' : ''}`}>
                                 <input
                                     type="radio"
                                     onChange={() => onChangeKlarteLagetDet(true)}
@@ -72,7 +72,7 @@ const GiPoengForRundeModal: React.FC<Props> = ({
                                 Ja
                             </label>
 
-                            <label className="klarteLagetDetRadio">
+                            <label className={`radio ${klarteLagetDet === false ? 'checked' : ''}`}>
                                 <input
                                     type="radio"
                                     onChange={() => onChangeKlarteLagetDet(false)}
@@ -84,21 +84,26 @@ const GiPoengForRundeModal: React.FC<Props> = ({
                     </>
                 )}
 
-                {spillerIder.map((id) => (
-                    <div key={id} className="leggTilNyePoeng">
+                <div className="nyePoengInput">
+                    {spillerIder.map((id) => (
                         <label className="labelNyePoeng">
-                            {spillere[id].navn}
+                            <span className="navn">{spillere[id].navn}</span>
                             <input
                                 className="inputNyePoeng"
-                                type="text"
+                                type="number"
                                 value={nyRundedata && nyRundedata[id] ? nyRundedata[id] : ''}
                                 onChange={(event) => oppdaterRundedata(id, parseInt(event.target.value))}
                             />
                         </label>
-                    </div>
-                ))}
+                    ))}
+                </div>
 
-                <button onClick={leggTilRunde}>Legg til</button>
+                <button className="knapp avbryt" onClick={onAvbryt}>
+                    Avbryt
+                </button>
+                <button className="knapp" onClick={leggTilRunde}>
+                    Legg til
+                </button>
             </div>
         </Modal>
     );
