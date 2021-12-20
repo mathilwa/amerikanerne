@@ -19,6 +19,7 @@ const GiPoengForRundeModal: React.FC<Props> = ({
 }) => {
     const [poengTilSpillere, setPoengTilSpillere] = useState<Poeng | null>(null);
     const [klarteLagetDet, setKlarteLagetDet] = useState<boolean | null>(null);
+    const [poengManglerError, setPoengManglerError] = useState<string>('');
 
     const spillerIder = Object.keys(spillere).map((key) => key);
 
@@ -26,6 +27,7 @@ const GiPoengForRundeModal: React.FC<Props> = ({
         setPoengTilSpillere(
             poengTilSpillere ? { ...poengTilSpillere, [spillerId]: antallPoeng } : { [spillerId]: antallPoeng },
         );
+        setPoengManglerError('');
     };
 
     const leggTilPoeng = () => {
@@ -33,6 +35,10 @@ const GiPoengForRundeModal: React.FC<Props> = ({
             onOppdaterPoeng(poengTilSpillere);
 
             setPoengTilSpillere(null);
+            setPoengManglerError('');
+            setKlarteLagetDet(null);
+        } else {
+            setPoengManglerError('Noen spillere mangler poeng');
         }
     };
 
@@ -51,6 +57,14 @@ const GiPoengForRundeModal: React.FC<Props> = ({
         }
 
         setKlarteLagetDet(klarteDeDet);
+    };
+
+    const avbryt = () => {
+        setPoengTilSpillere(null);
+        setKlarteLagetDet(null);
+        setPoengManglerError('');
+
+        onAvbryt();
     };
 
     return (
@@ -100,7 +114,9 @@ const GiPoengForRundeModal: React.FC<Props> = ({
                     ))}
                 </div>
 
-                <button className="knapp avbryt" onClick={onAvbryt}>
+                {poengManglerError && <div className="error">{poengManglerError}</div>}
+
+                <button className="knapp avbryt" onClick={avbryt}>
                     Avbryt
                 </button>
                 <button className="knapp" onClick={leggTilPoeng}>

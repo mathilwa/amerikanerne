@@ -194,7 +194,7 @@ h3 {
 }
 
 .poengContainer .poeng.lag {
-    border: 1px solid red;
+    border: 1px solid #ba1515;
     border-radius: 45px;
 }
 
@@ -246,6 +246,13 @@ h3 {
 
 .tabellHeaderDesktop {
     display: none;
+}
+
+.error {
+    margin-bottom: 10px;
+    color: #ba1515;
+    background-color: white;
+    padding: 5px 10px;
 }
 
 @media screen and (min-width: 500px) {
