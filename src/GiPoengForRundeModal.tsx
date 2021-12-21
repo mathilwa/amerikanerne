@@ -116,7 +116,7 @@ const GiPoengForRundeModal: React.FC<Props> = ({
 
                 {poengManglerError && <div className="error">{poengManglerError}</div>}
 
-                <button className="knapp avbryt" onClick={avbryt}>
+                <button className="knapp sekundaerKnapp" onClick={avbryt}>
                     Avbryt
                 </button>
                 <button className="knapp" onClick={leggTilPoeng}>

@@ -41,7 +41,7 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
                 <h2>Første runde:</h2>
                 <NyRundeInput onOppdaterRunde={setNyRunde} runde={nyRunde} spillere={spillere} />
 
-                <button type="submit" className="knapp avbryt" onClick={onAvbryt}>
+                <button type="submit" className="knapp sekundaerKnapp" onClick={onAvbryt}>
                     Avbryt
                 </button>
                 <button type="submit" className="knapp" onClick={startNyttSpill}>

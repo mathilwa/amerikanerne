@@ -40,7 +40,7 @@ const NyRundeModal: React.FC<Props> = ({ visNyttSpillInput, startNyRunde, onAvbr
                 <NyRundeInput runde={nyRunde} onOppdaterRunde={setNyRunde} spillere={spillere} />
                 <button
                     type="submit"
-                    className="knapp avbryt"
+                    className="knapp sekundaerKnapp"
                     onClick={() => {
                         setNyRunde(null);
 

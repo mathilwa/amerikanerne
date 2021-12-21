@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { slagIkoner, Spill, Spillere } from './types/Types';
-import { formatDateAndClock } from './utils';
+import { finnTotalsumForSpiller, formatDateAndClock } from './utils';
 
 interface Props {
     spill: Spill;
@@ -11,24 +11,13 @@ interface Props {
 const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
     const runder = spill.runder;
 
-    const finnTotalsumForSpiller = (spillerId: string) => {
-        if (runder) {
-            return Object.values(runder).reduce((akk, runde) => {
-                if (runde.poeng) {
-                    return akk + runde.poeng[spillerId];
-                } else {
-                    return akk;
-                }
-            }, 0);
-        }
-        return 0;
-    };
-
     const spillerIder = Object.keys(spillere).map((key) => key);
 
     return (
         <div className="spillTabellContainer">
-            {spill.startet && <div className="spillStartet">{`Startet ${formatDateAndClock(new Date(spill.startet))}`}</div>}
+            {spill.startet && (
+                <div className="spillStartet">{`Startet ${formatDateAndClock(new Date(spill.startet))}`}</div>
+            )}
             <div className="poengtabell">
                 {spillerIder.map((id) => (
                     <div key={'navn-' + id}>
@@ -82,7 +71,7 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
                             Totalt:{' '}
                             <div className="poengtabell">
                                 {spillerIder.map((id) => (
-                                    <span key={'sum' + id}>{finnTotalsumForSpiller(id)}</span>
+                                    <span key={'sum' + id}>{finnTotalsumForSpiller(runder, id)}</span>
                                 ))}
                             </div>
                         </div>

@@ -7,7 +7,7 @@ import NyttSpillModal from './NyttSpillModal';
 import GiPoengForRundeModal from './GiPoengForRundeModal';
 import NyRundeModal from './NyRundeModal';
 import { Poeng, Runde, Runder, Spill, Spillere } from './types/Types';
-import { formaterSpillForLagring } from './utils';
+import { formaterSpillForLagring, getSpillerIder, spilletHarEnVinner } from './utils';
 import sortBy from 'lodash.sortby';
 
 const App: React.FC = () => {
@@ -121,21 +121,32 @@ const App: React.FC = () => {
             <div className="sideContainer">
                 <h1>Amerikanerne</h1>
 
-                {paGaendeSpill && <SpillTabell spill={paGaendeSpill} spillere={spillere} />}
-
-                <div className="knappContainer">
-                    <button className="knapp" onClick={() => setVisNyttSpillModal(true)}>
-                        + Nytt spill
-                    </button>
+                {paGaendeSpill && (
                     <div>
-                        <button className="knapp nyRunde" onClick={() => setVisSettNyRundeModal(true)}>
-                            + Legg til runde
-                        </button>
-                        <button className="knapp" onClick={() => setVisGiPoengModal(true)}>
-                            + Legg til poeng
-                        </button>
+                        <SpillTabell spill={paGaendeSpill} spillere={spillere} />
+
+                        <div className="knappContainer">
+                            <button
+                                className={`knapp ${
+                                    spilletHarEnVinner(paGaendeSpill, getSpillerIder(spillere))
+                                        ? ''
+                                        : 'sekundaerKnapp'
+                                }`}
+                                onClick={() => setVisNyttSpillModal(true)}
+                            >
+                                + Nytt spill
+                            </button>
+                            <div>
+                                <button className="knapp nyRunde" onClick={() => setVisSettNyRundeModal(true)}>
+                                    + Legg til runde
+                                </button>
+                                <button className="knapp" onClick={() => setVisGiPoengModal(true)}>
+                                    + Legg til poeng
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 <NyttSpillModal
                     visNyttSpillInput={visNyttSpillModal}
