@@ -33,7 +33,7 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
             </div>
             {runder && runder[0] && (
                 <>
-                    <div>
+                    <div className="runder">
                         {Object.keys(runder).map((runde) => (
                             <div key={runde} className="poengtabell">
                                 {runder[runde] && (
@@ -68,7 +68,7 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
                     </div>
                     {Object.keys(runder).length > 1 && (
                         <div className="totalsum">
-                            Totalt:{' '}
+                            <div className="totalsumHeading">Totalt:</div>
                             <div className="poengtabell">
                                 {spillerIder.map((id) => (
                                     <span key={'sum' + id}>{finnTotalsumForSpiller(runder, id)}</span>

@@ -16,7 +16,7 @@ const App: React.FC = () => {
     const [visNyttSpillModal, setVisNyttSpillModal] = useState<boolean>(false);
     const [visSettNyRundeModal, setVisSettNyRundeModal] = useState<boolean>(false);
     const [visGiPoengModal, setVisGiPoengModal] = useState<boolean>(false);
-    const [paGaendeSpill, setPaGaendeSpill] = useState<Spill | null>(null);
+    const [pagaendeSpill, setPaGaendeSpill] = useState<Spill | null>(null);
 
     useEffect(() => {
         const database = getFirestore();
@@ -69,21 +69,21 @@ const App: React.FC = () => {
         const database = getFirestore();
         const lagretSpill = await addDoc(collection(database, 'spill'), formaterSpillForLagring(nyttSpill));
 
-        paGaendeSpill && setGamleSpill(gamleSpill.concat(paGaendeSpill));
+        pagaendeSpill && setGamleSpill(gamleSpill.concat(pagaendeSpill));
         setPaGaendeSpill({ ...nyttSpill, id: lagretSpill.id });
         setVisNyttSpillModal(false);
     };
 
     const startNyRunde = async (runde: Runde) => {
-        if (paGaendeSpill && paGaendeSpill.id) {
-            const indexForNyRunde = paGaendeSpill.runder ? Object.keys(paGaendeSpill.runder).length : 0;
+        if (pagaendeSpill && pagaendeSpill.id) {
+            const indexForNyRunde = pagaendeSpill.runder ? Object.keys(pagaendeSpill.runder).length : 0;
 
             const database = getFirestore();
-            await setDoc(doc(database, 'spill', paGaendeSpill.id), {
-                ...formaterSpillForLagring(paGaendeSpill),
-                runder: { ...paGaendeSpill.runder, [indexForNyRunde]: runde },
+            await setDoc(doc(database, 'spill', pagaendeSpill.id), {
+                ...formaterSpillForLagring(pagaendeSpill),
+                runder: { ...pagaendeSpill.runder, [indexForNyRunde]: runde },
             });
-            setPaGaendeSpill({ ...paGaendeSpill, runder: { ...paGaendeSpill.runder, [indexForNyRunde]: runde } });
+            setPaGaendeSpill({ ...pagaendeSpill, runder: { ...pagaendeSpill.runder, [indexForNyRunde]: runde } });
             setVisSettNyRundeModal(false);
         }
     };
@@ -94,13 +94,13 @@ const App: React.FC = () => {
     };
 
     const onLagrePoeng = async (oppdatertePoeng: Poeng) => {
-        if (paGaendeSpill && paGaendeSpill.id && paGaendeSpill.runder) {
+        if (pagaendeSpill && pagaendeSpill.id && pagaendeSpill.runder) {
             const database = getFirestore();
 
-            const gjeldendeRundeIndex = Object.keys(paGaendeSpill.runder).length - 1;
-            const gjeldendeRunde = paGaendeSpill.runder[gjeldendeRundeIndex];
+            const gjeldendeRundeIndex = Object.keys(pagaendeSpill.runder).length - 1;
+            const gjeldendeRunde = pagaendeSpill.runder[gjeldendeRundeIndex];
             const oppdatertRundeData = {
-                ...paGaendeSpill.runder,
+                ...pagaendeSpill.runder,
                 [gjeldendeRundeIndex]: { ...gjeldendeRunde, poeng: oppdatertePoeng },
             };
 
@@ -110,13 +110,13 @@ const App: React.FC = () => {
                   )
                 : null;
 
-            await setDoc(doc(database, 'spill', paGaendeSpill.id), {
-                ...formaterSpillForLagring(paGaendeSpill),
+            await setDoc(doc(database, 'spill', pagaendeSpill.id), {
+                ...formaterSpillForLagring(pagaendeSpill),
                 runder: oppdatertRundeData,
                 vinnerIder: spillVinnere,
             });
 
-            setPaGaendeSpill({ ...paGaendeSpill, runder: oppdatertRundeData, vinnerIder: spillVinnere ?? [] });
+            setPaGaendeSpill({ ...pagaendeSpill, runder: oppdatertRundeData, vinnerIder: spillVinnere ?? [] });
             setVisGiPoengModal(false);
         }
     };
@@ -134,14 +134,14 @@ const App: React.FC = () => {
             <div className="sideContainer">
                 <h1>Amerikanerne</h1>
 
-                {paGaendeSpill && (
-                    <div>
-                        <SpillTabell spill={paGaendeSpill} spillere={spillere} />
+                {pagaendeSpill && (
+                    <div className="pagaendeSpillContainer">
+                        <SpillTabell spill={pagaendeSpill} spillere={spillere} />
 
                         <div className="knappContainer">
                             <button
                                 className={`knapp ${
-                                    getSpilletHarEnVinner(paGaendeSpill, getSpillerIder(spillere))
+                                    getSpilletHarEnVinner(pagaendeSpill, getSpillerIder(spillere))
                                         ? ''
                                         : 'sekundaerKnapp'
                                 }`}
@@ -150,10 +150,30 @@ const App: React.FC = () => {
                                 + Nytt spill
                             </button>
                             <div>
-                                <button className="knapp nyRunde" onClick={() => setVisSettNyRundeModal(true)}>
+                                <button
+                                    className={`knapp nyRunde ${
+                                        getSpilletHarEnVinner(pagaendeSpill, getSpillerIder(spillere)) ||
+                                        (pagaendeSpill.runder &&
+                                            pagaendeSpill.runder[Object.keys(pagaendeSpill.runder).length - 1] &&
+                                            !pagaendeSpill.runder[Object.keys(pagaendeSpill.runder).length - 1]
+                                                .poeng)
+                                            ? 'sekundaerKnapp'
+                                            : ''
+                                    }`}
+                                    onClick={() => setVisSettNyRundeModal(true)}
+                                >
                                     + Legg til runde
                                 </button>
-                                <button className="knapp" onClick={() => setVisGiPoengModal(true)}>
+                                <button
+                                    className={`knapp ${
+                                        pagaendeSpill.runder &&
+                                        pagaendeSpill.runder[Object.keys(pagaendeSpill.runder).length - 1] &&
+                                        pagaendeSpill.runder[Object.keys(pagaendeSpill.runder).length - 1].poeng
+                                            ? 'sekundaerKnapp'
+                                            : ''
+                                    }`}
+                                    onClick={() => setVisGiPoengModal(true)}
+                                >
                                     + Legg til poeng
                                 </button>
                             </div>
@@ -174,11 +194,11 @@ const App: React.FC = () => {
                     onAvbryt={() => setVisSettNyRundeModal(false)}
                     spillere={spillere}
                 />
-                {paGaendeSpill && paGaendeSpill.runder && (
+                {pagaendeSpill && pagaendeSpill.runder && (
                     <GiPoengForRundeModal
                         onOppdaterPoeng={(oppdatertePoeng) => onLagrePoeng(oppdatertePoeng)}
                         visGiPoengForRunde={visGiPoengModal}
-                        gjeldendeRunde={gjeldendeRunde(paGaendeSpill.runder)}
+                        gjeldendeRunde={gjeldendeRunde(pagaendeSpill.runder)}
                         onAvbryt={() => setVisGiPoengModal(false)}
                         spillere={spillere}
                     />
@@ -186,9 +206,13 @@ const App: React.FC = () => {
 
                 {gamleSpill.length > 0 && (
                     <div>
-                        <h2>Tidligere spill:</h2>
+                        <h2 className="tidligereSpillHeading">Tidligere spill:</h2>
                         {gamleSpill.map((gammeltSpill) => (
-                            <SpillTabell spill={gammeltSpill} spillere={spillere} />
+                            <SpillTabell
+                                key={`gammeltSpill-${gammeltSpill.id}`}
+                                spill={gammeltSpill}
+                                spillere={spillere}
+                            />
                         ))}
                     </div>
                 )}

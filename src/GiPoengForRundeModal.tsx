@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from './Modal';
 import { Poeng, Runde, Spillere } from './types/Types';
-import {getSpillerIder} from './utils';
+import { getSpillerIder } from './utils';
 
 interface Props {
     onOppdaterPoeng: (poeng: Poeng) => void;
@@ -108,7 +108,13 @@ const GiPoengForRundeModal: React.FC<Props> = ({
                             <input
                                 className="inputNyePoeng"
                                 type="number"
-                                value={poengTilSpillere && poengTilSpillere[id] ? poengTilSpillere[id] : ''}
+                                inputMode="numeric"
+                                pattern="[0-9]*"
+                                value={
+                                    poengTilSpillere && (poengTilSpillere[id] || poengTilSpillere[id] === 0)
+                                        ? poengTilSpillere[id]!.toString()
+                                        : ''
+                                }
                                 onChange={(event) => oppdaterPoeng(id, parseInt(event.target.value))}
                             />
                         </label>
