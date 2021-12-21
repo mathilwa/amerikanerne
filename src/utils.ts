@@ -2,7 +2,7 @@ import { Poeng, Runder, Spill, Spillere } from './types/Types';
 import { format } from 'date-fns';
 
 export const formaterSpillForLagring = (spill: Spill) => ({
-    vinnerId: spill.vinnerId ?? '',
+    vinnerId: spill.vinnerIder ?? '',
     runder: spill.runder,
     startingAt: spill.startet ?? new Date(),
     endingAt: spill.avsluttet ?? null,

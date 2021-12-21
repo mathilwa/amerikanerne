@@ -21,7 +21,7 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
             setNyttSpill({
                 id: null,
                 runder: { 0: nyRunde },
-                vinnerId: null,
+                vinnerIder: [],
                 startet: new Date(),
                 avsluttet: null,
             });

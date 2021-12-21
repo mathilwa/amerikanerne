@@ -42,7 +42,7 @@ const App: React.FC = () => {
 
                     alleSpill.push({
                         id: doc.id,
-                        vinnerId: !!spillData.vinnerId ? (spillData.vinnerId as string) : null,
+                        vinnerIder: spillData.vinnerId,
                         runder: (spillData.runder as Runder) ?? [],
                         startet: spillData.startingAt.toDate(),
                         avsluttet: !!spillData.endingAt ? spillData.endingAt : null,

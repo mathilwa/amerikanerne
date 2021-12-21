@@ -57,7 +57,7 @@ export interface Runde {
 export interface Spill {
     id: string | null;
     runder: Runder | null;
-    vinnerId: string | null;
+    vinnerIder: string[];
     startet: Date | null;
     avsluttet: Date | null;
 }
