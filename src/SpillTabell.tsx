@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { slagIkoner, Spill, Spillere } from './types/Types';
-import { finnTotalsumForSpiller, formatDateAndClock } from './utils';
+import { finnTotalsumForSpiller, formatDateAndClock, getSpillerIder } from './utils';
 
 interface Props {
     spill: Spill;
@@ -11,7 +11,7 @@ interface Props {
 const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
     const runder = spill.runder;
 
-    const spillerIder = Object.keys(spillere).map((key) => key);
+    const spillerIder = getSpillerIder(spillere);
 
     return (
         <div className="spillTabellContainer">

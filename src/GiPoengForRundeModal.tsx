@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Modal from './Modal';
 import { Poeng, Runde, Spillere } from './types/Types';
+import {getSpillerIder} from './utils';
 
 interface Props {
     onOppdaterPoeng: (poeng: Poeng) => void;
@@ -21,7 +22,7 @@ const GiPoengForRundeModal: React.FC<Props> = ({
     const [klarteLagetDet, setKlarteLagetDet] = useState<boolean | null>(null);
     const [poengManglerError, setPoengManglerError] = useState<string>('');
 
-    const spillerIder = Object.keys(spillere).map((key) => key);
+    const spillerIder = getSpillerIder(spillere);
 
     const oppdaterPoeng = (spillerId: string, antallPoeng: number) => {
         setPoengTilSpillere(

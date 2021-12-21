@@ -1,5 +1,6 @@
 import React from 'react';
 import { Melding, Runde, Slag, slagIkoner, Spillere } from './types/Types';
+import {getSpillerIder} from './utils';
 
 interface Props {
     onOppdaterRunde: (nyRunde: Runde) => void;
@@ -14,7 +15,7 @@ const NyRundeInput: React.FC<Props> = ({ onOppdaterRunde, spillere, runde }) => 
         melder: '',
         poeng: null,
     };
-    const spillerIder = Object.keys(spillere).map((key) => key);
+    const spillerIder = getSpillerIder(spillere);
 
     const oppdaterNyttLag = (spillerId: string) => {
         const nyttLag = rundeData.lag;

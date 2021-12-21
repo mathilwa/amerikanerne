@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import Modal from './Modal';
 import { Runde, Spill, Spillere } from './types/Types';
 import NyRundeInput from './NyRundeInput';
+import { getSpillerIder } from './utils';
 
 interface Props {
     visNyttSpillInput: boolean;
@@ -12,7 +13,7 @@ interface Props {
 
 const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAvbryt, spillere }) => {
     const [nyRunde, setNyRunde] = useState<Runde | null>(null);
-    const spillerIder = Object.keys(spillere).map((key) => key);
+    const spillerIder = getSpillerIder(spillere);
     const startNyttSpill = (event: FormEvent) => {
         event.preventDefault();
 
