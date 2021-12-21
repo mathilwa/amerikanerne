@@ -7,7 +7,7 @@ import NyttSpillModal from './NyttSpillModal';
 import GiPoengForRundeModal from './GiPoengForRundeModal';
 import NyRundeModal from './NyRundeModal';
 import { Poeng, Runde, Runder, Spill, Spillere } from './types/Types';
-import { formaterSpillForLagring, getSpillerIder, spilletHarEnVinner } from './utils';
+import { finnTotalsumForSpiller, formaterSpillForLagring, getSpillerIder, getSpilletHarEnVinner } from './utils';
 import sortBy from 'lodash.sortby';
 
 const App: React.FC = () => {
@@ -21,8 +21,9 @@ const App: React.FC = () => {
     useEffect(() => {
         const database = getFirestore();
 
-        const getSpillere = async () => {
+        const getSpillData = async () => {
             const spillereCollection = collection(database, 'users');
+            const spillCollection = collection(database, 'spill');
 
             await getDocs(spillereCollection).then((snapshot) => {
                 const spillerData = snapshot.docs.reduce((akk, doc) => {
@@ -30,10 +31,6 @@ const App: React.FC = () => {
                 }, {});
                 setSpillere(spillerData);
             });
-        };
-
-        const getSpill = async () => {
-            const spillCollection = collection(database, 'spill');
 
             const alleSpill: Spill[] = [];
             await getDocs(spillCollection).then((snapshot) => {
@@ -42,21 +39,30 @@ const App: React.FC = () => {
 
                     alleSpill.push({
                         id: doc.id,
-                        vinnerIder: spillData.vinnerId,
+                        vinnerIder: spillData.vinnerIder ?? [],
                         runder: (spillData.runder as Runder) ?? [],
                         startet: spillData.startingAt.toDate(),
                         avsluttet: !!spillData.endingAt ? spillData.endingAt : null,
                     });
                 }, {});
             });
-            const alleSpillSortert = sortBy(alleSpill, 'startet');
 
-            const gamleSpill = alleSpillSortert.slice(0, alleSpillSortert.length - 1);
-            setGamleSpill(gamleSpill);
-            setPaGaendeSpill(alleSpillSortert[alleSpillSortert.length - 1]);
+            if (alleSpill.length === 1) {
+                const paGaendeSpill = alleSpill[0];
+                setPaGaendeSpill(paGaendeSpill);
+            } else if (alleSpill.length > 1) {
+                const alleSpillSortert = sortBy(alleSpill, 'startet');
+
+                const gamleSpill = alleSpillSortert.slice(0, alleSpillSortert.length - 1);
+                const paGaendeSpill = alleSpillSortert[alleSpillSortert.length - 1];
+                setGamleSpill(gamleSpill);
+                setPaGaendeSpill(paGaendeSpill);
+            } else {
+                setPaGaendeSpill(null);
+                setGamleSpill([]);
+            }
         };
-        getSpillere();
-        getSpill();
+        getSpillData();
     }, []);
 
     const startNyttSpill = async (nyttSpill: Spill) => {
@@ -98,12 +104,19 @@ const App: React.FC = () => {
                 [gjeldendeRundeIndex]: { ...gjeldendeRunde, poeng: oppdatertePoeng },
             };
 
+            const spillVinnere = spillere
+                ? getSpillerIder(spillere).filter(
+                      (spillerId) => finnTotalsumForSpiller(oppdatertRundeData, spillerId) >= 52,
+                  )
+                : null;
+
             await setDoc(doc(database, 'spill', paGaendeSpill.id), {
                 ...formaterSpillForLagring(paGaendeSpill),
                 runder: oppdatertRundeData,
+                vinnerIder: spillVinnere,
             });
 
-            setPaGaendeSpill({ ...paGaendeSpill, runder: oppdatertRundeData });
+            setPaGaendeSpill({ ...paGaendeSpill, runder: oppdatertRundeData, vinnerIder: spillVinnere ?? [] });
             setVisGiPoengModal(false);
         }
     };
@@ -128,7 +141,7 @@ const App: React.FC = () => {
                         <div className="knappContainer">
                             <button
                                 className={`knapp ${
-                                    spilletHarEnVinner(paGaendeSpill, getSpillerIder(spillere))
+                                    getSpilletHarEnVinner(paGaendeSpill, getSpillerIder(spillere))
                                         ? ''
                                         : 'sekundaerKnapp'
                                 }`}
