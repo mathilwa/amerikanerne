@@ -40,21 +40,13 @@ const App: React.FC = () => {
                 snapshot.docs.map((doc) => {
                     const spillData = doc.data();
 
-                    console.log(spillData);
                     alleSpill.push({
                         id: doc.id,
                         vinnerId: !!spillData.vinnerId ? (spillData.vinnerId as string) : null,
                         runder: (spillData.runder as Runder) ?? [],
-                        startet: spillData.startingAt,
+                        startet: spillData.startingAt.toDate(),
                         avsluttet: !!spillData.endingAt ? spillData.endingAt : null,
                     });
-                    // setPaGaendeSpill({
-                    //     id: doc.id,
-                    //     vinnerId: !!spillData.vinnerId ? (spillData.vinnerId as string) : null,
-                    //     runder: (spillData.runder as Runder) ?? [],
-                    //     startet: spillData.startedAt,
-                    //     avsluttet: !!spillData.endingAt ? spillData.endingAt : null,
-                    // });
                 }, {});
             });
             const alleSpillSortert = sortBy(alleSpill, 'startet');
@@ -120,8 +112,6 @@ const App: React.FC = () => {
         return null;
     }
 
-    console.log(gamleSpill);
-    console.log(paGaendeSpill);
     return (
         <div className="App">
             <header className="appHeader">

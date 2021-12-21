@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import { slagIkoner, Spill, Spillere } from './types/Types';
+import { formatDateAndClock } from './utils';
 
 interface Props {
     spill: Spill;
@@ -9,7 +10,6 @@ interface Props {
 
 const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
     const runder = spill.runder;
-    console.log('rinder', runder);
 
     const finnTotalsumForSpiller = (spillerId: string) => {
         if (runder) {
@@ -27,7 +27,8 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
     const spillerIder = Object.keys(spillere).map((key) => key);
 
     return (
-        <>
+        <div className="spillTabellContainer">
+            {spill.startet && <div className="spillStartet">{`Startet ${formatDateAndClock(new Date(spill.startet))}`}</div>}
             <div className="poengtabell">
                 {spillerIder.map((id) => (
                     <div key={'navn-' + id}>
@@ -88,7 +89,7 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
                     )}
                 </>
             )}
-        </>
+        </div>
     );
 };
 
