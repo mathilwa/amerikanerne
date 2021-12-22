@@ -41,7 +41,7 @@ const App: React.FC = () => {
                         id: doc.id,
                         vinnerIder: spillData.vinnerIder ?? [],
                         runder: (spillData.runder as Runder) ?? [],
-                        startet: spillData.startingAt.toDate(),
+                        startet: !!spillData.startingAt ? spillData.startingAt.toDate() : null,
                         avsluttet: !!spillData.endingAt ? spillData.endingAt : null,
                     });
                 }, {});
