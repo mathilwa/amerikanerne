@@ -7,8 +7,14 @@ import NyttSpillModal from './NyttSpillModal';
 import GiPoengForRundeModal from './GiPoengForRundeModal';
 import NyRundeModal from './NyRundeModal';
 import { Poeng, Runde, Runder, Spill, Spillere } from './types/Types';
-import { finnTotalsumForSpiller, formaterSpillForLagring, getSpillerIder, getSpilletHarEnVinner } from './utils';
-import sortBy from 'lodash.sortby';
+import {
+    finnTotalsumForSpiller,
+    formaterSpillForLagring,
+    getPoengForSisteRunde,
+    getSpillerIder,
+    getSpilletHarEnVinner
+} from './utils';
+import orderBy from 'lodash.orderby';
 
 const App: React.FC = () => {
     const [spillere, setSpillere] = useState<Spillere | null>(null);
@@ -51,7 +57,7 @@ const App: React.FC = () => {
                 const paGaendeSpill = alleSpill[0];
                 setPaGaendeSpill(paGaendeSpill);
             } else if (alleSpill.length > 1) {
-                const alleSpillSortert = sortBy(alleSpill, 'startet');
+                const alleSpillSortert = orderBy(alleSpill, 'startet', 'desc');
 
                 const gamleSpill = alleSpillSortert.slice(0, alleSpillSortert.length - 1);
                 const paGaendeSpill = alleSpillSortert[alleSpillSortert.length - 1];
@@ -126,6 +132,7 @@ const App: React.FC = () => {
     }
 
     const pagaendeSpillHarEnVinner = pagaendeSpill && getSpilletHarEnVinner(pagaendeSpill, getSpillerIder(spillere));
+    const onSmallScreen = window.screen.width < 500;
     return (
         <div className="App">
             <header className="appHeader">
@@ -145,34 +152,27 @@ const App: React.FC = () => {
                                 }`}
                                 onClick={() => setVisNyttSpillModal(true)}
                             >
-                                + Nytt spill
+                                <span>{`${onSmallScreen ? '+ Spill' : '+ Nytt spill' }`}</span>
                             </button>
                             {!pagaendeSpillHarEnVinner && <div>
                                 <button
                                     className={`knapp nyRunde ${
-                                        
-                                        (pagaendeSpill.runder &&
-                                            pagaendeSpill.runder[Object.keys(pagaendeSpill.runder).length - 1] &&
-                                            !pagaendeSpill.runder[Object.keys(pagaendeSpill.runder).length - 1]
-                                                .poeng)
+                                        !getPoengForSisteRunde(pagaendeSpill)
                                             ? 'sekundaerKnapp'
                                             : ''
                                     }`}
                                     onClick={() => setVisSettNyRundeModal(true)}
                                 >
-                                    + Legg til runde
+                                    <span>{`${onSmallScreen ? '+ Runde' : '+ Legg til runde' }`}</span>
                                 </button>
                                 <button
-                                    className={`knapp ${
-                                        pagaendeSpill.runder &&
-                                        pagaendeSpill.runder[Object.keys(pagaendeSpill.runder).length - 1] &&
-                                        pagaendeSpill.runder[Object.keys(pagaendeSpill.runder).length - 1].poeng
+                                    className={`knapp ${getPoengForSisteRunde(pagaendeSpill) 
                                             ? 'sekundaerKnapp'
                                             : ''
                                     }`}
                                     onClick={() => setVisGiPoengModal(true)}
                                 >
-                                    + Legg til poeng
+                                    <span>{`${onSmallScreen ? '+ Poeng' : '+ Legg til poeng' }`}</span>
                                 </button>
                             </div>}
                         </div>
@@ -202,18 +202,18 @@ const App: React.FC = () => {
                     />
                 )}
 
-                {/*{gamleSpill.length > 0 && (*/}
-                {/*    <div>*/}
-                {/*        <h2 className="tidligereSpillHeading">Tidligere spill:</h2>*/}
-                {/*        {gamleSpill.map((gammeltSpill) => (*/}
-                {/*            <SpillTabell*/}
-                {/*                key={`gammeltSpill-${gammeltSpill.id}`}*/}
-                {/*                spill={gammeltSpill}*/}
-                {/*                spillere={spillere}*/}
-                {/*            />*/}
-                {/*        ))}*/}
-                {/*    </div>*/}
-                {/*)}*/}
+                {gamleSpill.length > 0 && (
+                    <div>
+                        <h2 className="tidligereSpillHeading">Tidligere spill:</h2>
+                        {gamleSpill.map((gammeltSpill) => (
+                            <SpillTabell
+                                key={`gammeltSpill-${gammeltSpill.id}`}
+                                spill={gammeltSpill}
+                                spillere={spillere}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

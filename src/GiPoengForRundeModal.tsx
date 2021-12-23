@@ -70,15 +70,15 @@ const GiPoengForRundeModal: React.FC<Props> = ({
 
     return (
         <Modal isOpen={visGiPoengForRunde} onClose={onAvbryt}>
-            <div className="nyePoeng">
-                <h2 className="nyePoengTittel">Legg til poeng:</h2>
+            <div>
+                <h1 className="nyePoengTittel">Gi poeng for runde</h1>
                 {gjeldendeRunde && gjeldendeRunde.lag && (
                     <>
-                        <h3 className="klarteLagetDet">
+                        <h2 className="klarteLagetDet heading2">
                             {`Klarte ${spillere[gjeldendeRunde.lag[0]].navn} og ${
                                 spillere[gjeldendeRunde.lag[1]].navn
                             } det?`}{' '}
-                        </h3>
+                        </h2>
                         <div className="klarteLagetDetInput">
                             <label className={`radio ${klarteLagetDet === true ? 'checked' : ''}`}>
                                 <input
@@ -101,6 +101,7 @@ const GiPoengForRundeModal: React.FC<Props> = ({
                     </>
                 )}
 
+                    <h2 className="heading2">Antall poeng:</h2>
                 <div className="nyePoengInput">
                     {spillerIder.map((id) => (
                         <label key={`poeng-input-${id}`} className="labelNyePoeng">
@@ -123,12 +124,12 @@ const GiPoengForRundeModal: React.FC<Props> = ({
 
                 {poengManglerError && <div className="error">{poengManglerError}</div>}
 
-                <button className="knapp sekundaerKnapp" onClick={avbryt}>
+                <div className="knapperad"><button className="knapp sekundaerKnapp" onClick={avbryt}>
                     Avbryt
                 </button>
-                <button className="knapp" onClick={leggTilPoeng}>
-                    Legg til
-                </button>
+                    <button className="knapp" onClick={leggTilPoeng}>
+                        Legg til
+                    </button></div>
             </div>
         </Modal>
     );

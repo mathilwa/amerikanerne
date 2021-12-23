@@ -32,22 +32,22 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
         <Modal onClose={onAvbryt} isOpen={visNyttSpillInput}>
             <form>
                 <h1>Nytt spill</h1>
-                <h2>Spillere:</h2>
+                <h2 className="heading2">Spillere:</h2>
                 <div className="spillere">
                     {spillerIder.map((id) => (
-                        <div key={'spillere' + id}>{spillere[id].navn}</div>
+                        <div key={'spillere' + id} className="spiller">{spillere[id].navn}</div>
                     ))}
                 </div>
 
                 <h2>Første runde:</h2>
                 <NyRundeInput onOppdaterRunde={setNyRunde} runde={nyRunde} spillere={spillere} />
 
-                <button type="submit" className="knapp sekundaerKnapp" onClick={onAvbryt}>
+                <div className="knapperad"><button type="submit" className="knapp sekundaerKnapp" onClick={onAvbryt}>
                     Avbryt
                 </button>
-                <button type="submit" className="knapp" onClick={startNyttSpill}>
-                    Start spill
-                </button>
+                    <button type="submit" className="knapp" onClick={startNyttSpill}>
+                        Start spill
+                    </button></div>
             </form>
         </Modal>
     );

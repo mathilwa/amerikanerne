@@ -30,12 +30,20 @@
     margin-bottom: 2rem;
 }
 
+.heading2 {
+    font-size: 1rem;
+}
+
 .poengtabell {
     display: grid;
     grid-template-columns: 2fr 2fr 2fr 2fr 4fr;
     min-height: 15px;
     list-style-type: none;
     grid-gap: 0.5rem;
+}
+
+.totalsum .poengtabell > *.vinner {
+    border-color: red;
 }
 
 .poengtabell > * {
@@ -51,8 +59,10 @@
 .modal {
     margin: 0 auto;
     background-color: #282c34;
-    padding: 3rem;
+    padding: 1rem;
     color: white;
+    max-height: 100vh;
+    overflow-y: auto;
 }
 
 .modalOverlay {
@@ -70,8 +80,9 @@
 }
 
 .spillere {
-    width: 60%;
+
     display: flex;
+    flex-wrap: wrap;
     margin-bottom: 1rem;
 }
 
@@ -81,7 +92,8 @@
     border: 2px solid aqua;
     border-radius: 4px;
     padding: 1rem;
-    margin-right: 2rem;
+    margin-right: 10px;
+    margin-bottom: 10px;
 }
 
 .modal .melder.valgt,
@@ -102,11 +114,21 @@ input[type='number']::-webkit-inner-spin-button {
 }
 
 .slagIkon {
-    width: 2rem;
+    width: 3rem;
+}
+
+.spillTabellContainer .slagIkon {
+    width: 1.5rem
+}
+
+.slag {
+    display: flex;
+    margin-bottom: 1rem;
 }
 
 .melding {
     display: flex;
+    flex-direction: column;
 }
 
 .melding .slag label {
@@ -120,13 +142,12 @@ input[type='number']::-webkit-inner-spin-button {
     text-align: right;
 }
 
-.hvemMelder {
-    display: flex;
+.hvemKommerPaLag {
+    margin-bottom: 2rem;
 }
 
-.hvemKommerPaLag {
-    display: flex;
-    margin-bottom: 4rem;
+.spiller {
+    width: 60px;
 }
 
 h2,
@@ -143,6 +164,11 @@ h3 {
     color: white;
     border: 2px solid white;
     border-radius: 4px;
+}
+
+.knapperad {
+    display: flex;
+    margin-bottom: 2rem;
 }
 
 .modalOverlay {
@@ -256,6 +282,14 @@ h3 {
     display: none;
 }
 
+.tabellHeaderDesktop, .tabellHeaderMobil {
+    font-weight: bold;
+}
+
+.tabellHeaderMeldingDesktop {
+    display: none;
+}
+
 .tidligereSpillHeading {
     text-align: left;
 }
@@ -271,14 +305,48 @@ h3 {
 .totalsumHeading {
     text-align: left;
     margin-bottom: 5px;
-    font-size: 1.2rem;
+    font-size: 0.8rem;
 }
+
 
 @media screen and (min-width: 500px) {
     .poengtabell > * {
         padding: 0.5rem;
     }
+
+    .modal {
+        padding: 3rem;
+        width: auto;
+    }
+
+    .spillere {
+        width: 60%;
+        flex-wrap: nowrap;
+    }
+
+    .spillere > *,
+    .melder,
+    .velgLag {
+        margin-right: 2rem;
+    }
+
+    .melding {
+        flex-direction: row;
+    }
+
+    .slag {
+        margin-bottom: 0;
+    }
+
+    .tabellHeaderMeldingDesktop {
+        display: block;
+    }
+
+    .tabellHeaderMeldingMobil {
+        display: none;
+    }
 }
+
 @media screen and (min-width: 900px) {
     .tabellHeaderMobil {
         display: none;
@@ -286,6 +354,11 @@ h3 {
 
     .tabellHeaderDesktop {
         display: block;
+    }
+
+    .spillStartet,
+    .totalsumHeading {
+        font-size: 1rem;
     }
 
     .poengContainer > * {
@@ -297,7 +370,7 @@ h3 {
         padding: 1rem;
     }
 
-    .slagIkon {
+    .spillTabellContainer .slagIkon {
         width: 3rem;
     }
 

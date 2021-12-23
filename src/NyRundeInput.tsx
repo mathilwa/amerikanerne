@@ -43,7 +43,7 @@ const NyRundeInput: React.FC<Props> = ({ onOppdaterRunde, spillere, runde }) => 
 
     return (
         <>
-            <h2>Hva meldes?</h2>
+            <h2 className="heading2">Hva meldes?</h2>
             <div className="hvaMeldes">
                 <div className="melding">
                     <div className="slag">
@@ -73,6 +73,8 @@ const NyRundeInput: React.FC<Props> = ({ onOppdaterRunde, spillere, runde }) => 
                             <input
                                 className="inputNyePoeng"
                                 type="number"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 value={rundeData.melding.antallStikk ? rundeData.melding.antallStikk : ''}
                                 onChange={(event) =>
                                     onSetNyMelding({
@@ -85,10 +87,10 @@ const NyRundeInput: React.FC<Props> = ({ onOppdaterRunde, spillere, runde }) => 
                     </div>
                 </div>
             </div>
-            <h2>Hvem melder?</h2>
-            <div className="hvemMelder">
+            <h2 className="heading2">Hvem melder?</h2>
+            <div className="hvemMelder spillere">
                 {spillerIder.map((melder) => (
-                    <label key={melder} className={`melder ${melder === rundeData.melder ? 'valgt' : ''}`}>
+                    <label key={melder} className={`melder spiller ${melder === rundeData.melder ? 'valgt' : ''}`}>
                         <input
                             type="radio"
                             id={melder}
@@ -100,12 +102,12 @@ const NyRundeInput: React.FC<Props> = ({ onOppdaterRunde, spillere, runde }) => 
                 ))}
             </div>
 
-            <h2>Hvem kommer på lag?</h2>
-            <div className="hvemKommerPaLag">
+            <h2 className="heading2">Hvem kommer på lag?</h2>
+            <div className="hvemKommerPaLag spillere">
                 {spillerIder.map((id) => (
                     <div
                         key={id}
-                        className={`velgLag ${rundeData.lag.includes(id) ? 'paLag' : ''} `}
+                        className={`velgLag spiller ${rundeData.lag.includes(id) ? 'paLag' : ''} `}
                         onClick={() => oppdaterNyttLag(id)}
                     >
                         {spillere[id].navn}
