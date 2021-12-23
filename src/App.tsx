@@ -6,11 +6,13 @@ import SpillTabell from './SpillTabell';
 import { Runder, Spill, Spillere } from './types/Types';
 import orderBy from 'lodash.orderby';
 import PagaendeSpill from './PagaendeSpill';
+import StatistikkModal from './StatistikkModal';
 
 const App: React.FC = () => {
     const [spillere, setSpillere] = useState<Spillere | null>(null);
     const [gamleSpill, setGamleSpill] = useState<Spill[]>([]);
     const [pagaendeSpill, setPaGaendeSpill] = useState<Spill | null>(null);
+    const [visStatistikkModal, setVisStatistikkModal] = useState<boolean>(false);
 
     useEffect(() => {
         const database = getFirestore();
@@ -82,6 +84,12 @@ const App: React.FC = () => {
                         }}
                     />
                 )}
+                <StatistikkModal
+                    alleSpill={pagaendeSpill ? [pagaendeSpill, ...gamleSpill] : gamleSpill}
+                    spillere={spillere}
+                    onLukkModal={() => setVisStatistikkModal(false)}
+                    visModal={visStatistikkModal}
+                />
 
                 {gamleSpill.length > 0 && (
                     <div>

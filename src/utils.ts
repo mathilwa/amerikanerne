@@ -2,7 +2,7 @@ import { Poeng, Runder, Spill, Spillere } from './types/Types';
 import { format } from 'date-fns';
 
 export const formaterSpillForLagring = (spill: Spill) => ({
-    vinnerId: spill.vinnerIder ?? '',
+    vinnerIder: spill.vinnerIder ?? [],
     runder: spill.runder,
     startingAt: spill.startet ?? new Date(),
     endingAt: spill.avsluttet ?? null,
@@ -46,7 +46,7 @@ export const finnTotalsumForSpiller = (runder: Runder, spillerId: string) => {
     return 0;
 };
 
-export const getPoengForSisteRunde = (spill: Spill):Poeng | null =>
+export const getPoengForSisteRunde = (spill: Spill): Poeng | null =>
     spill.runder &&
     spill.runder[Object.keys(spill.runder).length - 1] &&
-    spill.runder[Object.keys(spill.runder).length - 1].poeng
+    spill.runder[Object.keys(spill.runder).length - 1].poeng;
