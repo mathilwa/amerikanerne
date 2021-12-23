@@ -11,18 +11,18 @@ export const getSpillerIder = (spillere: Spillere) => Object.keys(spillere).map(
 export const formatDateAndClock = (date: Date) => format(new Date(date), "dd.MM.yy 'kl.' HH:mm");
 const mapSamletPoengsumForSpill = (spill: Spill, spillerIder: string[]): Poeng | null => {
     if (spill.runder && Object.keys(spill.runder).length > 0) {
-        return Object.values(spill.runder).reduce((akk, runde) => {
+        return Object.values(spill.runder).reduce((allePoeng, runde) => {
             if (runde.poeng) {
                 const allePoengForRunde = spillerIder.reduce((poengForAlleSpillere, spillerId) => {
                     const poengForSpiller = runde.poeng![spillerId];
-                    const poengTilNaa = poengForAlleSpillere[spillerId] ?? 0;
+                    const poengTilNaa = allePoeng[spillerId] ?? 0;
                     return { ...poengForAlleSpillere, [spillerId]: poengTilNaa + poengForSpiller };
                 }, {} as Poeng);
-                return { ...akk, ...allePoengForRunde };
+                return { ...allePoeng, ...allePoengForRunde };
             } else {
-                return akk;
+                return allePoeng;
             }
-        }, {});
+        }, {} as Poeng);
     }
 
     return null;

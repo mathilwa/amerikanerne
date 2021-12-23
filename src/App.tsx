@@ -125,6 +125,7 @@ const App: React.FC = () => {
         return null;
     }
 
+    const pagaendeSpillHarEnVinner = pagaendeSpill && getSpilletHarEnVinner(pagaendeSpill, getSpillerIder(spillere));
     return (
         <div className="App">
             <header className="appHeader">
@@ -140,19 +141,16 @@ const App: React.FC = () => {
 
                         <div className="knappContainer">
                             <button
-                                className={`knapp ${
-                                    getSpilletHarEnVinner(pagaendeSpill, getSpillerIder(spillere))
-                                        ? ''
-                                        : 'sekundaerKnapp'
+                                className={`knapp ${ pagaendeSpillHarEnVinner ? '' : 'sekundaerKnapp'
                                 }`}
                                 onClick={() => setVisNyttSpillModal(true)}
                             >
                                 + Nytt spill
                             </button>
-                            <div>
+                            {!pagaendeSpillHarEnVinner && <div>
                                 <button
                                     className={`knapp nyRunde ${
-                                        getSpilletHarEnVinner(pagaendeSpill, getSpillerIder(spillere)) ||
+                                        
                                         (pagaendeSpill.runder &&
                                             pagaendeSpill.runder[Object.keys(pagaendeSpill.runder).length - 1] &&
                                             !pagaendeSpill.runder[Object.keys(pagaendeSpill.runder).length - 1]
@@ -176,7 +174,7 @@ const App: React.FC = () => {
                                 >
                                     + Legg til poeng
                                 </button>
-                            </div>
+                            </div>}
                         </div>
                     </div>
                 )}
@@ -204,18 +202,18 @@ const App: React.FC = () => {
                     />
                 )}
 
-                {gamleSpill.length > 0 && (
-                    <div>
-                        <h2 className="tidligereSpillHeading">Tidligere spill:</h2>
-                        {gamleSpill.map((gammeltSpill) => (
-                            <SpillTabell
-                                key={`gammeltSpill-${gammeltSpill.id}`}
-                                spill={gammeltSpill}
-                                spillere={spillere}
-                            />
-                        ))}
-                    </div>
-                )}
+                {/*{gamleSpill.length > 0 && (*/}
+                {/*    <div>*/}
+                {/*        <h2 className="tidligereSpillHeading">Tidligere spill:</h2>*/}
+                {/*        {gamleSpill.map((gammeltSpill) => (*/}
+                {/*            <SpillTabell*/}
+                {/*                key={`gammeltSpill-${gammeltSpill.id}`}*/}
+                {/*                spill={gammeltSpill}*/}
+                {/*                spillere={spillere}*/}
+                {/*            />*/}
+                {/*        ))}*/}
+                {/*    </div>*/}
+                {/*)}*/}
             </div>
         </div>
     );
