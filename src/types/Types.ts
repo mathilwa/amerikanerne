@@ -44,6 +44,8 @@ export interface Melding {
     antallStikk: number | null;
 }
 
+export type MeldingForMelder = Record<string, number[]>;
+
 export type Poeng = Record<string, number>;
 export type Runder = Record<string, Runde>;
 

@@ -13,6 +13,7 @@ import {
     getSpilletHarEnVinner,
 } from './utils';
 import { addDoc, collection, doc, getFirestore, setDoc } from 'firebase/firestore';
+import StatistikkModal from './StatistikkModal';
 
 interface Props {
     spill: Spill;
@@ -24,6 +25,7 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere, onNyttSpill }) => {
     const [visNyttSpillModal, setVisNyttSpillModal] = useState<boolean>(false);
     const [visSettNyRundeModal, setVisSettNyRundeModal] = useState<boolean>(false);
     const [visGiPoengModal, setVisGiPoengModal] = useState<boolean>(false);
+    const [visStatistikkModal, setVisStatistikkModal] = useState<boolean>(false);
 
     const startNyttSpill = async (nyttSpill: Spill) => {
         const database = getFirestore();
@@ -88,12 +90,19 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere, onNyttSpill }) => {
                 <SpillTabell spill={pagaendeSpill} spillere={spillere} />
 
                 <div className="knappContainer">
-                    <button
-                        className={`knapp ${pagaendeSpillHarEnVinner ? '' : 'sekundaerKnapp'}`}
-                        onClick={() => setVisNyttSpillModal(true)}
-                    >
-                        <span>{`${onSmallScreen ? '+ Spill' : '+ Nytt spill'}`}</span>
-                    </button>
+                    <div>
+                        <button
+                            className={`knapp nyttSpill${pagaendeSpillHarEnVinner ? '' : 'sekundaerKnapp'}`}
+                            onClick={() => setVisNyttSpillModal(true)}
+                        >
+                            <span>{`${onSmallScreen ? '+ Spill' : '+ Nytt spill'}`}</span>
+                        </button>
+                        {pagaendeSpillHarEnVinner && (
+                            <button className="knapp" onClick={() => setVisStatistikkModal(true)}>
+                                <span>Se statistikk</span>
+                            </button>
+                        )}
+                    </div>
                     {!pagaendeSpillHarEnVinner && (
                         <div>
                             <button
@@ -136,6 +145,13 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere, onNyttSpill }) => {
                     spillere={spillere}
                 />
             )}
+
+            <StatistikkModal
+                alleSpill={[pagaendeSpill]}
+                spillere={spillere}
+                onLukkModal={() => setVisStatistikkModal(false)}
+                visModal={visStatistikkModal}
+            />
         </>
     );
 };

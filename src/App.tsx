@@ -84,16 +84,16 @@ const App: React.FC = () => {
                         }}
                     />
                 )}
-                <StatistikkModal
-                    alleSpill={pagaendeSpill ? [pagaendeSpill, ...gamleSpill] : gamleSpill}
-                    spillere={spillere}
-                    onLukkModal={() => setVisStatistikkModal(false)}
-                    visModal={visStatistikkModal}
-                />
 
                 {gamleSpill.length > 0 && (
                     <div>
-                        <h2 className="tidligereSpillHeading">{`Tidligere spill (${gamleSpill.length}):`}</h2>
+                        <div className="tidligereSpillHeader">
+                            <h2 className="tidligereSpillHeading">{`Tidligere spill (${gamleSpill.length}):`}</h2>
+                            <button className="knapp" onClick={() => setVisStatistikkModal(true)}>
+                                <span>Se statistikk for alle spill</span>
+                            </button>
+                        </div>
+
                         {gamleSpill.map((gammeltSpill) => (
                             <SpillTabell
                                 key={`gammeltSpill-${gammeltSpill.id}`}
@@ -101,6 +101,13 @@ const App: React.FC = () => {
                                 spillere={spillere}
                             />
                         ))}
+
+                        <StatistikkModal
+                            alleSpill={pagaendeSpill ? [pagaendeSpill, ...gamleSpill] : gamleSpill}
+                            spillere={spillere}
+                            onLukkModal={() => setVisStatistikkModal(false)}
+                            visModal={visStatistikkModal}
+                        />
                     </div>
                 )}
             </div>
