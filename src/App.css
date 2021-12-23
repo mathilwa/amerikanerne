@@ -80,7 +80,6 @@
 }
 
 .spillere {
-
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 1rem;
@@ -118,7 +117,7 @@ input[type='number']::-webkit-inner-spin-button {
 }
 
 .spillTabellContainer .slagIkon {
-    width: 1.5rem
+    width: 1.5rem;
 }
 
 .slag {
@@ -282,7 +281,8 @@ h3 {
     display: none;
 }
 
-.tabellHeaderDesktop, .tabellHeaderMobil {
+.tabellHeaderDesktop,
+.tabellHeaderMobil {
     font-weight: bold;
 }
 
@@ -292,6 +292,7 @@ h3 {
 
 .tidligereSpillHeading {
     text-align: left;
+    font-size: 1.5rem;
 }
 
 .error {
@@ -307,7 +308,6 @@ h3 {
     margin-bottom: 5px;
     font-size: 0.8rem;
 }
-
 
 @media screen and (min-width: 500px) {
     .poengtabell > * {

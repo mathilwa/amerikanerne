@@ -1,27 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { getFirestore, collection, getDocs, addDoc, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import './App.css';
 import logo from './icons/cards.png';
 import SpillTabell from './SpillTabell';
-import NyttSpillModal from './NyttSpillModal';
-import GiPoengForRundeModal from './GiPoengForRundeModal';
-import NyRundeModal from './NyRundeModal';
-import { Poeng, Runde, Runder, Spill, Spillere } from './types/Types';
-import {
-    finnTotalsumForSpiller,
-    formaterSpillForLagring,
-    getPoengForSisteRunde,
-    getSpillerIder,
-    getSpilletHarEnVinner
-} from './utils';
+import { Runder, Spill, Spillere } from './types/Types';
 import orderBy from 'lodash.orderby';
+import PagaendeSpill from './PagaendeSpill';
 
 const App: React.FC = () => {
     const [spillere, setSpillere] = useState<Spillere | null>(null);
     const [gamleSpill, setGamleSpill] = useState<Spill[]>([]);
-    const [visNyttSpillModal, setVisNyttSpillModal] = useState<boolean>(false);
-    const [visSettNyRundeModal, setVisSettNyRundeModal] = useState<boolean>(false);
-    const [visGiPoengModal, setVisGiPoengModal] = useState<boolean>(false);
     const [pagaendeSpill, setPaGaendeSpill] = useState<Spill | null>(null);
 
     useEffect(() => {
@@ -57,10 +45,10 @@ const App: React.FC = () => {
                 const paGaendeSpill = alleSpill[0];
                 setPaGaendeSpill(paGaendeSpill);
             } else if (alleSpill.length > 1) {
-                const alleSpillSortert = orderBy(alleSpill, 'startet', 'desc');
+                const alleSpillSortert = orderBy(alleSpill, 'startet', 'asc');
 
-                const gamleSpill = alleSpillSortert.slice(0, alleSpillSortert.length - 1);
-                const paGaendeSpill = alleSpillSortert[alleSpillSortert.length - 1];
+                const paGaendeSpill = alleSpillSortert[0];
+                const gamleSpill = alleSpillSortert.slice(1, alleSpillSortert.length);
                 setGamleSpill(gamleSpill);
                 setPaGaendeSpill(paGaendeSpill);
             } else {
@@ -71,68 +59,10 @@ const App: React.FC = () => {
         getSpillData();
     }, []);
 
-    const startNyttSpill = async (nyttSpill: Spill) => {
-        const database = getFirestore();
-        const lagretSpill = await addDoc(collection(database, 'spill'), formaterSpillForLagring(nyttSpill));
-
-        pagaendeSpill && setGamleSpill(gamleSpill.concat(pagaendeSpill));
-        setPaGaendeSpill({ ...nyttSpill, id: lagretSpill.id });
-        setVisNyttSpillModal(false);
-    };
-
-    const startNyRunde = async (runde: Runde) => {
-        if (pagaendeSpill && pagaendeSpill.id) {
-            const indexForNyRunde = pagaendeSpill.runder ? Object.keys(pagaendeSpill.runder).length : 0;
-
-            const database = getFirestore();
-            await setDoc(doc(database, 'spill', pagaendeSpill.id), {
-                ...formaterSpillForLagring(pagaendeSpill),
-                runder: { ...pagaendeSpill.runder, [indexForNyRunde]: runde },
-            });
-            setPaGaendeSpill({ ...pagaendeSpill, runder: { ...pagaendeSpill.runder, [indexForNyRunde]: runde } });
-            setVisSettNyRundeModal(false);
-        }
-    };
-
-    const gjeldendeRunde = (runder: Runder) => {
-        const antallRunder = Object.keys(runder).length;
-        return runder[antallRunder - 1];
-    };
-
-    const onLagrePoeng = async (oppdatertePoeng: Poeng) => {
-        if (pagaendeSpill && pagaendeSpill.id && pagaendeSpill.runder) {
-            const database = getFirestore();
-
-            const gjeldendeRundeIndex = Object.keys(pagaendeSpill.runder).length - 1;
-            const gjeldendeRunde = pagaendeSpill.runder[gjeldendeRundeIndex];
-            const oppdatertRundeData = {
-                ...pagaendeSpill.runder,
-                [gjeldendeRundeIndex]: { ...gjeldendeRunde, poeng: oppdatertePoeng },
-            };
-
-            const spillVinnere = spillere
-                ? getSpillerIder(spillere).filter(
-                      (spillerId) => finnTotalsumForSpiller(oppdatertRundeData, spillerId) >= 52,
-                  )
-                : null;
-
-            await setDoc(doc(database, 'spill', pagaendeSpill.id), {
-                ...formaterSpillForLagring(pagaendeSpill),
-                runder: oppdatertRundeData,
-                vinnerIder: spillVinnere,
-            });
-
-            setPaGaendeSpill({ ...pagaendeSpill, runder: oppdatertRundeData, vinnerIder: spillVinnere ?? [] });
-            setVisGiPoengModal(false);
-        }
-    };
-
     if (!spillere) {
         return null;
     }
 
-    const pagaendeSpillHarEnVinner = pagaendeSpill && getSpilletHarEnVinner(pagaendeSpill, getSpillerIder(spillere));
-    const onSmallScreen = window.screen.width < 500;
     return (
         <div className="App">
             <header className="appHeader">
@@ -143,68 +73,19 @@ const App: React.FC = () => {
                 <h1>Amerikanerne</h1>
 
                 {pagaendeSpill && (
-                    <div className="pagaendeSpillContainer">
-                        <SpillTabell spill={pagaendeSpill} spillere={spillere} />
-
-                        <div className="knappContainer">
-                            <button
-                                className={`knapp ${ pagaendeSpillHarEnVinner ? '' : 'sekundaerKnapp'
-                                }`}
-                                onClick={() => setVisNyttSpillModal(true)}
-                            >
-                                <span>{`${onSmallScreen ? '+ Spill' : '+ Nytt spill' }`}</span>
-                            </button>
-                            {!pagaendeSpillHarEnVinner && <div>
-                                <button
-                                    className={`knapp nyRunde ${
-                                        !getPoengForSisteRunde(pagaendeSpill)
-                                            ? 'sekundaerKnapp'
-                                            : ''
-                                    }`}
-                                    onClick={() => setVisSettNyRundeModal(true)}
-                                >
-                                    <span>{`${onSmallScreen ? '+ Runde' : '+ Legg til runde' }`}</span>
-                                </button>
-                                <button
-                                    className={`knapp ${getPoengForSisteRunde(pagaendeSpill) 
-                                            ? 'sekundaerKnapp'
-                                            : ''
-                                    }`}
-                                    onClick={() => setVisGiPoengModal(true)}
-                                >
-                                    <span>{`${onSmallScreen ? '+ Poeng' : '+ Legg til poeng' }`}</span>
-                                </button>
-                            </div>}
-                        </div>
-                    </div>
-                )}
-
-                <NyttSpillModal
-                    visNyttSpillInput={visNyttSpillModal}
-                    setNyttSpill={startNyttSpill}
-                    onAvbryt={() => setVisNyttSpillModal(false)}
-                    spillere={spillere}
-                />
-
-                <NyRundeModal
-                    visNyttSpillInput={visSettNyRundeModal}
-                    startNyRunde={startNyRunde}
-                    onAvbryt={() => setVisSettNyRundeModal(false)}
-                    spillere={spillere}
-                />
-                {pagaendeSpill && pagaendeSpill.runder && (
-                    <GiPoengForRundeModal
-                        onOppdaterPoeng={(oppdatertePoeng) => onLagrePoeng(oppdatertePoeng)}
-                        visGiPoengForRunde={visGiPoengModal}
-                        gjeldendeRunde={gjeldendeRunde(pagaendeSpill.runder)}
-                        onAvbryt={() => setVisGiPoengModal(false)}
+                    <PagaendeSpill
+                        spill={pagaendeSpill}
                         spillere={spillere}
+                        onNyttSpill={(nyttSpill, gammeltSpill) => {
+                            setPaGaendeSpill(nyttSpill);
+                            setGamleSpill(gamleSpill.concat(gammeltSpill));
+                        }}
                     />
                 )}
 
                 {gamleSpill.length > 0 && (
                     <div>
-                        <h2 className="tidligereSpillHeading">Tidligere spill:</h2>
+                        <h2 className="tidligereSpillHeading">{`Tidligere spill (${gamleSpill.length}):`}</h2>
                         {gamleSpill.map((gammeltSpill) => (
                             <SpillTabell
                                 key={`gammeltSpill-${gammeltSpill.id}`}

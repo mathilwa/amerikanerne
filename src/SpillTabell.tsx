@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { slagIkoner, Spill, Spillere } from './types/Types';
-import {finnTotalsumForSpiller, formatDateAndClock, getSpillerIder, mapSamletPoengsumForSpill} from './utils';
+import { finnTotalsumForSpiller, formatDateAndClock, getSpillerIder, mapSamletPoengsumForSpill } from './utils';
 
 interface Props {
     spill: Spill;
