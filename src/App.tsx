@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore';
-import './App.css';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import './styles.css';
 import logo from './icons/cards.png';
 import SpillTabell from './SpillTabell';
 import { Runder, Spill, Spillere } from './types/Types';
 import orderBy from 'lodash.orderby';
 import PagaendeSpill from './PagaendeSpill';
 import StatistikkModal from './StatistikkModal';
-import { formaterSpillForLagring, getSpilletHarEnVinner, onSmallScreen } from './utils';
+import { getSpilletHarEnVinner, onSmallScreen } from './utils';
 import NyttSpillModal from './NyttSpillModal';
 
 const App: React.FC = () => {
@@ -69,14 +69,11 @@ const App: React.FC = () => {
         getSpillData();
     }, []);
 
-    const startNyttSpill = async (nyttSpill: Spill) => {
-        const database = getFirestore();
-        const lagretSpill = await addDoc(collection(database, 'spill'), formaterSpillForLagring(nyttSpill));
-
+    const startNyttSpill = (nyttSpill: Spill) => {
         if (pagaendeSpill) {
             setTidligereSpill([pagaendeSpill].concat(tidligereSpill));
         }
-        setPagaendeSpill({ ...nyttSpill, id: lagretSpill.id });
+        setPagaendeSpill(nyttSpill);
 
         setVisNyttSpillModal(false);
     };

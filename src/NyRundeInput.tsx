@@ -1,6 +1,6 @@
 import React from 'react';
 import { Melding, Runde, Slag, slagIkoner, Spillere } from './types/Types';
-import {getSpillerIder} from './utils';
+import { getSpillerIder } from './utils';
 
 interface Props {
     onOppdaterRunde: (nyRunde: Runde) => void;

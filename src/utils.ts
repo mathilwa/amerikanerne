@@ -1,4 +1,4 @@
-import { Poeng, Runder, Spill, Spillere } from './types/Types';
+import { Poeng, Runde, Runder, Spill, Spillere } from './types/Types';
 import { format } from 'date-fns';
 
 export const formaterSpillForLagring = (spill: Spill) => ({
@@ -48,6 +48,9 @@ export const finnTotalsumForSpiller = (runder: Runder, spillerId: string) => {
     }
     return 0;
 };
+
+export const rundedataErUtfylt = (runde: Runde | null): boolean =>
+    !!(runde && runde.melding.antallStikk && runde.melding.slag && runde.lag.length === 2 && !!runde.melder);
 
 export const getPoengForSisteRunde = (spill: Spill): Poeng | null =>
     spill.runder &&

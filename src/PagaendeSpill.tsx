@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import './App.css';
+import './styles.css';
 import SpillTabell from './SpillTabell';
 import GiPoengForRundeModal from './GiPoengForRundeModal';
 import NyRundeModal from './NyRundeModal';
-import { Poeng, Runde, Runder, Spill, Spillere } from './types/Types';
-import {
-    finnTotalsumForSpiller,
-    formaterSpillForLagring,
-    getPoengForSisteRunde,
-    getSpillerIder,
-    getSpilletHarEnVinner,
-    onSmallScreen,
-} from './utils';
-import { doc, getFirestore, setDoc } from 'firebase/firestore';
+import { Runder, Spill, Spillere } from './types/Types';
+import { getPoengForSisteRunde, getSpilletHarEnVinner, onSmallScreen } from './utils';
 import StatistikkModal from './StatistikkModal';
 
 interface Props {
@@ -30,51 +22,9 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere }) => {
     const [visGiPoengModal, setVisGiPoengModal] = useState<boolean>(false);
     const [visStatistikkModal, setVisStatistikkModal] = useState<boolean>(false);
 
-    const startNyRunde = async (runde: Runde) => {
-        if (pagaendeSpill && pagaendeSpill.id) {
-            const indexForNyRunde = pagaendeSpill.runder ? Object.keys(pagaendeSpill.runder).length : 0;
-
-            const database = getFirestore();
-            await setDoc(doc(database, 'spill', pagaendeSpill.id), {
-                ...formaterSpillForLagring(pagaendeSpill),
-                runder: { ...pagaendeSpill.runder, [indexForNyRunde]: runde },
-            });
-            setPagaendeSpill({ ...pagaendeSpill, runder: { ...pagaendeSpill.runder, [indexForNyRunde]: runde } });
-            setVisSettNyRundeModal(false);
-        }
-    };
-
     const gjeldendeRunde = (runder: Runder) => {
         const antallRunder = Object.keys(runder).length;
         return runder[antallRunder - 1];
-    };
-
-    const onLagrePoeng = async (oppdatertePoeng: Poeng) => {
-        if (pagaendeSpill && pagaendeSpill.id && pagaendeSpill.runder) {
-            const database = getFirestore();
-
-            const gjeldendeRundeIndex = Object.keys(pagaendeSpill.runder).length - 1;
-            const gjeldendeRunde = pagaendeSpill.runder[gjeldendeRundeIndex];
-            const oppdatertRundeData = {
-                ...pagaendeSpill.runder,
-                [gjeldendeRundeIndex]: { ...gjeldendeRunde, poeng: oppdatertePoeng },
-            };
-
-            const spillVinnere = spillere
-                ? getSpillerIder(spillere).filter(
-                      (spillerId) => finnTotalsumForSpiller(oppdatertRundeData, spillerId) >= 52,
-                  )
-                : null;
-
-            await setDoc(doc(database, 'spill', pagaendeSpill.id), {
-                ...formaterSpillForLagring(pagaendeSpill),
-                runder: oppdatertRundeData,
-                vinnerIder: spillVinnere,
-            });
-
-            setPagaendeSpill({ ...pagaendeSpill, runder: oppdatertRundeData, vinnerIder: spillVinnere ?? [] });
-            setVisGiPoengModal(false);
-        }
     };
 
     const pagaendeSpillHarEnVinner = getSpilletHarEnVinner(pagaendeSpill);
@@ -108,14 +58,22 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere }) => {
 
             <NyRundeModal
                 visNyttSpillInput={visSettNyRundeModal}
-                startNyRunde={startNyRunde}
+                pagaendeSpill={pagaendeSpill}
+                onOppdaterPagaendeSpill={(oppdatertSpill) => {
+                    setPagaendeSpill(oppdatertSpill);
+                    setVisSettNyRundeModal(false);
+                }}
                 onAvbryt={() => setVisSettNyRundeModal(false)}
                 spillere={spillere}
             />
             {pagaendeSpill.runder && (
                 <GiPoengForRundeModal
-                    onOppdaterPoeng={(oppdatertePoeng) => onLagrePoeng(oppdatertePoeng)}
+                    onOppdaterPagaendeSpill={(oppdatertSpill) => {
+                        setPagaendeSpill(oppdatertSpill);
+                        setVisGiPoengModal(false);
+                    }}
                     visGiPoengForRunde={visGiPoengModal}
+                    pagaendeSpill={pagaendeSpill}
                     gjeldendeRunde={gjeldendeRunde(pagaendeSpill.runder)}
                     onAvbryt={() => setVisGiPoengModal(false)}
                     spillere={spillere}

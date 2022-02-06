@@ -99,7 +99,6 @@
 
 .modal .melder.valgt,
 .modal .velgLag.paLag {
-    border-color: white;
     background-color: aqua;
     color: #282c34;
 }
@@ -411,6 +410,7 @@ h3 {
         font-size: 1.2rem;
     }
 }
+
 
 @media screen and (min-width: 1400px) {
     .sideContainer {
