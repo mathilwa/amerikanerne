@@ -47,9 +47,11 @@ const App: React.FC = () => {
                 const paGaendeSpill = alleSpill[0];
                 setPaGaendeSpill(paGaendeSpill);
             } else if (alleSpill.length > 1) {
-                const alleSpillSortert = orderBy(alleSpill, 'startet', 'asc');
+                const alleSpillMedStarttidspunkt = alleSpill.filter((spill) => !!spill.startet);
+                const alleSpillSortert = orderBy(alleSpillMedStarttidspunkt, 'startet', 'desc');
 
                 const paGaendeSpill = alleSpillSortert[0];
+
                 const gamleSpill = alleSpillSortert.slice(1, alleSpillSortert.length);
                 setGamleSpill(gamleSpill);
                 setPaGaendeSpill(paGaendeSpill);
