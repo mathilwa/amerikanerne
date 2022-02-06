@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import SpillTabell from './SpillTabell';
-import NyttSpillModal from './NyttSpillModal';
 import GiPoengForRundeModal from './GiPoengForRundeModal';
 import NyRundeModal from './NyRundeModal';
 import { Poeng, Runde, Runder, Spill, Spillere } from './types/Types';
@@ -11,29 +10,25 @@ import {
     getPoengForSisteRunde,
     getSpillerIder,
     getSpilletHarEnVinner,
+    onSmallScreen,
 } from './utils';
-import { addDoc, collection, doc, getFirestore, setDoc } from 'firebase/firestore';
+import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import StatistikkModal from './StatistikkModal';
 
 interface Props {
     spill: Spill;
     spillere: Spillere;
-    onNyttSpill: (nyttSpill: Spill, gammeltSpill: Spill) => void;
 }
-const PagaendeSpill: React.FC<Props> = ({ spill, spillere, onNyttSpill }) => {
+const PagaendeSpill: React.FC<Props> = ({ spill, spillere }) => {
     const [pagaendeSpill, setPagaendeSpill] = useState<Spill>(spill);
-    const [visNyttSpillModal, setVisNyttSpillModal] = useState<boolean>(false);
+
+    useEffect(() => {
+        setPagaendeSpill(spill);
+    }, [spill]);
+
     const [visSettNyRundeModal, setVisSettNyRundeModal] = useState<boolean>(false);
     const [visGiPoengModal, setVisGiPoengModal] = useState<boolean>(false);
     const [visStatistikkModal, setVisStatistikkModal] = useState<boolean>(false);
-
-    const startNyttSpill = async (nyttSpill: Spill) => {
-        const database = getFirestore();
-        const lagretSpill = await addDoc(collection(database, 'spill'), formaterSpillForLagring(nyttSpill));
-
-        onNyttSpill({ ...nyttSpill, id: lagretSpill.id }, pagaendeSpill);
-        setVisNyttSpillModal(false);
-    };
 
     const startNyRunde = async (runde: Runde) => {
         if (pagaendeSpill && pagaendeSpill.id) {
@@ -83,24 +78,9 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere, onNyttSpill }) => {
     };
 
     const pagaendeSpillHarEnVinner = getSpilletHarEnVinner(pagaendeSpill);
-    const onSmallScreen = window.screen.width < 500;
     return (
         <>
             <div className="pagaendeSpillContainer">
-                <div className="startSpillKnappContainer knappContainer">
-                    <button
-                        className={`knapp nyttSpill ${pagaendeSpillHarEnVinner ? '' : 'sekundaerKnapp'}`}
-                        onClick={() => setVisNyttSpillModal(true)}
-                    >
-                        <span>{`${onSmallScreen ? '+ Spill' : '+ Nytt spill'}`}</span>
-                    </button>
-                    {pagaendeSpillHarEnVinner && (
-                        <button className="knapp" onClick={() => setVisStatistikkModal(true)}>
-                            <span>Se statistikk</span>
-                        </button>
-                    )}
-                </div>
-
                 <h2 className="spillTabellHeading">Pågående spill</h2>
                 <SpillTabell spill={pagaendeSpill} spillere={spillere} />
 
@@ -125,12 +105,6 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere, onNyttSpill }) => {
                     )}
                 </div>
             </div>
-            <NyttSpillModal
-                visNyttSpillInput={visNyttSpillModal}
-                setNyttSpill={startNyttSpill}
-                onAvbryt={() => setVisNyttSpillModal(false)}
-                spillere={spillere}
-            />
 
             <NyRundeModal
                 visNyttSpillInput={visSettNyRundeModal}

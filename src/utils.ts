@@ -53,3 +53,5 @@ export const getPoengForSisteRunde = (spill: Spill): Poeng | null =>
     spill.runder &&
     spill.runder[Object.keys(spill.runder).length - 1] &&
     spill.runder[Object.keys(spill.runder).length - 1].poeng;
+
+export const onSmallScreen = window.screen.width < 500;

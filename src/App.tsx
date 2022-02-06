@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore';
 import './App.css';
 import logo from './icons/cards.png';
 import SpillTabell from './SpillTabell';
@@ -7,12 +7,14 @@ import { Runder, Spill, Spillere } from './types/Types';
 import orderBy from 'lodash.orderby';
 import PagaendeSpill from './PagaendeSpill';
 import StatistikkModal from './StatistikkModal';
-import { getSpilletHarEnVinner } from './utils';
+import { formaterSpillForLagring, getSpilletHarEnVinner, onSmallScreen } from './utils';
+import NyttSpillModal from './NyttSpillModal';
 
 const App: React.FC = () => {
     const [spillere, setSpillere] = useState<Spillere | null>(null);
     const [tidligereSpill, setTidligereSpill] = useState<Spill[]>([]);
     const [pagaendeSpill, setPagaendeSpill] = useState<Spill | null>(null);
+    const [visNyttSpillModal, setVisNyttSpillModal] = useState<boolean>(false);
     const [visStatistikkModal, setVisStatistikkModal] = useState<boolean>(false);
 
     useEffect(() => {
@@ -67,9 +69,23 @@ const App: React.FC = () => {
         getSpillData();
     }, []);
 
+    const startNyttSpill = async (nyttSpill: Spill) => {
+        const database = getFirestore();
+        const lagretSpill = await addDoc(collection(database, 'spill'), formaterSpillForLagring(nyttSpill));
+
+        if (pagaendeSpill) {
+            setTidligereSpill([pagaendeSpill].concat(tidligereSpill));
+        }
+        setPagaendeSpill({ ...nyttSpill, id: lagretSpill.id });
+
+        setVisNyttSpillModal(false);
+    };
+
     if (!spillere) {
         return null;
     }
+
+    const pagaendeSpillHarEnVinner = pagaendeSpill && getSpilletHarEnVinner(pagaendeSpill);
 
     return (
         <div className="App">
@@ -80,16 +96,28 @@ const App: React.FC = () => {
             <div className="sideContainer">
                 <h1>Amerikanerne</h1>
 
-                {pagaendeSpill && (
-                    <PagaendeSpill
-                        spill={pagaendeSpill}
-                        spillere={spillere}
-                        onNyttSpill={(nyttSpill, gammeltSpill) => {
-                            setPagaendeSpill(nyttSpill);
-                            setTidligereSpill(tidligereSpill.concat(gammeltSpill));
-                        }}
-                    />
-                )}
+                <div className="startSpillKnappContainer knappContainer">
+                    <button
+                        className={`knapp nyttSpill ${pagaendeSpillHarEnVinner ? '' : 'sekundaerKnapp'}`}
+                        onClick={() => setVisNyttSpillModal(true)}
+                    >
+                        <span>{`${onSmallScreen ? '+ Spill' : '+ Nytt spill'}`}</span>
+                    </button>
+                    {pagaendeSpillHarEnVinner && (
+                        <button className="knapp" onClick={() => setVisStatistikkModal(true)}>
+                            <span>Se statistikk</span>
+                        </button>
+                    )}
+                </div>
+
+                <NyttSpillModal
+                    visNyttSpillInput={visNyttSpillModal}
+                    setNyttSpill={startNyttSpill}
+                    onAvbryt={() => setVisNyttSpillModal(false)}
+                    spillere={spillere}
+                />
+
+                {pagaendeSpill && <PagaendeSpill spill={pagaendeSpill} spillere={spillere} />}
 
                 {tidligereSpill.length > 0 && (
                     <div>
