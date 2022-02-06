@@ -116,8 +116,8 @@ const StatistikkModal: React.FC<Props> = ({ alleSpill, spillere, visModal, onLuk
                     <h2 className="heading2">Flest seire:</h2>
                     {flestSeire.map((seireInfo) => (
                         <div key={'seireInfo-' + seireInfo.id}>
-                            <span className="statistikkNavn">{spillere[seireInfo.id].navn}</span> -
-                            {seireInfo.antallSeire} seire
+                            <span className="statistikkNavn">{spillere[seireInfo.id].navn}</span>
+                            {`: ${seireInfo.antallSeire} seire`}
                         </div>
                     ))}
                 </div>
@@ -127,8 +127,8 @@ const StatistikkModal: React.FC<Props> = ({ alleSpill, spillere, visModal, onLuk
                 <h2 className="heading2">Flest meldinger:</h2>
                 {flestMeldinger.map((meldingInfo) => (
                     <div key={'meldinginfo-' + meldingInfo.id}>
-                        <span className="statistikkNavn">{spillere[meldingInfo.id].navn}</span> -{' '}
-                        {meldingInfo.antallMeldinger}
+                        <span className="statistikkNavn">{spillere[meldingInfo.id].navn}</span>
+                        {`: ${meldingInfo.antallMeldinger}`}
                     </div>
                 ))}
             </div>
@@ -138,8 +138,8 @@ const StatistikkModal: React.FC<Props> = ({ alleSpill, spillere, visModal, onLuk
                     <h2 className="heading2">Høyest snittmelding:</h2>
                     {alleMeldingerSortert.map((meldingsinfo) => (
                         <div key={'allemeldingerinfo-' + meldingsinfo.id}>
-                            <span className="statistikkNavn">{spillere[meldingsinfo.id].navn}</span> - Snittmelding
-                            på {meldingsinfo.gjennomsnittsmelding} stikk
+                            <span className="statistikkNavn">{spillere[meldingsinfo.id].navn}</span>
+                            {`: Snittmelding på ${meldingsinfo.gjennomsnittsmelding} stikk`}
                         </div>
                     ))}
                 </div>
@@ -149,8 +149,8 @@ const StatistikkModal: React.FC<Props> = ({ alleSpill, spillere, visModal, onLuk
                 <h2 className="heading2">Antall ganger med på lag uten å melde selv:</h2>
                 {lagmeldemInfoSomListeSortert.map((lagmeldemInfo) => (
                     <div key={'lagmeldemInfo-' + lagmeldemInfo.id}>
-                        <span className="statistikkNavn">{spillere[lagmeldemInfo.id].navn}</span> -{' '}
-                        {lagmeldemInfo.antallSpill}
+                        <span className="statistikkNavn">{spillere[lagmeldemInfo.id].navn}</span>
+                        {`: ${lagmeldemInfo.antallSpill}`}
                     </div>
                 ))}
             </div>

@@ -30,6 +30,8 @@ const NyRundeModal: React.FC<Props> = ({ visNyttSpillInput, startNyRunde, onAvbr
                 poeng: null,
             });
         }
+
+        setNyRunde(null);
     };
 
     return (
@@ -39,20 +41,20 @@ const NyRundeModal: React.FC<Props> = ({ visNyttSpillInput, startNyRunde, onAvbr
 
                 <NyRundeInput runde={nyRunde} onOppdaterRunde={setNyRunde} spillere={spillere} />
 
-                <div className="knapperad"><button
-                    type="submit"
-                    className="knapp sekundaerKnapp"
-                    onClick={() => {
-                        setNyRunde(null);
-
-                        onAvbryt();
-                    }}
-                >
-                    Avbryt
-                </button>
-                <button type="submit" className="knapp" onClick={onStartNyRunde}>
-                    Legg til
-                </button>
+                <div className="knapperad">
+                    <button
+                        type="submit"
+                        className="knapp sekundaerKnapp"
+                        onClick={() => {
+                            setNyRunde(null);
+                            onAvbryt();
+                        }}
+                    >
+                        Avbryt
+                    </button>
+                    <button type="submit" className="knapp" onClick={onStartNyRunde}>
+                        Legg til
+                    </button>
                 </div>
             </form>
         </Modal>
