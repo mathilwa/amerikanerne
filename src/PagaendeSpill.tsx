@@ -82,27 +82,29 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere, onNyttSpill }) => {
         }
     };
 
-    const pagaendeSpillHarEnVinner = getSpilletHarEnVinner(pagaendeSpill, getSpillerIder(spillere));
+    const pagaendeSpillHarEnVinner = getSpilletHarEnVinner(pagaendeSpill);
     const onSmallScreen = window.screen.width < 500;
     return (
         <>
             <div className="pagaendeSpillContainer">
+                <div className="startSpillKnappContainer knappContainer">
+                    <button
+                        className={`knapp nyttSpill ${pagaendeSpillHarEnVinner ? '' : 'sekundaerKnapp'}`}
+                        onClick={() => setVisNyttSpillModal(true)}
+                    >
+                        <span>{`${onSmallScreen ? '+ Spill' : '+ Nytt spill'}`}</span>
+                    </button>
+                    {pagaendeSpillHarEnVinner && (
+                        <button className="knapp" onClick={() => setVisStatistikkModal(true)}>
+                            <span>Se statistikk</span>
+                        </button>
+                    )}
+                </div>
+
+                <h2 className="spillTabellHeading">Pågående spill</h2>
                 <SpillTabell spill={pagaendeSpill} spillere={spillere} />
 
                 <div className="knappContainer">
-                    <div>
-                        <button
-                            className={`knapp nyttSpill${pagaendeSpillHarEnVinner ? '' : 'sekundaerKnapp'}`}
-                            onClick={() => setVisNyttSpillModal(true)}
-                        >
-                            <span>{`${onSmallScreen ? '+ Spill' : '+ Nytt spill'}`}</span>
-                        </button>
-                        {pagaendeSpillHarEnVinner && (
-                            <button className="knapp" onClick={() => setVisStatistikkModal(true)}>
-                                <span>Se statistikk</span>
-                            </button>
-                        )}
-                    </div>
                     {!pagaendeSpillHarEnVinner && (
                         <div>
                             <button

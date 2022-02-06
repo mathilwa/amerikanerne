@@ -9,8 +9,11 @@ export const formaterSpillForLagring = (spill: Spill) => ({
 });
 export const getSpillerIder = (spillere: Spillere) => Object.keys(spillere).map((key) => key);
 export const formatDateAndClock = (date: Date) => format(new Date(date), "dd.MM.yy 'kl.' HH:mm");
-export const mapSamletPoengsumForSpill = (spill: Spill, spillerIder: string[]): Poeng | null => {
+export const mapSamletPoengsumForSpill = (spill: Spill): Poeng | null => {
     if (spill.runder && Object.keys(spill.runder).length > 0) {
+        const spillerIder = spill.runder[0].poeng
+            ? Object.keys(spill.runder[0].poeng).map((spillerId) => spillerId)
+            : [];
         return Object.values(spill.runder).reduce((allePoeng, runde) => {
             if (runde.poeng) {
                 const allePoengForRunde = spillerIder.reduce((poengForAlleSpillere, spillerId) => {
@@ -27,8 +30,8 @@ export const mapSamletPoengsumForSpill = (spill: Spill, spillerIder: string[]): 
 
     return null;
 };
-export const getSpilletHarEnVinner = (spill: Spill, spillerIder: string[]): boolean => {
-    const poengForAlleRunder = mapSamletPoengsumForSpill(spill, spillerIder);
+export const getSpilletHarEnVinner = (spill: Spill): boolean => {
+    const poengForAlleRunder = mapSamletPoengsumForSpill(spill);
 
     return poengForAlleRunder ? Object.values(poengForAlleRunder).some((poeng) => (poeng as number) >= 52) : false;
 };

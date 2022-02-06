@@ -13,20 +13,24 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
 
     const spillerIder = getSpillerIder(spillere);
 
-    const spillerErVinner = (spillerId: string):boolean => {
-        const allePoengForSpill =  mapSamletPoengsumForSpill(spill, spillerIder);
+    const spillerErVinner = (spillerId: string): boolean => {
+        const allePoengForSpill = mapSamletPoengsumForSpill(spill);
         if (!allePoengForSpill) {
             return false;
         }
 
-        const spillereSomHarVunnet = Object.keys(allePoengForSpill).filter(id => allePoengForSpill[id] >= 52);
+        const spillereSomHarVunnet = Object.keys(allePoengForSpill).filter((id) => allePoengForSpill[id] >= 52);
         return spillereSomHarVunnet.includes(spillerId);
+    };
 
-    }
+    const spillStartetTekst =
+        spill.startet && spill.startet > new Date('12.01.2021')
+            ? `Startet ${formatDateAndClock(new Date(spill.startet))}`
+            : 'Startet: Før desember 2021';
+
     return (
         <div className="spillTabellContainer">
-
-            <div className="spillStartet">{`${spill.startet ? `Startet ${formatDateAndClock(new Date(spill.startet))}` : 'Startet: Før desember 2021'}`}</div>
+            <div className="spillStartet">{spillStartetTekst}</div>
 
             <div className="poengtabell">
                 {spillerIder.map((id) => (
@@ -83,14 +87,16 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
                             <div className="poengtabell">
                                 {spillerIder.map((id) => (
                                     <div key={'navn-sum' + id}>
-                                    <span className="tabellHeaderMobil">{spillere[id].forkortelse}</span>
-                                    <span className="tabellHeaderDesktop">{spillere[id].navn}</span>
+                                        <span className="tabellHeaderMobil">{spillere[id].forkortelse}</span>
+                                        <span className="tabellHeaderDesktop">{spillere[id].navn}</span>
                                     </div>
                                 ))}
                             </div>
                             <div className="poengtabell">
                                 {spillerIder.map((id) => (
-                                    <span key={'sum' + id} className={`${spillerErVinner(id) ? 'vinner' : ''}`}>{finnTotalsumForSpiller(runder, id)}</span>
+                                    <span key={'sum' + id} className={`${spillerErVinner(id) ? 'vinner' : ''}`}>
+                                        {finnTotalsumForSpiller(runder, id)}
+                                    </span>
                                 ))}
                             </div>
                         </div>

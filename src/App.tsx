@@ -7,11 +7,12 @@ import { Runder, Spill, Spillere } from './types/Types';
 import orderBy from 'lodash.orderby';
 import PagaendeSpill from './PagaendeSpill';
 import StatistikkModal from './StatistikkModal';
+import { getSpilletHarEnVinner } from './utils';
 
 const App: React.FC = () => {
     const [spillere, setSpillere] = useState<Spillere | null>(null);
-    const [gamleSpill, setGamleSpill] = useState<Spill[]>([]);
-    const [pagaendeSpill, setPaGaendeSpill] = useState<Spill | null>(null);
+    const [tidligereSpill, setTidligereSpill] = useState<Spill[]>([]);
+    const [pagaendeSpill, setPagaendeSpill] = useState<Spill | null>(null);
     const [visStatistikkModal, setVisStatistikkModal] = useState<boolean>(false);
 
     useEffect(() => {
@@ -44,20 +45,23 @@ const App: React.FC = () => {
             });
 
             if (alleSpill.length === 1) {
-                const paGaendeSpill = alleSpill[0];
-                setPaGaendeSpill(paGaendeSpill);
+                const spill = alleSpill[0];
+                if (getSpilletHarEnVinner(spill)) {
+                    setTidligereSpill([spill]);
+                } else {
+                    setPagaendeSpill(spill);
+                }
             } else if (alleSpill.length > 1) {
-                const alleSpillMedStarttidspunkt = alleSpill.filter((spill) => !!spill.startet);
-                const alleSpillSortert = orderBy(alleSpillMedStarttidspunkt, 'startet', 'desc');
+                const alleSpillSortert = orderBy(alleSpill, 'startet', 'desc');
 
-                const paGaendeSpill = alleSpillSortert[0];
+                const pagaendeSpill = alleSpillSortert[0];
 
-                const gamleSpill = alleSpillSortert.slice(1, alleSpillSortert.length);
-                setGamleSpill(gamleSpill);
-                setPaGaendeSpill(paGaendeSpill);
+                const tidligereSpill = alleSpillSortert.slice(1, alleSpillSortert.length);
+                setTidligereSpill(tidligereSpill);
+                setPagaendeSpill(pagaendeSpill);
             } else {
-                setPaGaendeSpill(null);
-                setGamleSpill([]);
+                setPagaendeSpill(null);
+                setTidligereSpill([]);
             }
         };
         getSpillData();
@@ -81,22 +85,22 @@ const App: React.FC = () => {
                         spill={pagaendeSpill}
                         spillere={spillere}
                         onNyttSpill={(nyttSpill, gammeltSpill) => {
-                            setPaGaendeSpill(nyttSpill);
-                            setGamleSpill(gamleSpill.concat(gammeltSpill));
+                            setPagaendeSpill(nyttSpill);
+                            setTidligereSpill(tidligereSpill.concat(gammeltSpill));
                         }}
                     />
                 )}
 
-                {gamleSpill.length > 0 && (
+                {tidligereSpill.length > 0 && (
                     <div>
                         <div className="tidligereSpillHeader">
-                            <h2 className="tidligereSpillHeading">{`Tidligere spill (${gamleSpill.length}):`}</h2>
+                            <h2 className="spillTabellHeading">{`Tidligere spill (${tidligereSpill.length}):`}</h2>
                             <button className="knapp" onClick={() => setVisStatistikkModal(true)}>
                                 <span>Se statistikk for alle spill</span>
                             </button>
                         </div>
 
-                        {gamleSpill.map((gammeltSpill) => (
+                        {tidligereSpill.map((gammeltSpill) => (
                             <SpillTabell
                                 key={`gammeltSpill-${gammeltSpill.id}`}
                                 spill={gammeltSpill}
@@ -105,7 +109,7 @@ const App: React.FC = () => {
                         ))}
 
                         <StatistikkModal
-                            alleSpill={pagaendeSpill ? [pagaendeSpill, ...gamleSpill] : gamleSpill}
+                            alleSpill={pagaendeSpill ? [pagaendeSpill, ...tidligereSpill] : tidligereSpill}
                             spillere={spillere}
                             onLukkModal={() => setVisStatistikkModal(false)}
                             visModal={visStatistikkModal}
