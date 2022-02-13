@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles.css';
 import { slagIkoner, Spill, Spillere } from './types/Types';
-import { finnTotalsumForSpiller, formatDateAndClock, getSpillerIder, mapSamletPoengsumForSpill } from './utils';
+import { finnTotalsumForSpiller, formatDateAndClock, mapSamletPoengsumForSpill } from './utils';
 
 interface Props {
     spill: Spill;
@@ -10,8 +10,6 @@ interface Props {
 
 const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
     const runder = spill.runder;
-
-    const spillerIder = getSpillerIder(spillere);
 
     const spillerErVinner = (spillerId: string): boolean => {
         const allePoengForSpill = mapSamletPoengsumForSpill(spill);
@@ -33,7 +31,7 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
             <div className="spillStartet">{spillStartetTekst}</div>
 
             <div className="poengtabell">
-                {spillerIder.map((id) => (
+                {spill.spillerRekkefolge.map((id) => (
                     <div key={'navn-' + id}>
                         <span key={'navn-mobil-' + id} className="tabellHeaderMobil">
                             {spillere[id].forkortelse}
@@ -53,7 +51,7 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
                             <div key={runde} className="poengtabell">
                                 {runder[runde] && (
                                     <>
-                                        {spillerIder.map((spillerId) => (
+                                        {spill.spillerRekkefolge.map((spillerId) => (
                                             <div key={spillerId} className="poengContainer">
                                                 <div
                                                     className={`poeng ${
@@ -85,7 +83,7 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
                         <div className="totalsum">
                             <div className="totalsumHeading">Totalt:</div>
                             <div className="poengtabell">
-                                {spillerIder.map((id) => (
+                                {spill.spillerRekkefolge.map((id) => (
                                     <div key={'navn-sum' + id}>
                                         <span className="tabellHeaderMobil">{spillere[id].forkortelse}</span>
                                         <span className="tabellHeaderDesktop">{spillere[id].navn}</span>
@@ -93,7 +91,7 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
                                 ))}
                             </div>
                             <div className="poengtabell">
-                                {spillerIder.map((id) => (
+                                {spill.spillerRekkefolge.map((id) => (
                                     <span key={'sum' + id} className={`${spillerErVinner(id) ? 'vinner' : ''}`}>
                                         {finnTotalsumForSpiller(runder, id)}
                                     </span>

@@ -42,6 +42,7 @@ const App: React.FC = () => {
                         runder: (spillData.runder as Runder) ?? [],
                         startet: !!spillData.startingAt ? spillData.startingAt.toDate() : null,
                         avsluttet: !!spillData.endingAt ? spillData.endingAt : null,
+                        spillerRekkefolge: spillData.spillerRekkefolge ?? [],
                     });
                 }, {});
             });

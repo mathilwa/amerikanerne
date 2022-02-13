@@ -12,10 +12,10 @@ const Modal: React.FC<Props> = ({ isOpen, onClose, children }) => (
     <ReactModal
         isOpen={isOpen}
         onRequestClose={onClose}
-        shouldCloseOnEsc={true}
+        shouldCloseOnEsc={false}
         className="modal"
         overlayClassName="modalOverlay"
-        shouldCloseOnOverlayClick={true}
+        shouldCloseOnOverlayClick={false}
     >
         <div>{children}</div>
     </ReactModal>

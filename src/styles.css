@@ -98,9 +98,34 @@
 }
 
 .modal .melder.valgt,
+.modal .rekkefolge.valgt,
 .modal .velgLag.paLag {
     background-color: aqua;
     color: #282c34;
+}
+
+.velgSpillerBeskrivelse {
+    font-size: 0.875rem;
+}
+
+.spillere .rekkefolge {
+    position: relative;
+}
+
+.spillere .rekkefolgeNummer {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #282c34;
+    color: white;
+    border-radius: 45%;
+    height: 15px;
+    width: 15px;
+    font-size: 0.6rem;
 }
 
 input[type='radio'] {
@@ -410,7 +435,6 @@ h3 {
         font-size: 1.2rem;
     }
 }
-
 
 @media screen and (min-width: 1400px) {
     .sideContainer {

@@ -15,6 +15,7 @@ interface Props {
 
 const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAvbryt, spillere }) => {
     const [nyRunde, setNyRunde] = useState<Runde | null>(null);
+    const [spillerRekkefolge, setSpillerRekkefolge] = useState<string[]>([]);
     const [lagrer, setLagrer] = useState<boolean>(false);
     const [feilmelding, setFeilmelding] = useState<string>('');
 
@@ -25,13 +26,14 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
 
         setFeilmelding('');
 
-        if (spillerIder.length === 4 && rundedataErUtfylt(nyRunde)) {
+        if (spillerRekkefolge.length === 4 && rundedataErUtfylt(nyRunde)) {
             const nyttSpill = {
                 id: null,
                 runder: { 0: nyRunde! },
                 vinnerIder: [],
                 startet: new Date(),
                 avsluttet: null,
+                spillerRekkefolge: spillerRekkefolge,
             };
             try {
                 setLagrer(true);
@@ -42,17 +44,27 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
                 );
                 setNyttSpill({ ...nyttSpill, id: lagretSpill.id });
                 setNyRunde(null);
+                setSpillerRekkefolge([]);
             } catch (_error) {
                 setFeilmelding('Noe gikk galt ved lagring av ny runde. Prøv igjen');
             } finally {
                 setLagrer(false);
             }
         } else {
-            if (spillerIder.length < 4) {
+            if (spillerRekkefolge.length < 4) {
                 setFeilmelding('Har du husket å velge fire spillere?');
             } else if (!nyRunde) {
                 setFeilmelding('Er all informasjon om første runde fyllt ut riktig?');
             }
+        }
+    };
+
+    const updateSpillerRekkefolge = (spillerId: string) => {
+        if (spillerRekkefolge.includes(spillerId)) {
+            const spillerRekkefolgeUtenSpillerId = spillerRekkefolge.filter((id) => id !== spillerId);
+            setSpillerRekkefolge(spillerRekkefolgeUtenSpillerId);
+        } else {
+            setSpillerRekkefolge(spillerRekkefolge.concat(spillerId));
         }
     };
 
@@ -64,12 +76,27 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
                 <form>
                     <h1>Nytt spill</h1>
                     <h2 className="heading2">Spillere:</h2>
+                    <p className="velgSpillerBeskrivelse">Velg deg selv først og så spillerne i rekkefølge til venstre for deg</p>
                     <div className="spillere">
-                        {spillerIder.map((id) => (
-                            <div key={'spillere' + id} className="spiller">
-                                {spillere[id].navn}
-                            </div>
-                        ))}
+                        {spillerIder.map((id) => {
+                            const rekkefolgeIndex = spillerRekkefolge.findIndex(
+                                (rekkefolgeId) => rekkefolgeId === id,
+                            );
+                            const spillerErValgt = spillerRekkefolge.includes(id);
+
+                            return (
+                                <div
+                                    key={`spillere ${id}`}
+                                    className={`spiller rekkefolge ${spillerErValgt ? 'valgt' : ''}`}
+                                    onClick={() => updateSpillerRekkefolge(id)}
+                                >
+                                    {rekkefolgeIndex !== -1 && spillerErValgt && (
+                                        <div className="rekkefolgeNummer">{rekkefolgeIndex + 1}</div>
+                                    )}
+                                    <div>{spillere[id].navn}</div>
+                                </div>
+                            );
+                        })}
                     </div>
 
                     <h2>Første runde:</h2>
@@ -89,6 +116,8 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
                             className="knapp sekundaerKnapp"
                             onClick={() => {
                                 setFeilmelding('');
+                                setNyRunde(null);
+                                setSpillerRekkefolge([]);
                                 onAvbryt();
                             }}
                         >
