@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import Modal from './Modal';
 import { Poeng, Runde, Spill, Spillere } from './types/Types';
 import { finnTotalsumForSpiller, formaterSpillForLagring, getSpillerIder } from './utils';
@@ -36,7 +36,9 @@ const GiPoengForRundeModal: React.FC<Props> = ({
         setFeilmelding('');
     };
 
-    const leggTilPoeng = async () => {
+    const leggTilPoeng = async (event: FormEvent) => {
+        event.preventDefault();
+
         if (poengTilSpillere && Object.keys(poengTilSpillere).length === 4) {
             if (pagaendeSpill && pagaendeSpill.id && pagaendeSpill.runder) {
                 const database = getFirestore();

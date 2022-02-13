@@ -19,6 +19,7 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
     const [feilmelding, setFeilmelding] = useState<string>('');
 
     const spillerIder = getSpillerIder(spillere);
+
     const startNyttSpill = async (event: FormEvent) => {
         event.preventDefault();
 
