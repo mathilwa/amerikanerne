@@ -28,11 +28,12 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere }) => {
     };
 
     const pagaendeSpillHarEnVinner = getSpilletHarEnVinner(pagaendeSpill);
+
     return (
         <>
             <div className="pagaendeSpillContainer">
                 <h2 className="spillTabellHeading">Pågående spill</h2>
-                <SpillTabell spill={pagaendeSpill} spillere={spillere} />
+                <SpillTabell spill={pagaendeSpill} spillere={spillere} pagaendeSpill={true} />
 
                 <div className="knappContainer">
                     {!pagaendeSpillHarEnVinner && (

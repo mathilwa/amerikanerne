@@ -5,16 +5,18 @@ import { getSpillerIder } from './utils';
 interface Props {
     onOppdaterRunde: (nyRunde: Runde) => void;
     runde: Runde | null;
+    delerIdForRunde: string | undefined;
     spillere: Spillere;
 }
 
-const NyRundeInput: React.FC<Props> = ({ onOppdaterRunde, spillere, runde }) => {
+const NyRundeInput: React.FC<Props> = ({ onOppdaterRunde, spillere, runde, delerIdForRunde }) => {
     const rundeData = runde ?? {
         melding: { antallStikk: null, slag: null },
         lag: [],
         melder: '',
         poeng: null,
     };
+
     const spillerIder = getSpillerIder(spillere);
 
     const oppdaterNyttLag = (spillerId: string) => {
@@ -43,6 +45,12 @@ const NyRundeInput: React.FC<Props> = ({ onOppdaterRunde, spillere, runde }) => 
 
     return (
         <>
+            {!!delerIdForRunde && (
+                <p className="hvemDelerInfo">
+                    <span className="delerIkon">{`🃏`}</span>
+                    {`${spillere[delerIdForRunde].navn} deler`}
+                </p>
+            )}
             <h2 className="heading2">Hva meldes?</h2>
             <div className="hvaMeldes">
                 <div className="melding">

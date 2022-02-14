@@ -6,6 +6,7 @@ export const formaterSpillForLagring = (spill: Spill) => ({
     runder: spill.runder,
     startingAt: spill.startet ?? new Date(),
     endingAt: spill.avsluttet ?? null,
+    spillerRekkefolge: spill.spillerRekkefolge,
 });
 export const getSpillerIder = (spillere: Spillere) => Object.keys(spillere).map((key) => key);
 export const formatDateAndClock = (date: Date) => format(new Date(date), "dd.MM.yy 'kl.' HH:mm");
@@ -56,5 +57,16 @@ export const getPoengForSisteRunde = (spill: Spill): Poeng | null =>
     spill.runder &&
     spill.runder[Object.keys(spill.runder).length - 1] &&
     spill.runder[Object.keys(spill.runder).length - 1].poeng;
+
+export const getSpillerIdSomDelerForRunde = (spill: Spill, rundeKey: number): string => {
+    const rundeSomNummer = rundeKey + 1;
+    const nesteDelerNummer = rundeSomNummer % 4;
+
+    if (nesteDelerNummer === 0) {
+        return spill.spillerRekkefolge[3];
+    } else {
+        return spill.spillerRekkefolge[nesteDelerNummer - 1];
+    }
+};
 
 export const onSmallScreen = window.screen.width < 500;

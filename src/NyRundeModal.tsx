@@ -2,7 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import Modal from './Modal';
 import { Runde, Spill, Spillere } from './types/Types';
 import NyRundeInput from './NyRundeInput';
-import { formaterSpillForLagring, rundedataErUtfylt } from './utils';
+import { formaterSpillForLagring, getSpillerIdSomDelerForRunde, rundedataErUtfylt } from './utils';
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import Spinner from './spinner/Spinner';
 
@@ -63,6 +63,11 @@ const NyRundeModal: React.FC<Props> = ({
         setNyRunde(null);
     };
 
+    const delerIdForRunde = getSpillerIdSomDelerForRunde(
+        pagaendeSpill,
+        pagaendeSpill.runder ? Object.keys(pagaendeSpill.runder).length : 0,
+    );
+
     return (
         <Modal onClose={onAvbryt} isOpen={visNyttSpillInput}>
             {lagring ? (
@@ -77,6 +82,7 @@ const NyRundeModal: React.FC<Props> = ({
                             setNyRunde(oppdatertRunde);
                             setFeilmelding('');
                         }}
+                        delerIdForRunde={delerIdForRunde}
                         spillere={spillere}
                     />
 

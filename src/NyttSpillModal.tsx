@@ -76,7 +76,9 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
                 <form>
                     <h1>Nytt spill</h1>
                     <h2 className="heading2">Spillere:</h2>
-                    <p className="velgSpillerBeskrivelse">Velg deg selv først og så spillerne i rekkefølge til venstre for deg</p>
+                    <p className="velgSpillerBeskrivelse">
+                        Velg deg selv først og så spillerne i rekkefølge til venstre for deg
+                    </p>
                     <div className="spillere">
                         {spillerIder.map((id) => {
                             const rekkefolgeIndex = spillerRekkefolge.findIndex(
@@ -106,6 +108,7 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
                             setFeilmelding('');
                         }}
                         runde={nyRunde}
+                        delerIdForRunde={spillerRekkefolge.length > 0 ? spillerRekkefolge[0] : ''}
                         spillere={spillere}
                     />
 

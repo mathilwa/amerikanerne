@@ -31,21 +31,20 @@ const App: React.FC = () => {
                 setSpillere(spillerData);
             });
 
-            const alleSpill: Spill[] = [];
-            await getDocs(spillCollection).then((snapshot) => {
+            const alleSpill = await getDocs(spillCollection).then((snapshot) =>
                 snapshot.docs.map((doc) => {
                     const spillData = doc.data();
 
-                    alleSpill.push({
+                    return {
                         id: doc.id,
                         vinnerIder: spillData.vinnerIder ?? [],
                         runder: (spillData.runder as Runder) ?? [],
                         startet: !!spillData.startingAt ? spillData.startingAt.toDate() : null,
                         avsluttet: !!spillData.endingAt ? spillData.endingAt : null,
                         spillerRekkefolge: spillData.spillerRekkefolge ?? [],
-                    });
-                }, {});
-            });
+                    };
+                }, {}),
+            );
 
             if (alleSpill.length === 1) {
                 const spill = alleSpill[0];

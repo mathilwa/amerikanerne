@@ -104,6 +104,16 @@
     color: #282c34;
 }
 
+.hvemDelerInfo {
+    display: flex;
+    align-items: center;
+}
+
+.modal .delerIkon {
+    font-size: 2rem;
+    margin-right: 8px;
+}
+
 .velgSpillerBeskrivelse {
     font-size: 0.875rem;
 }
@@ -234,12 +244,12 @@ h3 {
     margin-right: 10px;
 }
 
-.poengContainer {
+.tabellrute {
     display: flex;
     justify-content: center;
 }
 
-.poengContainer > * {
+.tabellrute > * {
     width: 2rem;
     height: 2rem;
     display: flex;
@@ -248,22 +258,33 @@ h3 {
     flex-direction: row;
 }
 
-.poengContainer .melding {
+.tabellrute .melding {
     width: 100%;
 }
 
-.poengContainer .slagIkon {
+.tabellrute .slagIkon {
     margin-right: 0.5rem;
 }
 
-.poengContainer .poeng.lag {
+.tabellrute .poeng.lag {
     border: 1px solid #ba1515;
     border-radius: 45px;
 }
 
-.poengContainer .poeng.lag.rundeMelder {
+.tabellrute .poeng.lag.rundeMelder {
     border-width: 2px;
     box-sizing: border-box;
+}
+
+.poengContainer {
+    position: relative;
+}
+
+.deler {
+    position: absolute;
+    font-size: 0.5rem;
+    top: -8px;
+    right: -8px;
 }
 
 .klarteLagetDet {
@@ -397,6 +418,12 @@ h3 {
     .tabellHeaderMeldingMobil {
         display: none;
     }
+
+    .deler {
+        font-size: 1rem;
+        top: -4px;
+        right: -6px;
+    }
 }
 
 @media screen and (min-width: 900px) {
@@ -413,7 +440,7 @@ h3 {
         font-size: 1rem;
     }
 
-    .poengContainer > * {
+    .tabellrute > * {
         width: 3rem;
         height: 3rem;
     }
@@ -433,6 +460,10 @@ h3 {
     .knapp {
         padding: 1rem;
         font-size: 1.2rem;
+    }
+
+    .deler {
+        font-size: 1.5rem;
     }
 }
 

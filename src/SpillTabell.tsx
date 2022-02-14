@@ -1,14 +1,20 @@
 import React from 'react';
 import './styles.css';
 import { slagIkoner, Spill, Spillere } from './types/Types';
-import { finnTotalsumForSpiller, formatDateAndClock, mapSamletPoengsumForSpill } from './utils';
+import {
+    finnTotalsumForSpiller,
+    formatDateAndClock,
+    getSpillerIdSomDelerForRunde,
+    mapSamletPoengsumForSpill,
+} from './utils';
 
 interface Props {
     spill: Spill;
     spillere: Spillere;
+    pagaendeSpill?: boolean;
 }
 
-const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
+const SpillTabell: React.FC<Props> = ({ spill, spillere, pagaendeSpill = false }) => {
     const runder = spill.runder;
 
     const spillerErVinner = (spillerId: string): boolean => {
@@ -25,6 +31,11 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
         spill.startet && spill.startet > new Date('12.01.2021')
             ? `Startet ${formatDateAndClock(new Date(spill.startet))}`
             : 'Startet: Før desember 2021';
+
+    const getSpillerErDelerForRunde = (spillerId: string, rundeKey: string) => {
+        const spillerIdSomDeler = getSpillerIdSomDelerForRunde(spill, parseInt(rundeKey));
+        return spillerIdSomDeler === spillerId;
+    };
 
     return (
         <div className="spillTabellContainer">
@@ -44,33 +55,41 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
                 <span className="tabellHeaderMeldingMobil">Mld</span>
                 <span className="tabellHeaderMeldingDesktop">Melding</span>
             </div>
-            {runder && runder[0] && (
+            {runder && (
                 <>
                     <div className="runder">
-                        {Object.keys(runder).map((runde) => (
-                            <div key={runde} className="poengtabell">
-                                {runder[runde] && (
+                        {Object.keys(runder).map((rundeKey) => (
+                            <div key={rundeKey} className="poengtabell">
+                                {runder[rundeKey] && (
                                     <>
                                         {spill.spillerRekkefolge.map((spillerId) => (
-                                            <div key={spillerId} className="poengContainer">
+                                            <div key={spillerId} className="tabellrute poengContainer">
+                                                {pagaendeSpill &&
+                                                    getSpillerErDelerForRunde(spillerId, rundeKey) && (
+                                                        <div className="deler">{`🃏`}</div>
+                                                    )}
                                                 <div
                                                     className={`poeng ${
-                                                        runder[runde].lag.includes(spillerId) ? 'lag' : ''
-                                                    } ${runder[runde].melder === spillerId ? 'rundeMelder' : ''}`}
+                                                        runder[rundeKey].lag.includes(spillerId) ? 'lag' : ''
+                                                    } ${
+                                                        runder[rundeKey].melder === spillerId ? 'rundeMelder' : ''
+                                                    }`}
                                                 >
-                                                    {runder[runde].poeng ? runder[runde].poeng![spillerId] : '-'}
+                                                    {runder[rundeKey].poeng
+                                                        ? runder[rundeKey].poeng![spillerId]
+                                                        : '-'}
                                                 </div>
                                             </div>
                                         ))}
-                                        {runder[runde].melding && (
-                                            <div className="poengContainer">
+                                        {runder[rundeKey].melding && (
+                                            <div className="tabellrute">
                                                 <div className="melding">
                                                     <img
                                                         className="slagIkon"
-                                                        src={slagIkoner[runder[runde].melding!.slag!].vanlig}
+                                                        src={slagIkoner[runder[rundeKey].melding!.slag!].vanlig}
                                                         alt=""
                                                     />
-                                                    <div>{`${runder[runde].melding.antallStikk}`}</div>
+                                                    <div>{`${runder[rundeKey].melding.antallStikk}`}</div>
                                                 </div>
                                             </div>
                                         )}
