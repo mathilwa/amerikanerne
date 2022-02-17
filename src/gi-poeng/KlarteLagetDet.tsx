@@ -1,6 +1,7 @@
 import React from 'react';
 import './gi-poeng.css';
 import { Runde, Spillere } from '../types/Types';
+import SeksjonHeading from '../seksjon-heading/SeksjonHeading';
 
 interface Props {
     klarteLagetDet: boolean | null;
@@ -18,11 +19,12 @@ const GiPoengForRundeModal: React.FC<Props> = ({
     <>
         {gjeldendeRunde && gjeldendeRunde.lag && (
             <>
-                <h2 className="klarteLagetDet heading2">
-                    {`Klarte ${spillere[gjeldendeRunde.lag[0]].navn} og ${
+                <SeksjonHeading
+                    heading={`Klarte ${spillere[gjeldendeRunde.lag[0]].navn} og ${
                         spillere[gjeldendeRunde.lag[1]].navn
-                    } det?`}{' '}
-                </h2>
+                    } det?`}
+                />
+
                 <div className="klarteLagetDetInput">
                     <label className={`radio ${klarteLagetDet === true ? 'checked' : ''}`}>
                         <input
