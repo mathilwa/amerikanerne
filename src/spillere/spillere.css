@@ -1,0 +1,53 @@
+.spillere {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.spillere > *,
+.melder,
+.velgLag {
+    border: 2px solid aqua;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.spillere .rekkefolge {
+    position: relative;
+}
+
+.spillere .rekkefolgeNummer {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #282c34;
+    color: white;
+    border-radius: 45%;
+    height: 15px;
+    width: 15px;
+    font-size: 0.6rem;
+}
+
+.spiller {
+    min-width: 60px;
+    text-align: center;
+}
+
+@media screen and (min-width: 500px) {
+    .spillere {
+        width: 60%;
+        flex-wrap: nowrap;
+    }
+
+    .spillere > *,
+    .melder,
+    .velgLag {
+        margin-right: 2rem;
+    }
+}

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Melding, Runde, Slag, slagIkoner, Spillere } from './types/Types';
 import { getSpillerIder } from './utils';
+import SpillereContainer from './spillere/SpillereContainer';
+import Spiller from './spillere/Spiller';
 
 interface Props {
     onOppdaterRunde: (nyRunde: Runde) => void;
@@ -24,6 +26,7 @@ const NyRundeInput: React.FC<Props> = ({ onOppdaterRunde, spillere, runde, deler
         const nyMelder = rundeData.melder;
 
         let oppdatertLag = [] as string[];
+
         if (nyttLag.includes(spillerId) && spillerId !== nyMelder) {
             oppdatertLag = [nyMelder];
         } else if (nyttLag.length < 2 && spillerId !== nyMelder) {
@@ -96,32 +99,28 @@ const NyRundeInput: React.FC<Props> = ({ onOppdaterRunde, spillere, runde, deler
                 </div>
             </div>
             <h2 className="heading2">Hvem melder?</h2>
-            <div className="hvemMelder spillere">
-                {spillerIder.map((melder) => (
-                    <label key={melder} className={`melder spiller ${melder === rundeData.melder ? 'valgt' : ''}`}>
-                        <input
-                            type="radio"
-                            id={melder}
-                            onChange={() => onSetHvemMelder(melder)}
-                            checked={rundeData.melder === melder}
-                        />
-                        {spillere[melder].navn}
-                    </label>
+            <SpillereContainer>
+                {spillerIder.map((spillerId) => (
+                    <Spiller
+                        spillerId={spillerId}
+                        spillere={spillere}
+                        valgt={spillerId === rundeData.melder}
+                        onClick={() => onSetHvemMelder(spillerId)}
+                    />
                 ))}
-            </div>
+            </SpillereContainer>
 
             <h2 className="heading2">Hvem kommer på lag?</h2>
-            <div className="hvemKommerPaLag spillere">
+            <SpillereContainer>
                 {spillerIder.map((id) => (
-                    <div
-                        key={id}
-                        className={`velgLag spiller ${rundeData.lag.includes(id) ? 'paLag' : ''} `}
+                    <Spiller
+                        spillerId={id}
                         onClick={() => oppdaterNyttLag(id)}
-                    >
-                        {spillere[id].navn}
-                    </div>
+                        valgt={rundeData.lag.includes(id)}
+                        spillere={spillere}
+                    />
                 ))}
-            </div>
+            </SpillereContainer>
         </>
     );
 };

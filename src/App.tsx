@@ -9,7 +9,7 @@ import confetti from 'canvas-confetti';
 import PagaendeSpill from './PagaendeSpill';
 import StatistikkModal from './StatistikkModal';
 import { getSpilletHarEnVinner, onSmallScreen } from './utils';
-import NyttSpillModal from './NyttSpillModal';
+import NyttSpillModal from './nytt-spill/NyttSpillModal';
 
 const App: React.FC = () => {
     const [spillere, setSpillere] = useState<Spillere | null>(null);

@@ -1,10 +1,15 @@
 import React, { FormEvent, useState } from 'react';
-import Modal from './Modal';
-import { Runde, Spill, Spillere } from './types/Types';
-import NyRundeInput from './NyRundeInput';
-import { formaterSpillForLagring, getSpillerIder, rundedataErUtfylt } from './utils';
-import Spinner from './spinner/Spinner';
+import Modal from '../Modal';
+import { Runde, Spill, Spillere } from '../types/Types';
+import NyRundeInput from '../NyRundeInput';
+import { formaterSpillForLagring, rundedataErUtfylt } from '../utils';
+import Spinner from '../spinner/Spinner';
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
+
+import VelgSpillere from './VelgSpillere';
+import Knapperad from '../knapp/Knapperad';
+import Feilmelding from '../feilmelding/Feilmelding';
+import SeksjonHeading from '../seksjon-heading/SeksjonHeading';
 
 interface Props {
     visNyttSpillInput: boolean;
@@ -18,9 +23,6 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
     const [spillerRekkefolge, setSpillerRekkefolge] = useState<string[]>([]);
     const [lagrer, setLagrer] = useState<boolean>(false);
     const [feilmelding, setFeilmelding] = useState<string>('');
-    const [spillerRekkefolgeFeilmelding, setSpillerRekkefolgeFeilmelding] = useState<string>('');
-
-    const spillerIder = getSpillerIder(spillere);
 
     const startNyttSpill = async (event: FormEvent) => {
         event.preventDefault();
@@ -60,18 +62,6 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
         }
     };
 
-    const updateSpillerRekkefolge = (spillerId: string) => {
-        setSpillerRekkefolgeFeilmelding('');
-        if (spillerRekkefolge.includes(spillerId)) {
-            const spillerRekkefolgeUtenSpillerId = spillerRekkefolge.filter((id) => id !== spillerId);
-            setSpillerRekkefolge(spillerRekkefolgeUtenSpillerId);
-        } else if (spillerRekkefolge.length === 4) {
-            setSpillerRekkefolgeFeilmelding('Du kan ikke velge flere enn 4 spillere');
-        } else {
-            setSpillerRekkefolge(spillerRekkefolge.concat(spillerId));
-        }
-    };
-
     return (
         <Modal onClose={onAvbryt} isOpen={visNyttSpillInput}>
             {lagrer ? (
@@ -79,34 +69,13 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
             ) : (
                 <form>
                     <h1>Nytt spill</h1>
-                    <h2 className="heading2">Spillere:</h2>
-                    <p className="velgSpillerBeskrivelse">
-                        Velg deg selv først og så spillerne i rekkefølge til venstre for deg
-                    </p>
-                    <div className="spillere">
-                        {spillerIder.map((id) => {
-                            const rekkefolgeIndex = spillerRekkefolge.findIndex(
-                                (rekkefolgeId) => rekkefolgeId === id,
-                            );
-                            const spillerErValgt = spillerRekkefolge.includes(id);
+                    <VelgSpillere
+                        spillerRekkefolge={spillerRekkefolge}
+                        onOppdaterSpillere={(rekkefolge) => setSpillerRekkefolge(rekkefolge)}
+                        spillere={spillere}
+                    />
 
-                            return (
-                                <div
-                                    key={`spillere ${id}`}
-                                    className={`spiller rekkefolge ${spillerErValgt ? 'valgt' : ''}`}
-                                    onClick={() => updateSpillerRekkefolge(id)}
-                                >
-                                    {rekkefolgeIndex !== -1 && spillerErValgt && (
-                                        <div className="rekkefolgeNummer">{rekkefolgeIndex + 1}</div>
-                                    )}
-                                    <div>{spillere[id].navn}</div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                    {!!spillerRekkefolgeFeilmelding && <div className="error">{spillerRekkefolgeFeilmelding}</div>}
-
-                    <h2>Første runde:</h2>
+                    <SeksjonHeading heading="Første runde:" />
                     <NyRundeInput
                         onOppdaterRunde={(runde) => {
                             setNyRunde(runde);
@@ -117,8 +86,8 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
                         spillere={spillere}
                     />
 
-                    {!!feilmelding && <div className="error">{feilmelding}</div>}
-                    <div className="knappContainer">
+                    {!!feilmelding && <Feilmelding feilmelding={feilmelding} />}
+                    <Knapperad>
                         <button
                             type="submit"
                             className="knapp sekundaerKnapp"
@@ -134,7 +103,7 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
                         <button type="submit" className="knapp" onClick={startNyttSpill}>
                             Start spill
                         </button>
-                    </div>
+                    </Knapperad>
                 </form>
             )}
         </Modal>
