@@ -1,10 +1,13 @@
 import React, { FormEvent, useState } from 'react';
-import Modal from './Modal';
-import { Runde, Spill, Spillere } from './types/Types';
+import './ny-runde.css';
+import Modal from '../modal/Modal';
+import { Runde, Spill, Spillere } from '../types/Types';
 import NyRundeInput from './NyRundeInput';
-import { formaterSpillForLagring, getSpillerIdSomDelerForRunde, rundedataErUtfylt } from './utils';
+import { formaterSpillForLagring, getSpillerIdSomDelerForRunde, rundedataErUtfylt } from '../utils';
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
-import Spinner from './spinner/Spinner';
+import Spinner from '../spinner/Spinner';
+import Knapperad from '../knapp/Knapperad';
+import Feilmelding from '../feilmelding/Feilmelding';
 
 interface Props {
     visNyttSpillInput: boolean;
@@ -73,7 +76,7 @@ const NyRundeModal: React.FC<Props> = ({
             {lagring ? (
                 <Spinner />
             ) : (
-                <form>
+                <form className="nyRunde">
                     <h1>Ny runde</h1>
 
                     <NyRundeInput
@@ -86,9 +89,9 @@ const NyRundeModal: React.FC<Props> = ({
                         spillere={spillere}
                     />
 
-                    {!!feilmelding && <div className="error">{feilmelding}</div>}
+                    {!!feilmelding && <Feilmelding feilmelding={feilmelding} />}
 
-                    <div className="knappContainer">
+                    <Knapperad>
                         <button
                             type="submit"
                             className="knapp sekundaerKnapp"
@@ -103,7 +106,7 @@ const NyRundeModal: React.FC<Props> = ({
                         <button type="submit" className="knapp" onClick={onStartNyRunde}>
                             Legg til
                         </button>
-                    </div>
+                    </Knapperad>
                 </form>
             )}
         </Modal>

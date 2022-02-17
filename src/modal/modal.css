@@ -1,0 +1,39 @@
+.modal {
+    margin: 0 auto;
+    background-color: #282c34;
+    padding: 2rem;
+    color: white;
+    max-height: 100vh;
+    overflow-y: auto;
+    min-width: 250px;
+}
+
+.modalOverlay {
+    z-index: 20;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.75);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalOverlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal .knapp:not(:last-child) {
+    margin-right: 2rem;
+}
+
+@media screen and (min-width: 500px) {
+    .modal {
+        padding: 3rem;
+        width: auto;
+    }
+}

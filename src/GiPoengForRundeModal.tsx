@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from 'react';
-import Modal from './Modal';
+import Modal from './modal/Modal';
 import { Poeng, Runde, Spill, Spillere } from './types/Types';
 import { finnTotalsumForSpiller, formaterSpillForLagring, getSpillerIder } from './utils';
 import { doc, getFirestore, setDoc } from 'firebase/firestore';

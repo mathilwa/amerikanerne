@@ -5,6 +5,6 @@ interface Props {
     heading: string;
 }
 
-const SeksjonHeading: React.FC<Props> = ({ heading }) => <div className="heading2">{heading}</div>;
+const SeksjonHeading: React.FC<Props> = ({ heading }) => <h2 className="heading2">{heading}</h2>;
 
 export default SeksjonHeading;

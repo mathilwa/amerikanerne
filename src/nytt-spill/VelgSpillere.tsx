@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 
 import { Spillere } from '../types/Types';
-
 import { getSpillerIder } from '../utils';
-
 import SpillereContainer from '../spillere/SpillereContainer';
 import Spiller from '../spillere/Spiller';
 import Feilmelding from '../feilmelding/Feilmelding';

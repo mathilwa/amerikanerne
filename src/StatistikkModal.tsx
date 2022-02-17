@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from './Modal';
+import Modal from './modal/Modal';
 import { MeldingForMelder, Runde, Spill, Spillere } from './types/Types';
 import countBy from 'lodash.countby';
 import orderBy from 'lodash.orderby';

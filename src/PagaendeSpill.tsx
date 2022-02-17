@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './styles.css';
 import SpillTabell from './SpillTabell';
 import GiPoengForRundeModal from './GiPoengForRundeModal';
-import NyRundeModal from './NyRundeModal';
+import NyRundeModal from './ny-runde/NyRundeModal';
 import { Runder, Spill, Spillere } from './types/Types';
 import { getPoengForSisteRunde, getSpilletHarEnVinner, onSmallScreen } from './utils';
 import StatistikkModal from './StatistikkModal';

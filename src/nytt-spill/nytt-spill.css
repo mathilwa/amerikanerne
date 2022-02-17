@@ -1,0 +1,23 @@
+.velgSpillerBeskrivelse {
+    font-size: 0.875rem;
+}
+
+.nyttSpill .rekkefolge {
+    position: relative;
+}
+
+.nyttSpill .rekkefolgeNummer {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #282c34;
+    color: white;
+    border-radius: 45%;
+    height: 15px;
+    width: 15px;
+    font-size: 0.6rem;
+}

@@ -1,0 +1,48 @@
+.hvemDelerInfo {
+    display: flex;
+    align-items: center;
+}
+
+.nyRunde .delerIkon {
+    font-size: 2rem;
+    margin-right: 8px;
+}
+
+.nyRunde .slagIkon {
+    width: 3rem;
+}
+
+.slag {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.melding {
+    display: flex;
+    flex-direction: column;
+}
+
+.melding .slag label {
+    margin-right: 2rem;
+}
+
+.inputNyePoeng {
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    width: 2rem;
+    text-align: right;
+}
+
+.hvemKommerPaLag {
+    margin-bottom: 2rem;
+}
+
+@media screen and (min-width: 500px) {
+    .melding {
+        flex-direction: row;
+    }
+
+    .slag {
+        margin-bottom: 0;
+    }
+}

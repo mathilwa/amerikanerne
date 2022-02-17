@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from 'react';
-import Modal from '../Modal';
+import Modal from '../modal/Modal';
 import { Runde, Spill, Spillere } from '../types/Types';
-import NyRundeInput from '../NyRundeInput';
+import NyRundeInput from '../ny-runde/NyRundeInput';
 import { formaterSpillForLagring, rundedataErUtfylt } from '../utils';
 import Spinner from '../spinner/Spinner';
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
@@ -67,7 +67,7 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
             {lagrer ? (
                 <Spinner />
             ) : (
-                <form>
+                <form className="nyttSpill">
                     <h1>Nytt spill</h1>
                     <VelgSpillere
                         spillerRekkefolge={spillerRekkefolge}
