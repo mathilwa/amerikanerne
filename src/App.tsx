@@ -8,7 +8,7 @@ import orderBy from 'lodash.orderby';
 import confetti from 'canvas-confetti';
 import PagaendeSpill from './PagaendeSpill';
 import StatistikkModal from './StatistikkModal';
-import { getSpilletHarEnVinner } from './utils';
+import { getSpilletHarEnVinner, onSmallScreen } from './utils';
 import NyttSpillModal from './NyttSpillModal';
 
 const App: React.FC = () => {
@@ -132,7 +132,7 @@ const App: React.FC = () => {
                         <div className="tidligereSpillHeader">
                             <h2 className="spillTabellHeading">{`Tidligere spill (${tidligereSpill.length}):`}</h2>
                             <button className="knapp" onClick={() => setVisStatistikkModal(true)}>
-                                <span>Se statistikk for alle spill</span>
+                                <span>{onSmallScreen ? 'Se statistikk' : 'Se statistikk for alle spill'}</span>
                             </button>
                         </div>
 

@@ -82,8 +82,8 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere, pagaendeSpill = false }
                                             </div>
                                         ))}
                                         {runder[rundeKey].melding && (
-                                            <div className="tabellrute">
-                                                <div className="melding">
+                                            <div className="tabellrute meldingContainer">
+                                                <div className="meldingVisning">
                                                     <img
                                                         className="slagIkon"
                                                         src={slagIkoner[runder[rundeKey].melding!.slag!].vanlig}
@@ -103,7 +103,11 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere, pagaendeSpill = false }
                             <div className="totalsumHeading">Totalt:</div>
                             <div className="poengtabell">
                                 {spill.spillerRekkefolge.map((id) => (
-                                    <div key={'navn-sum' + id}>
+                                    <div
+                                        key={'navn-sum' + id}
+                                        className={`${spillerErVinner(id) ? 'vinnerHeader' : ''}`}
+                                    >
+                                        {spillerErVinner(id) && <span className="vinnerIkon">{`🏆`}</span>}
                                         <span className="tabellHeaderMobil">{spillere[id].forkortelse}</span>
                                         <span className="tabellHeaderDesktop">{spillere[id].navn}</span>
                                     </div>
@@ -111,9 +115,9 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere, pagaendeSpill = false }
                             </div>
                             <div className="poengtabell">
                                 {spill.spillerRekkefolge.map((id) => (
-                                    <span key={'sum' + id} className={`${spillerErVinner(id) ? 'vinner' : ''}`}>
+                                    <div key={'sum' + id} className={`${spillerErVinner(id) ? 'vinner' : ''}`}>
                                         {finnTotalsumForSpiller(runder, id)}
-                                    </span>
+                                    </div>
                                 ))}
                             </div>
                         </div>

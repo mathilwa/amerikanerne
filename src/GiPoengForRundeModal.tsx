@@ -168,7 +168,7 @@ const GiPoengForRundeModal: React.FC<Props> = ({
 
                     {feilmelding && <div className="error">{feilmelding}</div>}
 
-                    <div className="knapperad">
+                    <div className="knappContainer">
                         <button className="knapp sekundaerKnapp" onClick={avbryt}>
                             Avbryt
                         </button>

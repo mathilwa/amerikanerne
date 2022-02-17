@@ -9,6 +9,7 @@
     flex-direction: column;
     color: white;
     padding: 2rem 0;
+    z-index: 1;
 }
 
 .App-logo {
@@ -32,19 +33,30 @@
 }
 
 .heading2 {
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
 
 .poengtabell {
     display: grid;
-    grid-template-columns: 2fr 2fr 2fr 2fr 4fr;
+    grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
     min-height: 15px;
     list-style-type: none;
     grid-gap: 0.5rem;
 }
 
 .totalsum .poengtabell > *.vinner {
-    border-color: red;
+    border-color: #ba1515;
+    border-width: 3px;
+}
+
+.vinnerHeader {
+    position: relative;
+}
+
+.vinnerIkon {
+    position: absolute;
+    top: -8px;
+    right: -8px;
 }
 
 .poengtabell > * {
@@ -60,7 +72,7 @@
 .modal {
     margin: 0 auto;
     background-color: #282c34;
-    padding: 1rem;
+    padding: 2rem;
     color: white;
     max-height: 100vh;
     overflow-y: auto;
@@ -192,8 +204,8 @@ h3 {
 
 .knapp {
     -webkit-appearance: none;
-    padding: 0.5rem;
-    font-size: 1rem;
+    padding: 0.8rem;
+    font-size: 1.4rem;
     box-sizing: border-box;
     background-color: #ba1515;
     color: white;
@@ -201,16 +213,12 @@ h3 {
     border-radius: 4px;
 }
 
-.knapp.nyttSpill {
-    margin-right: 10px;
-}
-
 .modalOverlay {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.modal .knapp {
+.modal .knapp:not(:last-child) {
     margin-right: 2rem;
 }
 
@@ -227,10 +235,6 @@ h3 {
     justify-content: flex-end;
 }
 
-.knappContainer > *:first-child {
-    margin-right: 1rem;
-}
-
 .knappContainer.startSpillKnappContainer {
     margin-bottom: 2rem;
     justify-content: flex-start;
@@ -238,10 +242,6 @@ h3 {
 
 .runder {
     margin-bottom: 1rem;
-}
-
-.knappContainer .nyRunde {
-    margin-right: 10px;
 }
 
 .tabellrute {
@@ -258,8 +258,13 @@ h3 {
     flex-direction: row;
 }
 
-.tabellrute .melding {
-    width: 100%;
+.tabellrute.meldingContainer {
+    justify-content: center;
+}
+
+.tabellrute .meldingVisning {
+    justify-content: center;
+    width: 50px;
 }
 
 .tabellrute .slagIkon {
@@ -282,9 +287,9 @@ h3 {
 
 .deler {
     position: absolute;
-    font-size: 0.5rem;
-    top: -8px;
-    right: -8px;
+    font-size: 0.9rem;
+    top: -14px;
+    right: -14px;
 }
 
 .klarteLagetDet {
@@ -378,6 +383,13 @@ h3 {
 
 .statistikkSeksjon {
     margin-bottom: 2rem;
+}
+
+@media screen and (min-width: 450px) {
+    .tabellrute .meldingVisning {
+        justify-content: flex-start;
+        width: 50px;
+    }
 }
 
 @media screen and (min-width: 500px) {

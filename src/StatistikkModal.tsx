@@ -113,7 +113,7 @@ const StatistikkModal: React.FC<Props> = ({ alleSpill, spillere, visModal, onLuk
 
             {!statistikkForKunPagaendeSpill && (
                 <div className="statistikkSeksjon">
-                    <h2 className="heading2">Flest seire:</h2>
+                    <h2 className="heading2"> {`Flest seire 🏆`}:</h2>
                     {flestSeire.map((seireInfo) => (
                         <div key={'seireInfo-' + seireInfo.id}>
                             <span className="statistikkNavn">{spillere[seireInfo.id].navn}</span>

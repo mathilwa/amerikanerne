@@ -88,7 +88,7 @@ const NyRundeModal: React.FC<Props> = ({
 
                     {!!feilmelding && <div className="error">{feilmelding}</div>}
 
-                    <div className="knapperad">
+                    <div className="knappContainer">
                         <button
                             type="submit"
                             className="knapp sekundaerKnapp"

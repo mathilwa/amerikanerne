@@ -29,6 +29,7 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere, onUpdateSpilletHarEnV
     };
 
     const pagaendeSpillHarEnVinner = getSpilletHarEnVinner(pagaendeSpill);
+    const sisteRundeHarFattPoeng = !!getPoengForSisteRunde(pagaendeSpill);
 
     return (
         <>
@@ -39,20 +40,16 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere, onUpdateSpilletHarEnV
                 <div className="knappContainer">
                     {!pagaendeSpillHarEnVinner && (
                         <div>
-                            <button
-                                className={`knapp nyRunde ${
-                                    !getPoengForSisteRunde(pagaendeSpill) ? 'sekundaerKnapp' : ''
-                                }`}
-                                onClick={() => setVisSettNyRundeModal(true)}
-                            >
-                                <span>{`${onSmallScreen ? '+ Runde' : '+ Legg til runde'}`}</span>
-                            </button>
-                            <button
-                                className={`knapp ${getPoengForSisteRunde(pagaendeSpill) ? 'sekundaerKnapp' : ''}`}
-                                onClick={() => setVisGiPoengModal(true)}
-                            >
-                                <span>{`${onSmallScreen ? '+ Poeng' : '+ Legg til poeng'}`}</span>
-                            </button>
+                            {sisteRundeHarFattPoeng && (
+                                <button className="knapp" onClick={() => setVisSettNyRundeModal(true)}>
+                                    <span>{`${onSmallScreen ? '+ Runde' : '+ Legg til runde'}`}</span>
+                                </button>
+                            )}
+                            {!sisteRundeHarFattPoeng && (
+                                <button className="knapp" onClick={() => setVisGiPoengModal(true)}>
+                                    <span>{`${onSmallScreen ? '+ Poeng' : '+ Legg til poeng'}`}</span>
+                                </button>
+                            )}
                         </div>
                     )}
                 </div>
