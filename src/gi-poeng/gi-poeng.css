@@ -1,0 +1,60 @@
+.nyePoengTittel {
+    margin-bottom: 20px;
+}
+
+input[type='radio'] {
+    display: none;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.inputNyePoeng {
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    width: 2rem;
+    text-align: right;
+}
+
+.klarteLagetDet {
+    margin-bottom: 1rem;
+}
+
+.klarteLagetDetInput {
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+.klarteLagetDetInput .radio {
+    border: 2px solid aqua;
+    border-radius: 4px;
+    padding: 1rem 1.5rem;
+    margin-right: 1rem;
+}
+
+.klarteLagetDetInput .radio.checked {
+    color: #282c34;
+    background-color: aqua;
+}
+
+.nyePoengInput {
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+.labelNyePoeng {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+
+.leggTilNyePoeng {
+    margin-bottom: 1rem;
+}
+
+.labelNyePoeng .navn {
+    margin-bottom: 10px;
+}

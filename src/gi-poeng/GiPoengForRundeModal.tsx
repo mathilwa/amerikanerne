@@ -1,9 +1,14 @@
 import React, { FormEvent, useState } from 'react';
-import Modal from './modal/Modal';
-import { Poeng, Runde, Spill, Spillere } from './types/Types';
-import { finnTotalsumForSpiller, formaterSpillForLagring, getSpillerIder } from './utils';
+import './gi-poeng.css';
+import Modal from '../modal/Modal';
+import { Poeng, Runde, Spill, Spillere } from '../types/Types';
+import { finnTotalsumForSpiller, formaterSpillForLagring, getSpillerIder } from '../utils';
 import { doc, getFirestore, setDoc } from 'firebase/firestore';
-import Spinner from './spinner/Spinner';
+import Spinner from '../spinner/Spinner';
+import Feilmelding from '../feilmelding/Feilmelding';
+import KlarteLagetDet from './KlarteLagetDet';
+import GiPoeng from './GiPoeng';
+import SeksjonHeading from '../seksjon-heading/SeksjonHeading';
 
 interface Props {
     onOppdaterPagaendeSpill: (oppdatertSpill: Spill) => void;
@@ -27,12 +32,8 @@ const GiPoengForRundeModal: React.FC<Props> = ({
     const [lagrer, setLagrer] = useState<boolean>(false);
     const [feilmelding, setFeilmelding] = useState<string>('');
 
-    const spillerIder = getSpillerIder(spillere);
-
-    const oppdaterPoeng = (spillerId: string, antallPoeng: number) => {
-        setPoengTilSpillere(
-            poengTilSpillere ? { ...poengTilSpillere, [spillerId]: antallPoeng } : { [spillerId]: antallPoeng },
-        );
+    const oppdaterPoeng = (poeng: Poeng) => {
+        setPoengTilSpillere(poeng);
         setFeilmelding('');
     };
 
@@ -116,57 +117,21 @@ const GiPoengForRundeModal: React.FC<Props> = ({
             ) : (
                 <div>
                     <h1 className="nyePoengTittel">Gi poeng for runde</h1>
-                    {gjeldendeRunde && gjeldendeRunde.lag && (
-                        <>
-                            <h2 className="klarteLagetDet heading2">
-                                {`Klarte ${spillere[gjeldendeRunde.lag[0]].navn} og ${
-                                    spillere[gjeldendeRunde.lag[1]].navn
-                                } det?`}{' '}
-                            </h2>
-                            <div className="klarteLagetDetInput">
-                                <label className={`radio ${klarteLagetDet === true ? 'checked' : ''}`}>
-                                    <input
-                                        type="radio"
-                                        onChange={() => onChangeKlarteLagetDet(true)}
-                                        checked={klarteLagetDet === true}
-                                    />
-                                    Ja
-                                </label>
+                    <KlarteLagetDet
+                        klarteLagetDet={klarteLagetDet}
+                        onOppdaterKlarteLagetDet={(klarteDet) => onChangeKlarteLagetDet(klarteDet)}
+                        gjeldendeRunde={gjeldendeRunde}
+                        spillere={spillere}
+                    />
 
-                                <label className={`radio ${klarteLagetDet === false ? 'checked' : ''}`}>
-                                    <input
-                                        type="radio"
-                                        onChange={() => onChangeKlarteLagetDet(false)}
-                                        checked={klarteLagetDet === false}
-                                    />
-                                    Nei
-                                </label>
-                            </div>
-                        </>
-                    )}
+                    <SeksjonHeading heading="Antall poeng:" />
+                    <GiPoeng
+                        onOppdaterPoeng={(oppdatertePoeng) => oppdaterPoeng(oppdatertePoeng)}
+                        poengTilSpillere={poengTilSpillere}
+                        spillere={spillere}
+                    />
 
-                    <h2 className="heading2">Antall poeng:</h2>
-                    <div className="nyePoengInput">
-                        {spillerIder.map((id) => (
-                            <label key={`poeng-input-${id}`} className="labelNyePoeng">
-                                <span className="navn">{spillere[id].navn}</span>
-                                <input
-                                    className="inputNyePoeng"
-                                    type="number"
-                                    inputMode="numeric"
-                                    pattern="[0-9]*"
-                                    value={
-                                        poengTilSpillere && (poengTilSpillere[id] || poengTilSpillere[id] === 0)
-                                            ? poengTilSpillere[id]!.toString()
-                                            : ''
-                                    }
-                                    onChange={(event) => oppdaterPoeng(id, parseInt(event.target.value))}
-                                />
-                            </label>
-                        ))}
-                    </div>
-
-                    {feilmelding && <div className="error">{feilmelding}</div>}
+                    {feilmelding && <Feilmelding feilmelding="feilmelding" />}
 
                     <div className="knappContainer">
                         <button className="knapp sekundaerKnapp" onClick={avbryt}>
