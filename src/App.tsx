@@ -5,9 +5,10 @@ import logo from './icons/cards.png';
 import SpillTabell from './SpillTabell';
 import { Runder, Spill, Spillere } from './types/Types';
 import orderBy from 'lodash.orderby';
+import confetti from 'canvas-confetti';
 import PagaendeSpill from './PagaendeSpill';
 import StatistikkModal from './StatistikkModal';
-import { getSpilletHarEnVinner, onSmallScreen } from './utils';
+import { getSpilletHarEnVinner } from './utils';
 import NyttSpillModal from './NyttSpillModal';
 
 const App: React.FC = () => {
@@ -82,6 +83,10 @@ const App: React.FC = () => {
         return null;
     }
 
+    const launceConfetti = () => {
+        confetti();
+    };
+
     const pagaendeSpillHarEnVinner = pagaendeSpill && getSpilletHarEnVinner(pagaendeSpill);
 
     return (
@@ -98,7 +103,7 @@ const App: React.FC = () => {
                         className={`knapp nyttSpill ${pagaendeSpillHarEnVinner ? '' : 'sekundaerKnapp'}`}
                         onClick={() => setVisNyttSpillModal(true)}
                     >
-                        <span>{`${onSmallScreen ? '+ Spill' : '+ Nytt spill'}`}</span>
+                        <span>+ Nytt spill</span>
                     </button>
                     {pagaendeSpillHarEnVinner && (
                         <button className="knapp" onClick={() => setVisStatistikkModal(true)}>
@@ -114,7 +119,13 @@ const App: React.FC = () => {
                     spillere={spillere}
                 />
 
-                {pagaendeSpill && <PagaendeSpill spill={pagaendeSpill} spillere={spillere} />}
+                {pagaendeSpill && (
+                    <PagaendeSpill
+                        spill={pagaendeSpill}
+                        spillere={spillere}
+                        onUpdateSpilletHarEnVinner={launceConfetti}
+                    />
+                )}
 
                 {tidligereSpill.length > 0 && (
                     <div>

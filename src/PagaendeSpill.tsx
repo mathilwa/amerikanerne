@@ -10,8 +10,9 @@ import StatistikkModal from './StatistikkModal';
 interface Props {
     spill: Spill;
     spillere: Spillere;
+    onUpdateSpilletHarEnVinner: () => void;
 }
-const PagaendeSpill: React.FC<Props> = ({ spill, spillere }) => {
+const PagaendeSpill: React.FC<Props> = ({ spill, spillere, onUpdateSpilletHarEnVinner }) => {
     const [pagaendeSpill, setPagaendeSpill] = useState<Spill>(spill);
 
     useEffect(() => {
@@ -72,6 +73,11 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere }) => {
                     onOppdaterPagaendeSpill={(oppdatertSpill) => {
                         setPagaendeSpill(oppdatertSpill);
                         setVisGiPoengModal(false);
+
+                        const pagaendeSpillHarEnVinner = getSpilletHarEnVinner(oppdatertSpill);
+                        if (pagaendeSpillHarEnVinner) {
+                            onUpdateSpilletHarEnVinner();
+                        }
                     }}
                     visGiPoengForRunde={visGiPoengModal}
                     pagaendeSpill={pagaendeSpill}

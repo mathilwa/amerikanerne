@@ -18,6 +18,7 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
     const [spillerRekkefolge, setSpillerRekkefolge] = useState<string[]>([]);
     const [lagrer, setLagrer] = useState<boolean>(false);
     const [feilmelding, setFeilmelding] = useState<string>('');
+    const [spillerRekkefolgeFeilmelding, setSpillerRekkefolgeFeilmelding] = useState<string>('');
 
     const spillerIder = getSpillerIder(spillere);
 
@@ -60,9 +61,12 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
     };
 
     const updateSpillerRekkefolge = (spillerId: string) => {
+        setSpillerRekkefolgeFeilmelding('');
         if (spillerRekkefolge.includes(spillerId)) {
             const spillerRekkefolgeUtenSpillerId = spillerRekkefolge.filter((id) => id !== spillerId);
             setSpillerRekkefolge(spillerRekkefolgeUtenSpillerId);
+        } else if (spillerRekkefolge.length === 4) {
+            setSpillerRekkefolgeFeilmelding('Du kan ikke velge flere enn 4 spillere');
         } else {
             setSpillerRekkefolge(spillerRekkefolge.concat(spillerId));
         }
@@ -100,6 +104,7 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
                             );
                         })}
                     </div>
+                    {!!spillerRekkefolgeFeilmelding && <div className="error">{spillerRekkefolgeFeilmelding}</div>}
 
                     <h2>Første runde:</h2>
                     <NyRundeInput
