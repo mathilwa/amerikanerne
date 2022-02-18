@@ -6,6 +6,7 @@ import NyRundeModal from './ny-runde/NyRundeModal';
 import { Runder, Spill, Spillere } from './types/Types';
 import { getPoengForSisteRunde, getSpilletHarEnVinner, onSmallScreen } from './utils';
 import StatistikkModal from './StatistikkModal';
+import Knapp from './knapp/Knapp';
 
 interface Props {
     spill: Spill;
@@ -41,14 +42,16 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere, onUpdateSpilletHarEnV
                     {!pagaendeSpillHarEnVinner && (
                         <div>
                             {sisteRundeHarFattPoeng && (
-                                <button className="knapp" onClick={() => setVisSettNyRundeModal(true)}>
-                                    <span>{`${onSmallScreen ? '+ Runde' : '+ Legg til runde'}`}</span>
-                                </button>
+                                <Knapp
+                                    onClick={() => setVisSettNyRundeModal(true)}
+                                    tekst={onSmallScreen ? '+ Runde' : '+ Legg til runde'}
+                                />
                             )}
                             {!sisteRundeHarFattPoeng && (
-                                <button className="knapp" onClick={() => setVisGiPoengModal(true)}>
-                                    <span>{`${onSmallScreen ? '+ Poeng' : '+ Legg til poeng'}`}</span>
-                                </button>
+                                <Knapp
+                                    onClick={() => setVisGiPoengModal(true)}
+                                    tekst={onSmallScreen ? '+ Poeng' : '+ Legg til poeng'}
+                                />
                             )}
                         </div>
                     )}

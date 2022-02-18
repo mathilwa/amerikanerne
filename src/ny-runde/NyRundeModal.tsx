@@ -8,6 +8,7 @@ import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import Spinner from '../spinner/Spinner';
 import Knapperad from '../knapp/Knapperad';
 import Feilmelding from '../feilmelding/Feilmelding';
+import Knapp, { Knappetype } from '../knapp/Knapp';
 
 interface Props {
     visNyttSpillInput: boolean;
@@ -92,20 +93,16 @@ const NyRundeModal: React.FC<Props> = ({
                     {!!feilmelding && <Feilmelding feilmelding={feilmelding} />}
 
                     <Knapperad>
-                        <button
-                            type="submit"
-                            className="knapp sekundaerKnapp"
+                        <Knapp
                             onClick={() => {
                                 setNyRunde(null);
                                 setFeilmelding('');
                                 onAvbryt();
                             }}
-                        >
-                            Avbryt
-                        </button>
-                        <button type="submit" className="knapp" onClick={onStartNyRunde}>
-                            Legg til
-                        </button>
+                            sekundaerKnapp={true}
+                            tekst="Avbryt"
+                        />
+                        <Knapp onClick={onStartNyRunde} tekst="Legg til" knappetype={Knappetype.Submit} />
                     </Knapperad>
                 </form>
             )}

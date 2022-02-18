@@ -4,6 +4,8 @@ import { MeldingForMelder, Runde, Spill, Spillere } from './types/Types';
 import countBy from 'lodash.countby';
 import orderBy from 'lodash.orderby';
 import sum from 'lodash.sum';
+import Knapp from './knapp/Knapp';
+import Knapperad from './knapp/Knapperad';
 
 interface Props {
     alleSpill: Spill[];
@@ -156,11 +158,9 @@ const StatistikkModal: React.FC<Props> = ({ alleSpill, spillere, visModal, onLuk
             </div>
 
             {}
-            <div className="knapperad">
-                <button className="knapp sekundaerKnapp" onClick={onLukkModal}>
-                    Lukk
-                </button>
-            </div>
+            <Knapperad>
+                <Knapp onClick={() => onLukkModal()} tekst="Lukk" sekundaerKnapp={true} />
+            </Knapperad>
         </Modal>
     );
 };

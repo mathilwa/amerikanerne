@@ -3,6 +3,7 @@ import './gi-poeng.css';
 
 import { Poeng, Spillere } from '../types/Types';
 import { getSpillerIder } from '../utils';
+import SeksjonHeading from '../seksjon-heading/SeksjonHeading';
 
 interface Props {
     onOppdaterPoeng: (oppdatertePoeng: Poeng) => void;
@@ -20,25 +21,28 @@ const GiPoeng: React.FC<Props> = ({ onOppdaterPoeng, poengTilSpillere, spillere 
     };
 
     return (
-        <div className="nyePoengInput">
-            {spillerIder.map((id) => (
-                <label key={`poeng-input-${id}`} className="labelNyePoeng">
-                    <span className="navn">{spillere[id].navn}</span>
-                    <input
-                        className="inputNyePoeng"
-                        type="number"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        value={
-                            poengTilSpillere && (poengTilSpillere[id] || poengTilSpillere[id] === 0)
-                                ? poengTilSpillere[id]!.toString()
-                                : ''
-                        }
-                        onChange={(event) => oppdaterPoeng(id, parseInt(event.target.value))}
-                    />
-                </label>
-            ))}
-        </div>
+        <>
+            <SeksjonHeading heading="Antall poeng:" />
+            <div className="nyePoengInput">
+                {spillerIder.map((id) => (
+                    <label key={`poeng-input-${id}`} className="labelNyePoeng">
+                        <span className="navn">{spillere[id].navn}</span>
+                        <input
+                            className="inputNyePoeng"
+                            type="number"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            value={
+                                poengTilSpillere && (poengTilSpillere[id] || poengTilSpillere[id] === 0)
+                                    ? poengTilSpillere[id]!.toString()
+                                    : ''
+                            }
+                            onChange={(event) => oppdaterPoeng(id, parseInt(event.target.value))}
+                        />
+                    </label>
+                ))}
+            </div>
+        </>
     );
 };
 

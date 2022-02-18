@@ -8,7 +8,9 @@ import Spinner from '../spinner/Spinner';
 import Feilmelding from '../feilmelding/Feilmelding';
 import KlarteLagetDet from './KlarteLagetDet';
 import GiPoeng from './GiPoeng';
-import SeksjonHeading from '../seksjon-heading/SeksjonHeading';
+
+import Knapp, { Knappetype } from '../knapp/Knapp';
+import Knapperad from '../knapp/Knapperad';
 
 interface Props {
     onOppdaterPagaendeSpill: (oppdatertSpill: Spill) => void;
@@ -124,7 +126,6 @@ const GiPoengForRundeModal: React.FC<Props> = ({
                         spillere={spillere}
                     />
 
-                    <SeksjonHeading heading="Antall poeng:" />
                     <GiPoeng
                         onOppdaterPoeng={(oppdatertePoeng) => oppdaterPoeng(oppdatertePoeng)}
                         poengTilSpillere={poengTilSpillere}
@@ -133,14 +134,10 @@ const GiPoengForRundeModal: React.FC<Props> = ({
 
                     {feilmelding && <Feilmelding feilmelding="feilmelding" />}
 
-                    <div className="knappContainer">
-                        <button className="knapp sekundaerKnapp" onClick={avbryt}>
-                            Avbryt
-                        </button>
-                        <button className="knapp" onClick={leggTilPoeng}>
-                            Legg til
-                        </button>
-                    </div>
+                    <Knapperad>
+                        <Knapp onClick={avbryt} tekst="Avbryt" sekundaerKnapp={true} />
+                        <Knapp onClick={leggTilPoeng} knappetype={Knappetype.Submit} tekst="Legg til" />
+                    </Knapperad>
                 </div>
             )}
         </Modal>

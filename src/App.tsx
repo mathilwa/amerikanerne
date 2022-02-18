@@ -10,6 +10,7 @@ import PagaendeSpill from './PagaendeSpill';
 import StatistikkModal from './StatistikkModal';
 import { getSpilletHarEnVinner, onSmallScreen } from './utils';
 import NyttSpillModal from './nytt-spill/NyttSpillModal';
+import Knapp from './knapp/Knapp';
 
 const App: React.FC = () => {
     const [spillere, setSpillere] = useState<Spillere | null>(null);
@@ -99,16 +100,14 @@ const App: React.FC = () => {
                 <h1>Amerikanerne</h1>
 
                 <div className="startSpillKnappContainer knappContainer">
-                    <button
-                        className={`knapp nyttSpill ${pagaendeSpillHarEnVinner ? '' : 'sekundaerKnapp'}`}
+                    <Knapp
                         onClick={() => setVisNyttSpillModal(true)}
-                    >
-                        <span>+ Nytt spill</span>
-                    </button>
+                        tekst="+ Nytt spill"
+                        sekundaerKnapp={!pagaendeSpillHarEnVinner}
+                    />
+
                     {pagaendeSpillHarEnVinner && (
-                        <button className="knapp" onClick={() => setVisStatistikkModal(true)}>
-                            <span>Se statistikk</span>
-                        </button>
+                        <Knapp onClick={() => setVisStatistikkModal(true)} tekst="Se statistikk" />
                     )}
                 </div>
 
@@ -129,12 +128,11 @@ const App: React.FC = () => {
 
                 {tidligereSpill.length > 0 && (
                     <div>
-                        <div className="tidligereSpillHeader">
-                            <h2 className="spillTabellHeading">{`Tidligere spill (${tidligereSpill.length}):`}</h2>
-                            <button className="knapp" onClick={() => setVisStatistikkModal(true)}>
-                                <span>{onSmallScreen ? 'Se statistikk' : 'Se statistikk for alle spill'}</span>
-                            </button>
-                        </div>
+                        <h2 className="spillTabellHeading">{`Tidligere spill (${tidligereSpill.length}):`}</h2>
+                        <Knapp
+                            onClick={() => setVisStatistikkModal(true)}
+                            tekst={onSmallScreen ? 'Se statistikk' : 'Se statistikk for alle spill'}
+                        />
 
                         {tidligereSpill.map((gammeltSpill) => (
                             <SpillTabell

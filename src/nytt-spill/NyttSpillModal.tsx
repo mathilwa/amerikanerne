@@ -10,6 +10,7 @@ import VelgSpillere from './VelgSpillere';
 import Knapperad from '../knapp/Knapperad';
 import Feilmelding from '../feilmelding/Feilmelding';
 import SeksjonHeading from '../seksjon-heading/SeksjonHeading';
+import Knapp, { Knappetype } from '../knapp/Knapp';
 
 interface Props {
     visNyttSpillInput: boolean;
@@ -88,21 +89,17 @@ const NyttSpillModal: React.FC<Props> = ({ visNyttSpillInput, setNyttSpill, onAv
 
                     {!!feilmelding && <Feilmelding feilmelding={feilmelding} />}
                     <Knapperad>
-                        <button
-                            type="submit"
-                            className="knapp sekundaerKnapp"
+                        <Knapp
                             onClick={() => {
                                 setFeilmelding('');
                                 setNyRunde(null);
                                 setSpillerRekkefolge([]);
                                 onAvbryt();
                             }}
-                        >
-                            Avbryt
-                        </button>
-                        <button type="submit" className="knapp" onClick={startNyttSpill}>
-                            Start spill
-                        </button>
+                            tekst="Avbryt"
+                            sekundaerKnapp={true}
+                        />
+                        <Knapp onClick={startNyttSpill} tekst="Start spill" knappetype={Knappetype.Submit} />
                     </Knapperad>
                 </form>
             )}
