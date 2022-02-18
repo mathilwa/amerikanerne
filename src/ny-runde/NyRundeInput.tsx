@@ -29,6 +29,10 @@ const NyRundeInput: React.FC<Props> = ({ onOppdaterRunde, spillere, runde, deler
 
         let oppdatertLag = [] as string[];
 
+        if (spillerId === nyMelder) {
+            return;
+        }
+
         if (nyttLag.includes(spillerId) && spillerId !== nyMelder) {
             oppdatertLag = [nyMelder];
         } else if (nyttLag.length < 2 && spillerId !== nyMelder) {
