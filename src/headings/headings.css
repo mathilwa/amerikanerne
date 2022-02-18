@@ -1,0 +1,16 @@
+.seksjonsheading {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.miniheading {
+    text-align: left;
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+}
+
+@media screen and (min-width: 900px) {
+    .miniheading {
+        font-size: 1rem;
+    }
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import './ny-runde.css';
 import { Melding, Slag, slagIkoner } from '../types/Types';
-import SeksjonHeading from '../seksjon-heading/SeksjonHeading';
+import SeksjonHeading from '../headings/SeksjonHeading';
 
 interface Props {
     onOppdaterMelding: (nyMelding: Melding) => void;

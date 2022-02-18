@@ -5,7 +5,7 @@ import { getSpillerIder } from '../utils';
 import SpillereContainer from '../spillere/SpillereContainer';
 import Spiller from '../spillere/Spiller';
 import Feilmelding from '../feilmelding/Feilmelding';
-import SeksjonHeading from '../seksjon-heading/SeksjonHeading';
+import SeksjonHeading from '../headings/SeksjonHeading';
 
 interface Props {
     spillerRekkefolge: string[];

@@ -3,7 +3,7 @@ import { Runde, Spillere } from '../types/Types';
 import { getSpillerIder } from '../utils';
 import SpillereContainer from '../spillere/SpillereContainer';
 import Spiller from '../spillere/Spiller';
-import SeksjonHeading from '../seksjon-heading/SeksjonHeading';
+import SeksjonHeading from '../headings/SeksjonHeading';
 import LeggTilMelding from './LeggTilMelding';
 
 interface Props {

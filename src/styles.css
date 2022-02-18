@@ -36,7 +36,7 @@
     font-size: 1.2rem;
 }
 
-.poengtabell {
+.spilltabell {
     display: grid;
     grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
     min-height: 15px;
@@ -44,7 +44,7 @@
     grid-gap: 0.5rem;
 }
 
-.totalsum .poengtabell > *.vinner {
+.totalsum .spilltabell > *.vinner {
     border-color: #ba1515;
     border-width: 3px;
 }
@@ -59,7 +59,7 @@
     right: -8px;
 }
 
-.poengtabell > * {
+.spilltabell > * {
     border: 1px solid white;
     padding: 0.1rem;
     margin-bottom: 0.5rem;
@@ -392,7 +392,7 @@ h3 {
 }
 
 @media screen and (min-width: 500px) {
-    .poengtabell > * {
+    .spilltabell > * {
         padding: 0.5rem;
     }
 
@@ -454,7 +454,7 @@ h3 {
         height: 3rem;
     }
 
-    .poengtabell > * {
+    .spilltabell > * {
         padding: 1rem;
     }
 
@@ -462,7 +462,7 @@ h3 {
         width: 3rem;
     }
 
-    .poengtabell {
+    .spilltabell {
         grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
     }
 

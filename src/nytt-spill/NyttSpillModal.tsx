@@ -9,7 +9,7 @@ import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import VelgSpillere from './VelgSpillere';
 import Knapperad from '../knapp/Knapperad';
 import Feilmelding from '../feilmelding/Feilmelding';
-import SeksjonHeading from '../seksjon-heading/SeksjonHeading';
+import SeksjonHeading from '../headings/SeksjonHeading';
 import Knapp, { Knappetype } from '../knapp/Knapp';
 
 interface Props {

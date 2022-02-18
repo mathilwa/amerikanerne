@@ -1,11 +1,11 @@
 import React from 'react';
-import Modal from './modal/Modal';
-import { MeldingForMelder, Runde, Spill, Spillere } from './types/Types';
+import Modal from '../modal/Modal';
+import { MeldingForMelder, Runde, Spill, Spillere } from '../types/Types';
 import countBy from 'lodash.countby';
 import orderBy from 'lodash.orderby';
 import sum from 'lodash.sum';
-import Knapp from './knapp/Knapp';
-import Knapperad from './knapp/Knapperad';
+import Knapp from '../knapp/Knapp';
+import Knapperad from '../knapp/Knapperad';
 
 interface Props {
     alleSpill: Spill[];

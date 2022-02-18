@@ -3,7 +3,7 @@ import './gi-poeng.css';
 
 import { Poeng, Spillere } from '../types/Types';
 import { getSpillerIder } from '../utils';
-import SeksjonHeading from '../seksjon-heading/SeksjonHeading';
+import SeksjonHeading from '../headings/SeksjonHeading';
 
 interface Props {
     onOppdaterPoeng: (oppdatertePoeng: Poeng) => void;

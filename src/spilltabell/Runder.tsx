@@ -1,12 +1,7 @@
 import React from 'react';
-import './styles.css';
-import { slagIkoner, Spill, Spillere } from './types/Types';
-import {
-    finnTotalsumForSpiller,
-    formatDateAndClock,
-    getSpillerIdSomDelerForRunde,
-    mapSamletPoengsumForSpill,
-} from './utils';
+import './spilltabell.css';
+import { slagIkoner, Spill, Spillere } from '../types/Types';
+import { finnTotalsumForSpiller, getSpillerIdSomDelerForRunde, mapSamletPoengsumForSpill } from '../utils';
 
 interface Props {
     spill: Spill;
@@ -14,7 +9,7 @@ interface Props {
     pagaendeSpill?: boolean;
 }
 
-const SpillTabell: React.FC<Props> = ({ spill, spillere, pagaendeSpill = false }) => {
+const Runder: React.FC<Props> = ({ spill, spillere, pagaendeSpill = false }) => {
     const runder = spill.runder;
 
     const spillerErVinner = (spillerId: string): boolean => {
@@ -27,39 +22,18 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere, pagaendeSpill = false }
         return spillereSomHarVunnet.includes(spillerId);
     };
 
-    const spillStartetTekst =
-        spill.startet && spill.startet > new Date('12.01.2021')
-            ? `Startet ${formatDateAndClock(new Date(spill.startet))}`
-            : 'Startet: Før desember 2021';
-
     const getSpillerErDelerForRunde = (spillerId: string, rundeKey: string) => {
         const spillerIdSomDeler = getSpillerIdSomDelerForRunde(spill, parseInt(rundeKey));
         return spillerIdSomDeler === spillerId;
     };
 
     return (
-        <div className="spillTabellContainer">
-            <div className="spillStartet">{spillStartetTekst}</div>
-
-            <div className="poengtabell">
-                {spill.spillerRekkefolge.map((id) => (
-                    <div key={'navn-' + id}>
-                        <span key={'navn-mobil-' + id} className="tabellHeaderMobil">
-                            {spillere[id].forkortelse}
-                        </span>
-                        <span key={'navn-desktop-' + id} className="tabellHeaderDesktop">
-                            {spillere[id].navn}
-                        </span>
-                    </div>
-                ))}
-                <span className="tabellHeaderMeldingMobil">Mld</span>
-                <span className="tabellHeaderMeldingDesktop">Melding</span>
-            </div>
+        <>
             {runder && (
                 <>
                     <div className="runder">
                         {Object.keys(runder).map((rundeKey) => (
-                            <div key={rundeKey} className="poengtabell">
+                            <div key={rundeKey} className="spilltabell">
                                 {runder[rundeKey] && (
                                     <>
                                         {spill.spillerRekkefolge.map((spillerId) => (
@@ -101,7 +75,7 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere, pagaendeSpill = false }
                     {Object.keys(runder).length > 1 && (
                         <div className="totalsum">
                             <div className="totalsumHeading">Totalt:</div>
-                            <div className="poengtabell">
+                            <div className="spilltabell">
                                 {spill.spillerRekkefolge.map((id) => (
                                     <div
                                         key={'navn-sum' + id}
@@ -113,7 +87,7 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere, pagaendeSpill = false }
                                     </div>
                                 ))}
                             </div>
-                            <div className="poengtabell">
+                            <div className="spilltabell">
                                 {spill.spillerRekkefolge.map((id) => (
                                     <div key={'sum' + id} className={`${spillerErVinner(id) ? 'vinner' : ''}`}>
                                         {finnTotalsumForSpiller(runder, id)}
@@ -124,8 +98,8 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere, pagaendeSpill = false }
                     )}
                 </>
             )}
-        </div>
+        </>
     );
 };
 
-export default SpillTabell;
+export default Runder;

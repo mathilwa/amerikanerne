@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './styles.css';
-import SpillTabell from './SpillTabell';
+import SpillTabell from './spilltabell/SpillTabell';
 import GiPoengForRundeModal from './gi-poeng/GiPoengForRundeModal';
 import NyRundeModal from './ny-runde/NyRundeModal';
 import { Runder, Spill, Spillere } from './types/Types';
 import { getPoengForSisteRunde, getSpilletHarEnVinner, onSmallScreen } from './utils';
-import StatistikkModal from './StatistikkModal';
+import StatistikkModal from './statistikk/StatistikkModal';
 import Knapp from './knapp/Knapp';
 
 interface Props {

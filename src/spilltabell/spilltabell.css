@@ -1,0 +1,159 @@
+.spillTabellContainer {
+    margin-bottom: 2rem;
+}
+
+.spilltabell {
+    display: grid;
+    grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
+    min-height: 15px;
+    list-style-type: none;
+    grid-gap: 0.5rem;
+}
+
+.totalsum .spilltabell > *.vinner {
+    border-color: #ba1515;
+    border-width: 3px;
+}
+
+.vinnerHeader {
+    position: relative;
+}
+
+.vinnerIkon {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+}
+
+.spilltabell > * {
+    border: 1px solid white;
+    padding: 0.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.spillTabellContainer .slagIkon {
+    width: 1.5rem;
+}
+
+.runder {
+    margin-bottom: 1rem;
+}
+
+.tabellrute {
+    display: flex;
+    justify-content: center;
+}
+
+.tabellrute > * {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.tabellrute.meldingContainer {
+    justify-content: center;
+}
+
+.tabellrute .meldingVisning {
+    justify-content: center;
+    width: 50px;
+}
+
+.tabellrute .slagIkon {
+    margin-right: 0.5rem;
+}
+
+.tabellrute .poeng.lag {
+    border: 1px solid #ba1515;
+    border-radius: 45px;
+}
+
+.tabellrute .poeng.lag.rundeMelder {
+    border-width: 2px;
+    box-sizing: border-box;
+}
+
+.poengContainer {
+    position: relative;
+}
+
+.deler {
+    position: absolute;
+    font-size: 0.9rem;
+    top: -14px;
+    right: -14px;
+}
+
+.tabellHeaderDesktop {
+    display: none;
+}
+
+.tabellHeaderDesktop,
+.tabellHeaderMobil {
+    font-weight: bold;
+}
+
+.tabellHeaderMeldingDesktop {
+    display: none;
+}
+
+@media screen and (min-width: 450px) {
+    .tabellrute .meldingVisning {
+        justify-content: flex-start;
+        width: 50px;
+    }
+}
+
+@media screen and (min-width: 500px) {
+    .spilltabell > * {
+        padding: 0.5rem;
+    }
+
+    .tabellHeaderMeldingDesktop {
+        display: block;
+    }
+
+    .tabellHeaderMeldingMobil {
+        display: none;
+    }
+
+    .deler {
+        font-size: 1rem;
+        top: -4px;
+        right: -6px;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .tabellHeaderMobil {
+        display: none;
+    }
+
+    .tabellHeaderDesktop {
+        display: block;
+    }
+
+    .tabellrute > * {
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .spilltabell > * {
+        padding: 1rem;
+    }
+
+    .spillTabellContainer .slagIkon {
+        width: 3rem;
+    }
+
+    .spilltabell {
+        grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
+    }
+
+    .deler {
+        font-size: 1.5rem;
+    }
+}

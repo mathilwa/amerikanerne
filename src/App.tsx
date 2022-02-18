@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import './styles.css';
 import logo from './icons/cards.png';
-import SpillTabell from './SpillTabell';
+import SpillTabell from './spilltabell/SpillTabell';
 import { Runder, Spill, Spillere } from './types/Types';
 import orderBy from 'lodash.orderby';
 import confetti from 'canvas-confetti';
 import PagaendeSpill from './PagaendeSpill';
-import StatistikkModal from './StatistikkModal';
+import StatistikkModal from './statistikk/StatistikkModal';
 import { getSpilletHarEnVinner, onSmallScreen } from './utils';
 import NyttSpillModal from './nytt-spill/NyttSpillModal';
 import Knapp from './knapp/Knapp';
@@ -128,11 +128,13 @@ const App: React.FC = () => {
 
                 {tidligereSpill.length > 0 && (
                     <div>
-                        <h2 className="spillTabellHeading">{`Tidligere spill (${tidligereSpill.length}):`}</h2>
-                        <Knapp
-                            onClick={() => setVisStatistikkModal(true)}
-                            tekst={onSmallScreen ? 'Se statistikk' : 'Se statistikk for alle spill'}
-                        />
+                        <div className="tidligereSpillHeader">
+                            <h2 className="spillTabellHeading">{`Tidligere spill (${tidligereSpill.length}):`}</h2>
+                            <Knapp
+                                onClick={() => setVisStatistikkModal(true)}
+                                tekst={onSmallScreen ? 'Se statistikk' : 'Se statistikk for alle spill'}
+                            />
+                        </div>
 
                         {tidligereSpill.map((gammeltSpill) => (
                             <SpillTabell
