@@ -7,6 +7,7 @@ import { Runder, Spill, Spillere } from './types/Types';
 import { getPoengForSisteRunde, getSpilletHarEnVinner, onSmallScreen } from './utils';
 import StatistikkModal from './statistikk/StatistikkModal';
 import Knapp from './knapp/Knapp';
+import Knapperad from './knapp/Knapperad';
 
 interface Props {
     spill: Spill;
@@ -34,13 +35,13 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere, onUpdateSpilletHarEnV
 
     return (
         <>
-            <div className="pagaendeSpillContainer">
+            <div>
                 <h2 className="spillTabellHeading">Pågående spill</h2>
                 <SpillTabell spill={pagaendeSpill} spillere={spillere} pagaendeSpill={true} />
 
-                <div className="knappContainer">
-                    {!pagaendeSpillHarEnVinner && (
-                        <div>
+                {!pagaendeSpillHarEnVinner && (
+                    <Knapperad>
+                        <>
                             {sisteRundeHarFattPoeng && (
                                 <Knapp
                                     onClick={() => setVisSettNyRundeModal(true)}
@@ -53,9 +54,9 @@ const PagaendeSpill: React.FC<Props> = ({ spill, spillere, onUpdateSpilletHarEnV
                                     tekst={onSmallScreen ? '+ Poeng' : '+ Legg til poeng'}
                                 />
                             )}
-                        </div>
-                    )}
-                </div>
+                        </>
+                    </Knapperad>
+                )}
             </div>
 
             <NyRundeModal

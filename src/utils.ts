@@ -31,7 +31,11 @@ export const mapSamletPoengsumForSpill = (spill: Spill): Poeng | null => {
 
     return null;
 };
-export const getSpilletHarEnVinner = (spill: Spill): boolean => {
+export const getSpilletHarEnVinner = (spill: Spill | null): boolean => {
+    if (!spill) {
+        return false;
+    }
+
     const poengForAlleRunder = mapSamletPoengsumForSpill(spill);
 
     return poengForAlleRunder ? Object.values(poengForAlleRunder).some((poeng) => (poeng as number) >= 52) : false;

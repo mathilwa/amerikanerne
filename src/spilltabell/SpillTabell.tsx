@@ -24,7 +24,7 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere, pagaendeSpill = false }
             <MiniHeading heading={spillStartetTekst} />
 
             <TabellHeader spill={spill} spillere={spillere} />
-            <Runder pagaendeSpill={pagaendeSpill} spill={spill} spillere={spillere} />
+            <Runder pagaendeSpill={pagaendeSpill} spill={spill} />
             <Poengsum spill={spill} spillere={spillere} />
         </div>
     );

@@ -235,9 +235,13 @@ h3 {
     justify-content: flex-end;
 }
 
-.knappContainer.startSpillKnappContainer {
+.startSpillKnappContainer {
     margin-bottom: 2rem;
-    justify-content: flex-start;
+    display: flex;
+}
+
+.startSpillKnappContainer > * {
+    margin-right: 2rem;
 }
 
 .runder {

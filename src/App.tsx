@@ -16,6 +16,7 @@ const App: React.FC = () => {
     const [spillere, setSpillere] = useState<Spillere | null>(null);
     const [tidligereSpill, setTidligereSpill] = useState<Spill[]>([]);
     const [pagaendeSpill, setPagaendeSpill] = useState<Spill | null>(null);
+    const [pagaendeSpillHarEnVinner, setPagaendeSpillHarEnVinner] = useState<boolean>(false);
     const [visNyttSpillModal, setVisNyttSpillModal] = useState<boolean>(false);
     const [visStatistikkModal, setVisStatistikkModal] = useState<boolean>(false);
 
@@ -54,6 +55,7 @@ const App: React.FC = () => {
                     setTidligereSpill([spill]);
                 } else {
                     setPagaendeSpill(spill);
+                    setPagaendeSpillHarEnVinner(getSpilletHarEnVinner(spill));
                 }
             } else if (alleSpill.length > 1) {
                 const alleSpillSortert = orderBy(alleSpill, 'startet', 'desc');
@@ -63,6 +65,7 @@ const App: React.FC = () => {
                 const tidligereSpill = alleSpillSortert.slice(1, alleSpillSortert.length);
                 setTidligereSpill(tidligereSpill);
                 setPagaendeSpill(pagaendeSpill);
+                setPagaendeSpillHarEnVinner(getSpilletHarEnVinner(pagaendeSpill));
             } else {
                 setPagaendeSpill(null);
                 setTidligereSpill([]);
@@ -80,15 +83,18 @@ const App: React.FC = () => {
         setVisNyttSpillModal(false);
     };
 
-    if (!spillere) {
-        return null;
-    }
-
     const launceConfetti = () => {
         confetti();
     };
 
-    const pagaendeSpillHarEnVinner = pagaendeSpill && getSpilletHarEnVinner(pagaendeSpill);
+    const onUpdateSpilletHarEnVinner = () => {
+        launceConfetti();
+        setPagaendeSpillHarEnVinner(true);
+    };
+
+    if (!spillere) {
+        return null;
+    }
 
     return (
         <div className="App">
@@ -99,16 +105,12 @@ const App: React.FC = () => {
             <div className="sideContainer">
                 <h1>Amerikanerne</h1>
 
-                <div className="startSpillKnappContainer knappContainer">
+                <div className="startSpillKnappContainer">
                     <Knapp
                         onClick={() => setVisNyttSpillModal(true)}
                         tekst="+ Nytt spill"
                         sekundaerKnapp={!pagaendeSpillHarEnVinner}
                     />
-
-                    {pagaendeSpillHarEnVinner && (
-                        <Knapp onClick={() => setVisStatistikkModal(true)} tekst="Se statistikk" />
-                    )}
                 </div>
 
                 <NyttSpillModal
@@ -118,13 +120,22 @@ const App: React.FC = () => {
                     spillere={spillere}
                 />
 
-                {pagaendeSpill && (
-                    <PagaendeSpill
-                        spill={pagaendeSpill}
-                        spillere={spillere}
-                        onUpdateSpilletHarEnVinner={launceConfetti}
-                    />
-                )}
+                <div className="pagaendeSpillContainer">
+                    {pagaendeSpill && (
+                        <PagaendeSpill
+                            spill={pagaendeSpill}
+                            spillere={spillere}
+                            onUpdateSpilletHarEnVinner={onUpdateSpilletHarEnVinner}
+                        />
+                    )}
+                    {pagaendeSpillHarEnVinner && (
+                        <div className="startSpillKnappContainer">
+                            <Knapp onClick={() => setVisNyttSpillModal(true)} tekst="+ Nytt spill" />
+
+                            <Knapp onClick={() => setVisStatistikkModal(true)} tekst="Se statistikk" />
+                        </div>
+                    )}
+                </div>
 
                 {tidligereSpill.length > 0 && (
                     <div>
