@@ -15,7 +15,7 @@ interface Props {
 
 const SpillTabell: React.FC<Props> = ({ spill, spillere, pagaendeSpill = false }) => {
     const spillStartetTekst =
-        spill.startet && spill.startet > new Date('12.01.2021')
+        spill.startet && spill.startet > new Date('12/01/2021')
             ? `Startet ${formatDateAndClock(new Date(spill.startet))}`
             : 'Startet: Før desember 2021';
 
