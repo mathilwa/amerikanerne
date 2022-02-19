@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/amerikanerne/static/css/main.5c59e3db.chunk.css",
-    "main.js": "/amerikanerne/static/js/main.ce17180e.chunk.js",
-    "main.js.map": "/amerikanerne/static/js/main.ce17180e.chunk.js.map",
+    "main.css": "/amerikanerne/static/css/main.c08feea1.chunk.css",
+    "main.js": "/amerikanerne/static/js/main.06d66912.chunk.js",
+    "main.js.map": "/amerikanerne/static/js/main.06d66912.chunk.js.map",
     "runtime-main.js": "/amerikanerne/static/js/runtime-main.102bd7bc.js",
     "runtime-main.js.map": "/amerikanerne/static/js/runtime-main.102bd7bc.js.map",
     "static/js/2.4412fad0.chunk.js": "/amerikanerne/static/js/2.4412fad0.chunk.js",
     "static/js/2.4412fad0.chunk.js.map": "/amerikanerne/static/js/2.4412fad0.chunk.js.map",
     "index.html": "/amerikanerne/index.html",
-    "static/css/main.5c59e3db.chunk.css.map": "/amerikanerne/static/css/main.5c59e3db.chunk.css.map",
+    "static/css/main.c08feea1.chunk.css.map": "/amerikanerne/static/css/main.c08feea1.chunk.css.map",
     "static/js/2.4412fad0.chunk.js.LICENSE.txt": "/amerikanerne/static/js/2.4412fad0.chunk.js.LICENSE.txt",
     "static/media/cards.01ec99a3.png": "/amerikanerne/static/media/cards.01ec99a3.png",
     "static/media/hjerter-valgt.a7957b17.png": "/amerikanerne/static/media/hjerter-valgt.a7957b17.png",
@@ -17,7 +17,7 @@
   "entrypoints": [
     "static/js/runtime-main.102bd7bc.js",
     "static/js/2.4412fad0.chunk.js",
-    "static/css/main.5c59e3db.chunk.css",
-    "static/js/main.ce17180e.chunk.js"
+    "static/css/main.c08feea1.chunk.css",
+    "static/js/main.06d66912.chunk.js"
   ]
 }
