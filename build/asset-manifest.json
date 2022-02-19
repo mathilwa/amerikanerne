@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/amerikanerne/static/css/main.5c59e3db.chunk.css",
-    "main.js": "/amerikanerne/static/js/main.e63383a6.chunk.js",
-    "main.js.map": "/amerikanerne/static/js/main.e63383a6.chunk.js.map",
+    "main.js": "/amerikanerne/static/js/main.ce17180e.chunk.js",
+    "main.js.map": "/amerikanerne/static/js/main.ce17180e.chunk.js.map",
     "runtime-main.js": "/amerikanerne/static/js/runtime-main.102bd7bc.js",
     "runtime-main.js.map": "/amerikanerne/static/js/runtime-main.102bd7bc.js.map",
     "static/js/2.4412fad0.chunk.js": "/amerikanerne/static/js/2.4412fad0.chunk.js",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.102bd7bc.js",
     "static/js/2.4412fad0.chunk.js",
     "static/css/main.5c59e3db.chunk.css",
-    "static/js/main.e63383a6.chunk.js"
+    "static/js/main.ce17180e.chunk.js"
   ]
 }
