@@ -120,6 +120,11 @@
         display: none;
     }
 
+    .tabellrute > * {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
     .deler {
         font-size: 1rem;
         top: -4px;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './styles.css';
+import './spilloversikt.css';
 import SpillTabell from './spilltabell/SpillTabell';
 import GiPoengForRundeModal from './gi-poeng/GiPoengForRundeModal';
 import NyRundeModal from './ny-runde/NyRundeModal';

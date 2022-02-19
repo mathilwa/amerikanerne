@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import Spilloversikt from './Spilloversikt';
 import './index.css';
 import { initializeApp } from 'firebase/app';
 
@@ -18,7 +18,7 @@ initializeApp(firebaseConfig);
 ReactDOM.render(
     <React.StrictMode>
         <div id="modal" style={{ height: '100%' }} />
-        <App />
+        <Spilloversikt />
     </React.StrictMode>,
     document.getElementById('root'),
 );

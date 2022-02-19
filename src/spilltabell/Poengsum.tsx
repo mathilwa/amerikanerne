@@ -2,6 +2,7 @@ import React from 'react';
 import './spilltabell.css';
 import { Spill, Spillere } from '../types/Types';
 import { finnTotalsumForSpiller, mapSamletPoengsumForSpill } from '../utils';
+import MiniHeading from '../headings/MiniHeading';
 
 interface Props {
     spill: Spill;
@@ -25,7 +26,7 @@ const SpillTabell: React.FC<Props> = ({ spill, spillere }) => {
         <>
             {runder && Object.keys(runder).length > 1 && (
                 <div className="totalsum">
-                    <div className="totalsumHeading">Totalt:</div>
+                    <MiniHeading heading="Totalt:" />
                     <div className="spilltabell">
                         {spill.spillerRekkefolge.map((id) => (
                             <div key={'navn-sum' + id} className={`${spillerErVinner(id) ? 'vinnerHeader' : ''}`}>

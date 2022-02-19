@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
-import './styles.css';
+import './spilloversikt.css';
 import logo from './icons/cards.png';
 import SpillTabell from './spilltabell/SpillTabell';
 import { Runder, Spill, Spillere } from './types/Types';
@@ -12,7 +12,7 @@ import { getSpilletHarEnVinner, onSmallScreen } from './utils';
 import NyttSpillModal from './nytt-spill/NyttSpillModal';
 import Knapp from './knapp/Knapp';
 
-const App: React.FC = () => {
+const Spilloversikt: React.FC = () => {
     const [spillere, setSpillere] = useState<Spillere | null>(null);
     const [tidligereSpill, setTidligereSpill] = useState<Spill[]>([]);
     const [pagaendeSpill, setPagaendeSpill] = useState<Spill | null>(null);
@@ -97,9 +97,9 @@ const App: React.FC = () => {
     }
 
     return (
-        <div className="App">
-            <header className="appHeader">
-                <img src={logo} className="App-logo" alt="logo" />
+        <div className="spilloversiktContainer">
+            <header>
+                <img src={logo} className="logo" alt="logo" />
             </header>
 
             <div className="sideContainer">
@@ -168,4 +168,4 @@ const App: React.FC = () => {
     );
 };
 
-export default App;
+export default Spilloversikt;
