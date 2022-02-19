@@ -3,12 +3,12 @@
     align-items: center;
 }
 
-.nyRunde .delerIkon {
+.delerIkon {
     font-size: 2rem;
     margin-right: 8px;
 }
 
-.nyRunde .slagIkon {
+.slagIkon {
     width: 3rem;
 }
 

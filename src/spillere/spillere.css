@@ -4,14 +4,17 @@
     margin-bottom: 1rem;
 }
 
-.spillere > *,
-.melder,
-.velgLag {
+.spillere > * {
     border: 2px solid aqua;
     border-radius: 4px;
     padding: 1rem;
     margin-right: 10px;
     margin-bottom: 10px;
+}
+
+.spiller.valgt {
+    background-color: aqua;
+    color: #282c34;
 }
 
 .spillere .rekkefolge {
@@ -45,9 +48,7 @@
         flex-wrap: nowrap;
     }
 
-    .spillere > *,
-    .melder,
-    .velgLag {
+    .spillere > * {
         margin-right: 2rem;
     }
 }
