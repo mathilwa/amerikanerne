@@ -16,7 +16,7 @@ const LeggTilMelding: React.FC<Props> = ({ onOppdaterMelding, melding }) => (
             <div className="melding">
                 <div className="slag">
                     {Object.values(Slag).map((typeSlag) => (
-                        <label key={typeSlag}>
+                        <label key={typeSlag} className={`${melding.slag === typeSlag ? 'valgt' : '' }`}>
                             <input
                                 type="radio"
                                 id={typeSlag}
@@ -24,11 +24,7 @@ const LeggTilMelding: React.FC<Props> = ({ onOppdaterMelding, melding }) => (
                                 checked={melding.slag === typeSlag}
                             />
                             <img
-                                src={
-                                    melding.slag === typeSlag
-                                        ? slagIkoner[typeSlag].valgt
-                                        : slagIkoner[typeSlag].vanlig
-                                }
+                                src={slagIkoner[typeSlag].vanlig}
                                 className="slagIkon"
                                 alt=""
                             />

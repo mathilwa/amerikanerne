@@ -42,7 +42,9 @@ const NyRundeModal: React.FC<Props> = ({
                     melder: nyRunde!.melder,
                     poeng: null,
                 };
+
                 const database = getFirestore();
+
                 try {
                     setLagring(true);
                     await setDoc(doc(database, 'spill', pagaendeSpill.id), {
@@ -57,14 +59,13 @@ const NyRundeModal: React.FC<Props> = ({
                 } catch (_error) {
                     setFeilmelding('Noe gikk galt ved lagring av runde. Prøv igjen');
                 } finally {
+                    setNyRunde(null);
                     setLagring(false);
                 }
             }
         } else {
             setFeilmelding('Noen felter mangler, sjekk at du har fyllt ut alt');
         }
-
-        setNyRunde(null);
     };
 
     const delerIdForRunde = getSpillerIdSomDelerForRunde(
