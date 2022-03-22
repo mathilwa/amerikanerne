@@ -42,11 +42,14 @@ const StatistikkModal: React.FC<Props> = ({ alleSpill, spillere, visModal, onLuk
             : [],
     );
 
+
     const antallMeldingerPerSpiller = countBy(meldere);
+
     const meldereSomListe = Object.keys(antallMeldingerPerSpiller).map((spillerId) => ({
         id: spillerId,
         antallMeldinger: antallMeldingerPerSpiller[spillerId],
     }));
+
     const flestMeldinger = orderBy(meldereSomListe, 'antallMeldinger', 'desc');
 
     const antallGangerMedPaLag = countBy(lagmedlem);
@@ -78,18 +81,29 @@ const StatistikkModal: React.FC<Props> = ({ alleSpill, spillere, visModal, onLuk
         })
         .filter((melding) => !!melding);
 
+
     const alleMeldinger = meldinger.reduce((alleMeldingerForAlleSpillere, spillereMedMelding) => {
         if (spillereMedMelding) {
             return Object.keys(spillereMedMelding).reduce((meldingerForEtSpill, spillerId) => {
-                const alleredeRegistrerteMeldinger =
-                    alleMeldingerForAlleSpillere && alleMeldingerForAlleSpillere[spillerId]
-                        ? alleMeldingerForAlleSpillere[spillerId]
-                        : [0];
-
-                return {
-                    ...meldingerForEtSpill,
-                    [spillerId]: alleredeRegistrerteMeldinger.concat(spillereMedMelding[spillerId]),
-                };
+                if (!alleMeldingerForAlleSpillere) {
+                    return {
+                        ...meldingerForEtSpill,
+                        [spillerId]: spillereMedMelding[spillerId],
+                    };
+                } else if (!alleMeldingerForAlleSpillere[spillerId]) {
+                    return {
+                        ...meldingerForEtSpill,
+                        [spillerId]: spillereMedMelding[spillerId],
+                    };
+                } else if (alleMeldingerForAlleSpillere && alleMeldingerForAlleSpillere[spillerId]) {
+                    const alleredeRegistrerteMeldinger = alleMeldingerForAlleSpillere[spillerId];
+                    return {
+                        ...meldingerForEtSpill,
+                        [spillerId]: alleredeRegistrerteMeldinger.concat(spillereMedMelding[spillerId]),
+                    };
+                } else {
+                    return meldingerForEtSpill
+                }
             }, {} as MeldingForMelder);
         }
         return alleMeldingerForAlleSpillere;
